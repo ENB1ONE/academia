@@ -66,7 +66,7 @@ const ForgotPasswordPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu.email@exemplo.com"
-                icon={<Mail className="h-5 w-5 text-gray-400" />}
+                icon={Mail}
               />
 
               <Button type="submit" className="w-full" isLoading={isLoading}>

@@ -66,7 +66,7 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="seu@email.com"
-              icon={<Mail className="h-5 w-5 text-gray-400" />}
+              icon={Mail}
             />
 
             <div className="space-y-1">
@@ -77,7 +77,7 @@ const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="******"
-                icon={<Lock className="h-5 w-5 text-gray-400" />}
+                icon={Lock}
               />
               <div className="flex items-center justify-end mt-2">
                 <div className="text-sm">
