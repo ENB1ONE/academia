@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
+import Logo from '../../components/ui/Logo';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -37,11 +38,7 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <div className="h-16 w-16 bg-primary/20 rounded-full flex items-center justify-center mb-4 border border-primary/30">
-            <Activity className="h-8 w-8 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold text-text tracking-tight">FormaSync</h1>
-          <p className="text-gray-400 mt-2">Gestão de Carga e Treinamento</p>
+          <Logo className="scale-125 mb-4" />
         </div>
 
         <Card>

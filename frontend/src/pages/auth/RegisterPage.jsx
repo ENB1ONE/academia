@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
+import Logo from '../../components/ui/Logo';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -46,11 +47,9 @@ const RegisterPage = () => {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <div className="h-16 w-16 bg-primary/20 rounded-full flex items-center justify-center mb-4 border border-primary/30">
-            <Activity className="h-8 w-8 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold text-text tracking-tight">Criar Conta</h1>
-          <p className="text-gray-400 mt-2">Junte-se ao FormaSync</p>
+          <Logo className="scale-125 mb-4" />
+          <h1 className="text-3xl font-bold text-text tracking-tight mt-4">Criar Conta</h1>
+          <p className="text-gray-400 mt-2">Junte-se ao FORMCLUB</p>
         </div>
 
         <Card>

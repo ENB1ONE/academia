@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Activity, Users, Dumbbell, Heart, Brain, BarChart3, LogOut, Menu, X, Flower2, Zap } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
+import Logo from '../ui/Logo';
 
 const Sidebar = () => {
   const { user, logout } = useAuthStore();
@@ -29,9 +30,8 @@ const Sidebar = () => {
     <>
       {/* Mobile Top Bar */}
       <div className="md:hidden flex items-center justify-between p-4 bg-surface border-b border-gray-800 shrink-0">
-        <div className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight">
-          <Activity className="h-6 w-6" />
-          <span>FormaSync</span>
+        <div className="flex items-center gap-2">
+          <Logo className="scale-75 origin-left" />
         </div>
         <button 
           className="p-2 bg-background rounded-lg text-text border border-gray-700"
@@ -48,9 +48,8 @@ const Sidebar = () => {
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         <div className="p-6">
-          <div className="flex items-center gap-2 text-primary font-bold text-2xl tracking-tight">
-            <Activity className="h-8 w-8" />
-            <span>FormaSync</span>
+          <div className="flex items-center gap-2">
+            <Logo className="scale-90 origin-left" />
           </div>
         </div>
 
