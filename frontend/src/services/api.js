@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../store/authStore';
 
 const api = axios.create({
-  baseURL: 'https://log-handled-navy-advertising.trycloudflare.com',
+  baseURL: 'https://hour-tough-telescope-jill.trycloudflare.com',
   headers: {
     'Content-Type': 'application/json',
   },
