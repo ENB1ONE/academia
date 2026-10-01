@@ -37,9 +37,8 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="flex flex-col items-center mb-8">
-          {/* Constrain logo height on mobile so it doesn't break the layout */}
-          <Logo className="h-16 md:h-24 mb-4" />
+        <div className="flex flex-col items-center mb-10">
+          <Logo className="h-28 sm:h-32 md:h-48 mb-4" />
         </div>
 
         <Card>

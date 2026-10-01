@@ -31,7 +31,7 @@ const Sidebar = () => {
       {/* Mobile Top Bar */}
       <div className="md:hidden flex items-center justify-between p-4 bg-surface border-b border-gray-800 shrink-0">
         <div className="flex items-center gap-2">
-          <Logo className="h-8" />
+          <Logo className="h-16" />
         </div>
         <button 
           className="p-2 bg-background rounded-lg text-text border border-gray-700"
@@ -47,8 +47,8 @@ const Sidebar = () => {
         transform transition-transform duration-300 flex flex-col
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
-        <div className="p-6 flex justify-center border-b border-gray-800">
-          <Logo className="h-12" />
+        <div className="py-8 flex justify-center border-b border-gray-800">
+          <Logo className="h-28" />
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
