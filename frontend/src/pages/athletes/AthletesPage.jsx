@@ -49,7 +49,7 @@ const AthletesPage = () => {
       setAvatar(savedAvatar || null);
     } else {
       setEditingAthlete(null);
-      setFormData({ name: '', email: '', birth_date: '', sport: '', position: '', gender: '' });
+      setFormData({ name: '', email: '', birth_date: '', sport: '', position: '', gender: '', weight: '', height: '', experience_level: '', primary_goal: '', dominant_limb: '' });
       setAvatar(null);
     }
     setIsModalOpen(true);
@@ -252,7 +252,46 @@ const AthletesPage = () => {
                     <option value="Feminino">Feminino</option>
                   </select>
                 </div>
-              <Button type="submit" className="w-full mt-6" isLoading={isLoading}>
+              
+                <div className="grid grid-cols-2 gap-4">
+                  <Input type="number" step="0.1" label="Peso (kg)" placeholder="Ex: 75.5" value={formData.weight || ''} onChange={(e) => setFormData({...formData, weight: e.target.value})} />
+                  <Input type="number" label="Altura (cm)" placeholder="Ex: 175" value={formData.height || ''} onChange={(e) => setFormData({...formData, height: e.target.value})} />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1.5">N�vel de Experi�ncia</label>
+                    <select value={formData.experience_level || ''} onChange={(e) => setFormData({...formData, experience_level: e.target.value})} className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm px-3 py-2">
+                      <option value="">Selecione...</option>
+                      <option value="Iniciante">Iniciante</option>
+                      <option value="Intermedi�rio">Intermedi�rio</option>
+                      <option value="Avan�ado">Avan�ado</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1.5">Membro Dominante</label>
+                    <select value={formData.dominant_limb || ''} onChange={(e) => setFormData({...formData, dominant_limb: e.target.value})} className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm px-3 py-2">
+                      <option value="">Selecione...</option>
+                      <option value="Destro">Destro</option>
+                      <option value="Canhoto">Canhoto</option>
+                      <option value="Ambidestro">Ambidestro</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Objetivo Principal</label>
+                  <select value={formData.primary_goal || ''} onChange={(e) => setFormData({...formData, primary_goal: e.target.value})} className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm px-3 py-2">
+                    <option value="">Selecione...</option>
+                    <option value="Hipertrofia">Hipertrofia</option>
+                    <option value="Emagrecimento">Emagrecimento</option>
+                    <option value="Condicionamento Base">Condicionamento Base</option>
+                    <option value="For�a">For�a</option>
+                    <option value="Reabilita��o">Reabilita��o</option>
+                  </select>
+                </div>
+
+                <Button type="submit" className="w-full mt-6" isLoading={isLoading}>
                 {editingAthlete ? 'Salvar Alterações' : 'Cadastrar Atleta'}
               </Button>
             </form>

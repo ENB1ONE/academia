@@ -114,7 +114,7 @@ const AthleteDetailPage = () => {
           })()}
           <div>
             <h1 className="text-2xl font-bold text-text">{athlete.name}</h1>
-            <p className="text-gray-400 mt-1">{athlete.sport || 'Sem modalidade'} • {athlete.position || '-'}</p>
+            <p className="text-gray-400 mt-1">{athlete.sport || 'Sem modalidade'} � {athlete.position || '-'}</p>
             <div className="flex gap-2 mt-3">
               <Badge variant="neutral">{age} anos</Badge>
             </div>
@@ -232,9 +232,34 @@ const AthleteDetailPage = () => {
                 <p className="font-medium text-text">{athlete.sport || '-'}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-400">Posição</p>
+                <p className="text-sm text-gray-400">Posi��o</p>
                 <p className="font-medium text-text">{athlete.position || '-'}</p>
               </div>
+              {athlete.weight && (
+                <div>
+                  <p className="text-sm text-gray-400">Peso / Altura</p>
+                  <p className="font-medium text-text">{athlete.weight} kg {athlete.height ? '/ ' + athlete.height + ' cm' : ''}</p>
+                </div>
+              )}
+              {athlete.experience_level && (
+                <div>
+                  <p className="text-sm text-gray-400">Experi�ncia</p>
+                  <p className="font-medium text-text">{athlete.experience_level}</p>
+                </div>
+              )}
+              {athlete.primary_goal && (
+                <div>
+                  <p className="text-sm text-gray-400">Objetivo Principal</p>
+                  <p className="font-medium text-text">{athlete.primary_goal}</p>
+                </div>
+              )}
+              {athlete.dominant_limb && (
+                <div>
+                  <p className="text-sm text-gray-400">Membro Dominante</p>
+                  <p className="font-medium text-text">{athlete.dominant_limb}</p>
+                </div>
+              )}
+
             </div>
           </Card>
         )}
