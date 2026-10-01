@@ -44,7 +44,7 @@ const AthletesPage = () => {
         sport: athlete.sport || '',
         position: athlete.position || ''
       });
-      const savedAvatar = localStorage.getItem(`athleteAvatar_${athlete.id}`);
+      const savedAvatar = localStorage.getItem(`athleteAvatar_${athlete.id}`) || (athlete.user_id ? localStorage.getItem(`userAvatar_${athlete.user_id}`) : null);
       setAvatar(savedAvatar || null);
     } else {
       setEditingAthlete(null);
@@ -140,7 +140,7 @@ const AthletesPage = () => {
           <p className="text-gray-400 p-4">Carregando...</p>
         ) : filteredAthletes.length > 0 ? (
           filteredAthletes.map((athlete) => {
-            const savedAvatar = localStorage.getItem(`athleteAvatar_${athlete.id}`);
+            const savedAvatar = localStorage.getItem(`athleteAvatar_${athlete.id}`) || (athlete.user_id ? localStorage.getItem(`userAvatar_${athlete.user_id}`) : null);
             return (
               <Card key={athlete.id} padding="p-0" className="overflow-hidden flex flex-col cursor-pointer hover:border-primary transition-colors" onClick={(e) => {
                 if (e.target.closest('button')) return;

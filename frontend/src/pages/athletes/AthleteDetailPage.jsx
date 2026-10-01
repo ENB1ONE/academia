@@ -101,9 +101,16 @@ const AthleteDetailPage = () => {
 
       <Card padding="p-6">
         <div className="flex items-center gap-6">
-          <div className="h-20 w-20 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-3xl border border-primary/30">
-            {athlete.name.charAt(0)}
-          </div>
+          {(() => {
+            const savedAvatar = localStorage.getItem(`athleteAvatar_${athlete.id}`) || (athlete.user_id ? localStorage.getItem(`userAvatar_${athlete.user_id}`) : null);
+            return savedAvatar ? (
+              <img src={savedAvatar} alt={athlete.name} className="h-20 w-20 rounded-full object-cover border-2 border-primary/50" />
+            ) : (
+              <div className="h-20 w-20 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-3xl border border-primary/30">
+                {athlete.name.charAt(0).toUpperCase()}
+              </div>
+            );
+          })()}
           <div>
             <h1 className="text-2xl font-bold text-text">{athlete.name}</h1>
             <p className="text-gray-400 mt-1">{athlete.sport || 'Sem modalidade'} • {athlete.position || '-'}</p>
