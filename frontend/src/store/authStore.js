@@ -8,16 +8,29 @@ const useAuthStore = create((set) => ({
   
   login: async (email, password) => {
     try {
-      // Mock API call for now since backend might not exist
-      // const response = await api.post('/api/v1/auth/login', { email, password });
-      // Mocked response
-      const mockToken = 'mock-jwt-token-123';
-      const mockUser = { id: 1, name: 'Treinador Teste', email, role: 'treinador' };
+      // FastAPI OAuth2 requires x-www-form-urlencoded
+      const formData = new URLSearchParams();
+      formData.append('username', email);
+      formData.append('password', password);
+
+      const response = await api.post('/api/v1/auth/login', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
       
-      localStorage.setItem('token', mockToken);
-      localStorage.setItem('user', JSON.stringify(mockUser));
+      const token = response.data.access_token;
+      localStorage.setItem('token', token);
       
-      set({ user: mockUser, token: mockToken, isAuthenticated: true });
+      // Fetch user details
+      const userResponse = await api.get('/api/v1/auth/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      const user = userResponse.data;
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      set({ user, token, isAuthenticated: true });
       return true;
     } catch (error) {
       console.error('Login error', error);
@@ -25,16 +38,10 @@ const useAuthStore = create((set) => ({
     }
   },
   
+  // Register has been disabled for public, but kept in store for internal admin use if needed
   register: async (data) => {
     try {
-      // const response = await api.post('/api/v1/auth/register', data);
-      const mockToken = 'mock-jwt-token-123';
-      const mockUser = { id: 2, name: data.name, email: data.email, role: data.role };
-      
-      localStorage.setItem('token', mockToken);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      
-      set({ user: mockUser, token: mockToken, isAuthenticated: true });
+      await api.post('/api/v1/auth/register', data);
       return true;
     } catch (error) {
       throw error;

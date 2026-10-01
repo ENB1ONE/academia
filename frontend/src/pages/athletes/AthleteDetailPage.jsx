@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -9,14 +9,36 @@ import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
 import LoadChart from '../../components/charts/LoadChart';
 import WellnessChart from '../../components/charts/WellnessChart';
+import api from '../../services/api';
 
 const AthleteDetailPage = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('treinos');
   const [isExporting, setIsExporting] = useState(false);
+  const [athlete, setAthlete] = useState(null);
+  const [pseHistory, setPseHistory] = useState([]);
+  const [wellnessHistory, setWellnessHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data
-  const athlete = { name: 'Lucas Silva', age: 24, sport: 'Futebol', position: 'Atacante', height: '1.82m', weight: '78kg' };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [athRes, pseRes, wellRes] = await Promise.all([
+          api.get(`/api/v1/athletes/${id}`),
+          api.get(`/api/v1/monitoring/pse/${id}`),
+          api.get(`/api/v1/monitoring/wellness/${id}`)
+        ]);
+        setAthlete(athRes.data);
+        setPseHistory(pseRes.data);
+        setWellnessHistory(wellRes.data);
+      } catch (error) {
+        toast.error('Erro ao carregar dados do atleta');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const tabs = [
     { id: 'treinos', label: 'Treinos' },
@@ -39,7 +61,7 @@ const AthleteDetailPage = () => {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${athlete.name.replace(/\s+/g, '_')}_Relatorio.pdf`);
+      pdf.save(`${athlete?.name?.replace(/\s+/g, '_')}_Relatorio.pdf`);
       
       toast.success('Relatório exportado!', { id: toastId });
     } catch (error) {
@@ -49,6 +71,17 @@ const AthleteDetailPage = () => {
       setIsExporting(false);
     }
   };
+
+  if (isLoading) {
+    return <div className="p-8 text-center text-gray-400">Carregando detalhes do atleta...</div>;
+  }
+
+  if (!athlete) {
+    return <div className="p-8 text-center text-red-400">Atleta não encontrado.</div>;
+  }
+
+  // Calc basic stats
+  const age = athlete.birth_date ? new Date().getFullYear() - new Date(athlete.birth_date).getFullYear() : '--';
 
   return (
     <div className="space-y-6" id="pdf-content">
@@ -67,23 +100,21 @@ const AthleteDetailPage = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-text">{athlete.name}</h1>
-            <p className="text-gray-400 mt-1">{athlete.sport} • {athlete.position}</p>
+            <p className="text-gray-400 mt-1">{athlete.sport || 'Sem modalidade'} • {athlete.position || '-'}</p>
             <div className="flex gap-2 mt-3">
-              <Badge variant="neutral">{athlete.age} anos</Badge>
-              <Badge variant="neutral">{athlete.height}</Badge>
-              <Badge variant="neutral">{athlete.weight}</Badge>
+              <Badge variant="neutral">{age} anos</Badge>
             </div>
           </div>
         </div>
       </Card>
 
       <div className="border-b border-gray-800">
-        <nav className="flex space-x-8">
+        <nav className="flex space-x-8 overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'border-primary text-primary'
                   : 'border-transparent text-gray-400 hover:text-text hover:border-gray-700'
@@ -98,19 +129,8 @@ const AthleteDetailPage = () => {
       <div className="mt-6">
         {activeTab === 'treinos' && (
           <div className="space-y-4">
-            <Card padding="p-4">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-text">Treino A - Força Máxima</h3>
-                <span className="text-sm text-gray-400">Ontem</span>
-              </div>
-              <p className="text-sm text-gray-400">4 exercícios • 45 minutos</p>
-            </Card>
-            <Card padding="p-4">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-text">Treino B - Potência</h3>
-                <span className="text-sm text-gray-400">Há 3 dias</span>
-              </div>
-              <p className="text-sm text-gray-400">5 exercícios • 50 minutos</p>
+            <Card padding="p-8" className="text-center text-gray-400">
+              <p>Nenhum treino atribuído recentemente.</p>
             </Card>
           </div>
         )}
@@ -118,10 +138,14 @@ const AthleteDetailPage = () => {
         {activeTab === 'pse' && (
           <div className="space-y-6">
             <Card>
-              <h3 className="text-lg font-semibold text-text mb-6">Carga Crônica vs Aguda</h3>
-              <div className="h-80">
-                <LoadChart />
-              </div>
+              <h3 className="text-lg font-semibold text-text mb-6">Histórico de Carga (PSE)</h3>
+              {pseHistory.length > 0 ? (
+                <div className="h-80">
+                  <LoadChart data={pseHistory} />
+                </div>
+              ) : (
+                <div className="py-12 text-center text-gray-500">Nenhum registro de PSE.</div>
+              )}
             </Card>
           </div>
         )}
@@ -129,10 +153,14 @@ const AthleteDetailPage = () => {
         {activeTab === 'bem-estar' && (
           <div className="space-y-6">
             <Card>
-              <h3 className="text-lg font-semibold text-text mb-6">Radar de Bem-Estar (Semanal)</h3>
-              <div className="h-80 flex justify-center">
-                <WellnessChart />
-              </div>
+              <h3 className="text-lg font-semibold text-text mb-6">Evolução do Bem-Estar</h3>
+              {wellnessHistory.length > 0 ? (
+                <div className="h-80 flex justify-center">
+                  <WellnessChart data={wellnessHistory} />
+                </div>
+              ) : (
+                <div className="py-12 text-center text-gray-500">Nenhum registro de Bem-Estar.</div>
+              )}
             </Card>
           </div>
         )}
@@ -145,8 +173,16 @@ const AthleteDetailPage = () => {
                 <p className="font-medium text-text">{athlete.name}</p>
               </div>
               <div>
+                <p className="text-sm text-gray-400">Email</p>
+                <p className="font-medium text-text">{athlete.email || '-'}</p>
+              </div>
+              <div>
                 <p className="text-sm text-gray-400">Esporte</p>
-                <p className="font-medium text-text">{athlete.sport}</p>
+                <p className="font-medium text-text">{athlete.sport || '-'}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Posição</p>
+                <p className="font-medium text-text">{athlete.position || '-'}</p>
               </div>
             </div>
           </Card>
