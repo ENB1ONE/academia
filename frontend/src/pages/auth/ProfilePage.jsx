@@ -41,33 +41,42 @@ const ProfilePage = () => {
         return;
       }
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const base64String = reader.result;
         setAvatar(base64String);
         if (user?.id) {
           localStorage.setItem(`userAvatar_${user.id}`, base64String);
+          try {
+            await api.put('/api/v1/auth/me', { name: name, avatar: base64String });
+            const authStore = useAuthStore.getState();
+            authStore.updateUser({ ...user, avatar: base64String });
+            toast.success('Foto de perfil salva no servidor!');
+          } catch(e) {
+            toast.error('Erro ao salvar no servidor.');
+          }
         }
-        toast.success('Foto de perfil atualizada!');
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSaveName = () => {
+  const handleSaveName = async () => {
     if (!name.trim()) {
       toast.error('O nome não pode ser vazio');
       return;
     }
     if (user?.id) {
       localStorage.setItem(`userName_${user.id}`, name);
-      // For presentation mock purposes, update auth store user
-      const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-      currentUser.name = name;
-      localStorage.setItem('user', JSON.stringify(currentUser));
-      useAuthStore.setState({ user: currentUser });
+      try {
+        await api.put('/api/v1/auth/me', { name: name, avatar: avatar });
+        const authStore = useAuthStore.getState();
+        authStore.updateUser({ ...user, name: name });
+        setIsEditingName(false);
+        toast.success('Nome atualizado com sucesso no servidor!');
+      } catch(e) {
+        toast.error('Erro ao salvar o nome no servidor.');
+      }
     }
-    setIsEditingName(false);
-    toast.success('Nome atualizado!');
   };
 
   const handlePasswordChange = async (e) => {

@@ -103,7 +103,7 @@ const AthleteDetailPage = () => {
       <Card padding="p-6">
         <div className="flex items-center gap-6">
           {(() => {
-            const savedAvatar = localStorage.getItem(`athleteAvatar_${athlete.id}`) || (athlete.user_id ? localStorage.getItem(`userAvatar_${athlete.user_id}`) : null);
+            const savedAvatar = athlete.photo_url || localStorage.getItem(`athleteAvatar_${athlete.id}`) || (athlete.user_id ? localStorage.getItem(`userAvatar_${athlete.user_id}`) : null);
             return savedAvatar ? (
               <img src={savedAvatar} alt={athlete.name} className="h-20 w-20 rounded-full object-cover border-2 border-primary/50" />
             ) : (
