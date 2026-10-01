@@ -14,7 +14,6 @@ const CompleteSetupModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Check if we need to show this modal
   const needsPasswordChange = user?.force_password_change;
   const needsTerms = !user?.terms_accepted_at;
 
@@ -25,39 +24,38 @@ const CompleteSetupModal = () => {
     setError('');
 
     if (needsPasswordChange && password.length < 6) {
-      setError('A nova senha deve ter no mï¿½nimo 6 caracteres.');
+      setError('A nova senha deve ter no mínimo 6 caracteres.');
       return;
     }
 
     if (needsPasswordChange && password !== confirmPassword) {
-      setError('As senhas nï¿½o coincidem.');
+      setError('As senhas não coincidem.');
       return;
     }
 
     if (needsTerms && !acceptedTerms) {
-      setError('Vocï¿½ precisa aceitar os Termos de Uso e Polï¿½tica de Privacidade.');
+      setError('Você precisa aceitar os Termos de Uso e Política de Privacidade.');
       return;
     }
     if (user?.role === 'treinador' && !acceptedConfidentiality) {
-      setError('Vocï¿½ precisa aceitar o Termo de Confidencialidade e Sigilo.');
+      setError('Você precisa aceitar o Termo de Confidencialidade e Sigilo.');
       return;
     }
 
     setIsLoading(true);
     try {
       await api.post('/auth/complete-setup', {
-        new_password: password || 'placeholder123', // if only terms are needed
+        new_password: password || 'placeholder123',
         accepted_terms: acceptedTerms || !needsTerms,
         accepted_confidentiality: acceptedConfidentiality
       });
 
-      // Update local user state
       const updatedUser = { ...user, force_password_change: false, terms_accepted_at: new Date().toISOString() };
       setUser(updatedUser);
       
-      toast.success('Configuraï¿½ï¿½o concluï¿½da com sucesso!');
+      toast.success('Configuração concluída com sucesso!');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Erro ao salvar configuraï¿½ï¿½es.');
+      setError(err.response?.data?.detail || 'Erro ao salvar configurações.');
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +70,7 @@ const CompleteSetupModal = () => {
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">Bem-vindo(a)!</h2>
           <p className="text-gray-400 text-sm">
-            Para continuar, precisamos que vocï¿½ conclua a configuraï¿½ï¿½o da sua conta.
+            Para continuar, precisamos que você conclua a configuração da sua conta.
           </p>
         </div>
 
@@ -99,7 +97,7 @@ const CompleteSetupModal = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="block w-full pl-10 bg-background border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary sm:text-sm px-3 py-2"
-                    placeholder="Mï¿½nimo 6 caracteres"
+                    placeholder="Mínimo 6 caracteres"
                     required
                   />
                 </div>
@@ -126,39 +124,41 @@ const CompleteSetupModal = () => {
           )}
 
           {needsTerms && (
-            <div className="pt-2">
-              <label className="flex items-start gap-3 cursor-pointer group">
-                <div className="flex items-center h-5">
-                  <input
-                    type="checkbox"
-                    checked={acceptedTerms}
-                    onChange={(e) => setAcceptedTerms(e.target.checked)}
-                    className="w-5 h-5 rounded border-gray-600 bg-background text-primary focus:ring-primary focus:ring-offset-background"
-                  />
-                </div>
-                <div className="text-sm text-gray-400">
-                  Li e concordo com a <a href="#" className="text-primary hover:underline">Polï¿½tica de Privacidade</a> e autorizo o tratamento dos meus dados sensï¿½veis (fï¿½sicos e de saï¿½de) conforme a LGPD.
-                </div>
-              </label>
-            </div>
-            {user?.role === 'treinador' && (
-              <div className="pt-2 border-t border-gray-700/50 mt-4">
-                <label className="flex items-start gap-3 cursor-pointer group mt-2">
+            <div className="space-y-4 pt-2">
+              <div>
+                <label className="flex items-start gap-3 cursor-pointer group">
                   <div className="flex items-center h-5">
                     <input
                       type="checkbox"
-                      checked={acceptedConfidentiality}
-                      onChange={(e) => setAcceptedConfidentiality(e.target.checked)}
-                      className="w-5 h-5 rounded border-gray-600 bg-background text-red-500 focus:ring-red-500 focus:ring-offset-background"
+                      checked={acceptedTerms}
+                      onChange={(e) => setAcceptedTerms(e.target.checked)}
+                      className="w-5 h-5 rounded border-gray-600 bg-background text-primary focus:ring-primary focus:ring-offset-background"
                     />
                   </div>
                   <div className="text-sm text-gray-400">
-                    <span className="font-bold text-gray-300">Termo de Confidencialidade:</span> Declaro sob as penas da lei que manterei sigilo absoluto sobre os dados mï¿½dicos, fï¿½sicos e de saï¿½de dos atletas acessados nesta plataforma, nï¿½o os compartilhando com terceiros.
+                    Li e concordo com a <a href="#" className="text-primary hover:underline">Política de Privacidade</a> e autorizo o tratamento dos meus dados sensíveis (físicos e de saúde) conforme a LGPD.
                   </div>
                 </label>
               </div>
-            )}
 
+              {user?.role === 'treinador' && (
+                <div className="pt-4 border-t border-gray-700/50">
+                  <label className="flex items-start gap-3 cursor-pointer group mt-2">
+                    <div className="flex items-center h-5">
+                      <input
+                        type="checkbox"
+                        checked={acceptedConfidentiality}
+                        onChange={(e) => setAcceptedConfidentiality(e.target.checked)}
+                        className="w-5 h-5 rounded border-gray-600 bg-background text-red-500 focus:ring-red-500 focus:ring-offset-background"
+                      />
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      <span className="font-bold text-gray-300">Termo de Confidencialidade:</span> Declaro sob as penas da lei que manterei sigilo absoluto sobre os dados médicos, físicos e de saúde dos atletas acessados nesta plataforma, não os compartilhando com terceiros.
+                    </div>
+                  </label>
+                </div>
+              )}
+            </div>
           )}
 
           <button
@@ -166,7 +166,7 @@ const CompleteSetupModal = () => {
             disabled={isLoading}
             className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg transition-colors mt-6 disabled:opacity-50"
           >
-            {isLoading ? 'Salvando...' : 'Concluir Configuraï¿½ï¿½o'}
+            {isLoading ? 'Salvando...' : 'Concluir Configuração'}
           </button>
         </form>
       </div>
