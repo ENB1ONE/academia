@@ -42,13 +42,14 @@ const AthletesPage = () => {
         email: athlete.email || '',
         birth_date: athlete.birth_date || '',
         sport: athlete.sport || '',
-        position: athlete.position || ''
+        position: athlete.position || '',
+          gender: athlete.gender || ''
       });
       const savedAvatar = localStorage.getItem(`athleteAvatar_${athlete.id}`) || (athlete.user_id ? localStorage.getItem(`userAvatar_${athlete.user_id}`) : null);
       setAvatar(savedAvatar || null);
     } else {
       setEditingAthlete(null);
-      setFormData({ name: '', email: '', birth_date: '', sport: '', position: '' });
+      setFormData({ name: '', email: '', birth_date: '', sport: '', position: '', gender: '' });
       setAvatar(null);
     }
     setIsModalOpen(true);

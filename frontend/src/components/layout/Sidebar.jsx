@@ -5,7 +5,7 @@ import useAuthStore from '../../store/authStore';
 import Logo from '../ui/Logo';
 
 const Sidebar = () => {
-  const { user, logout } = useAuthStore();
+  const { user, athleteProfile, logout } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   
   const [avatar, setAvatar] = useState(null);
@@ -44,7 +44,7 @@ const Sidebar = () => {
     { to: '/monitoring/pse', icon: Brain, label: 'Registrar PSE', show: true },
     { to: '/monitoring/wellness', icon: Heart, label: 'Bem-Estar', show: true },
     { to: '/monitoring/pain', icon: Activity, label: 'Mapa de Dor', show: true },
-    { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual', show: true },
+    { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual', show: isTreinador || (user?.role === 'atleta' && athleteProfile?.gender === 'Feminino') },
     { to: '/monitoring/physical-tests', icon: Zap, label: 'Testes Físicos', show: isTreinador },
     { to: '/profile', icon: User, label: 'Meu Perfil', show: true },
     { to: '/admin/trainers', icon: Shield, label: 'Treinadores', show: isAdmin },

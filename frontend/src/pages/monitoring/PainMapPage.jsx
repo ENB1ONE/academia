@@ -62,6 +62,17 @@ const PainMapPage = () => {
     } else {
       setPainData({ intensity: 5, pain_type: 'Muscular', notes: '' });
     }
+    
+    setTimeout(() => {
+      if (formRef.current) {
+        try {
+          const y = formRef.current.getBoundingClientRect().top + window.scrollY - 100;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        } catch(e) {
+          formRef.current.scrollIntoView();
+        }
+      }
+    }, 150);
   };
 
   const handleSavePart = () => {
