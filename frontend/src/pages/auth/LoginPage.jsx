@@ -72,12 +72,6 @@ const LoginPage = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm">
-            <span className="text-gray-400">Não tem uma conta? </span>
-            <Link to="/register" className="text-primary hover:text-primary/80 font-medium transition-colors">
-              Registre-se
-            </Link>
-          </div>
         </Card>
       </div>
     </div>
