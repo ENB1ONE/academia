@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Activity, Users, Dumbbell, Heart, Brain, BarChart3, LogOut, Menu, X, Flower2 } from 'lucide-react';
+import { Activity, Users, Dumbbell, Heart, Brain, BarChart3, LogOut, Menu, X, Flower2, Zap } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 
 const Sidebar = () => {
@@ -15,6 +15,7 @@ const Sidebar = () => {
     { to: '/monitoring/wellness', icon: Heart, label: 'Bem-Estar' },
     { to: '/monitoring/pain', icon: Activity, label: 'Mapa de Dor' },
     { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual' },
+    { to: '/monitoring/physical-tests', icon: Zap, label: 'Testes Físicos' },
   ];
 
   const navClass = ({ isActive }) =>
