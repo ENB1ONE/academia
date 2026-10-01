@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import CompleteSetupModal from './CompleteSetupModal';
 import Sidebar from './Sidebar';
 import ForcePasswordChangeModal from '../auth/ForcePasswordChangeModal';
 
