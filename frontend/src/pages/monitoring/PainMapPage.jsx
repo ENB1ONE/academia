@@ -185,7 +185,7 @@ const PainMapPage = () => {
                   >
                     <option>Muscular</option>
                     <option>Articular</option>
-                    <option>Óssea</option>
+                    <optionÓssea</option>
                     <option>Pontada</option>
                     <option>Queimação</option>
                   </select>

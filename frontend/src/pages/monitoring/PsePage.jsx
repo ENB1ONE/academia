@@ -27,7 +27,7 @@ const PsePage = () => {
 
   const [athleteId, setAthleteId] = useState('');
   const [sessionType, setSessionType] = useState('Treino');
-  const [duration, setDuration] = useState('');
+  const [duration, setDuraçãon] = useState('');
   const [selectedPse, setSelectedPse] = useState(null);
   const [load, setLoad] = useState(0);
 
@@ -104,7 +104,7 @@ const PsePage = () => {
             type="number" 
             placeholder="Ex: 90" 
             value={duration} 
-            onChange={(e) => setDuration(e.target.value)} 
+            onChange={(e) => setDuraçãon(e.target.value)} 
           />
 
           <div>
