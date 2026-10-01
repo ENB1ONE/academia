@@ -18,7 +18,9 @@ const AdminTrainersPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    specialty: '',
+    cref: ''
   });
 
   const fetchTrainers = async () => {
@@ -40,7 +42,7 @@ const AdminTrainersPage = () => {
   }, []);
 
   const handleOpenModal = () => {
-    setFormData({ name: '', email: '', password: '' });
+    setFormData({ name: '', email: '', password: '', specialty: '', cref: '' });
     setAvatar(null);
     setIsModalOpen(true);
   };
@@ -68,7 +70,7 @@ const AdminTrainersPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.password) {
-      toast.error('Preencha todos os campos obrigatórios');
+      toast.error('Preencha todos os campos obrigat�rios');
       return;
     }
     try {
@@ -139,7 +141,15 @@ const AdminTrainersPage = () => {
                     )}
                     <div>
                       <h3 className="font-semibold text-text">{trainer.name}</h3>
-                      <p className="text-sm text-gray-400">Treinador</p>
+                      
+                        <p className="text-sm text-gray-400">Treinador</p>
+                        {trainer.specialty && (
+                          <p className="text-xs text-primary mt-0.5">{trainer.specialty}</p>
+                        )}
+                        {trainer.cref && (
+                          <p className="text-xs text-gray-500 mt-0.5">CREF: {trainer.cref}</p>
+                        )}
+
                     </div>
                   </div>
                 </div>
@@ -210,6 +220,22 @@ const AdminTrainersPage = () => {
                 onChange={(e) => setFormData({...formData, email: e.target.value})} 
                 required
               />
+
+              <div className="grid grid-cols-2 gap-4">
+                <Input 
+                  label="Especialidade" 
+                  placeholder="Ex: Fisioterapeuta, Preparador..." 
+                  value={formData.specialty} 
+                  onChange={(e) => setFormData({...formData, specialty: e.target.value})} 
+                />
+                <Input 
+                  label="CREF / Registro" 
+                  placeholder="Ex: 000000-G/SP" 
+                  value={formData.cref} 
+                  onChange={(e) => setFormData({...formData, cref: e.target.value})} 
+                />
+              </div>
+
               <Input 
                 label="Senha Inicial" 
                 type="password" 
@@ -218,6 +244,22 @@ const AdminTrainersPage = () => {
                 onChange={(e) => setFormData({...formData, password: e.target.value})} 
                 required
               />
+
+              <div className="grid grid-cols-2 gap-4">
+                <Input 
+                  label="Especialidade" 
+                  placeholder="Ex: Fisioterapeuta, Preparador..." 
+                  value={formData.specialty} 
+                  onChange={(e) => setFormData({...formData, specialty: e.target.value})} 
+                />
+                <Input 
+                  label="CREF / Registro" 
+                  placeholder="Ex: 000000-G/SP" 
+                  value={formData.cref} 
+                  onChange={(e) => setFormData({...formData, cref: e.target.value})} 
+                />
+              </div>
+
               
               <Button type="submit" className="w-full mt-6" isLoading={isLoading}>
                 Cadastrar Treinador
