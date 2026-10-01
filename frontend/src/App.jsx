@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import PwaInstallPrompt from './components/layout/PwaInstallPrompt';
 import useAuthStore from './store/authStore';
 
 // Layouts
@@ -34,7 +35,9 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 
 function App() {
   return (
-    <Routes>
+    <>
+      <PwaInstallPrompt />
+      <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       
@@ -66,6 +69,7 @@ function App() {
       {/* Catch all */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }
 
