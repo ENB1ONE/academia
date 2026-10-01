@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Plus, Trash2, Shield } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Plus, Trash2, Shield, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 import useAuthStore from '../../store/authStore';
@@ -12,6 +12,8 @@ const AdminTrainersPage = () => {
   const [trainers, setTrainers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const fileInputRef = useRef(null);
+  const [avatar, setAvatar] = useState(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -39,11 +41,28 @@ const AdminTrainersPage = () => {
 
   const handleOpenModal = () => {
     setFormData({ name: '', email: '', password: '' });
+    setAvatar(null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setAvatar(null);
+  };
+
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('A imagem deve ter no máximo 2MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -54,10 +73,16 @@ const AdminTrainersPage = () => {
     }
     try {
       setIsLoading(true);
-      await api.post('/api/v1/admin/trainers', formData, {
+      const res = await api.post('/api/v1/admin/trainers', formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Treinador cadastrado com sucesso!');
+      
+      // Save avatar mock to local storage if provided
+      if (avatar && res.data && res.data.id) {
+        localStorage.setItem(`userAvatar_${res.data.id}`, avatar);
+      }
+      
       handleCloseModal();
       fetchTrainers();
     } catch (error) {
@@ -73,6 +98,7 @@ const AdminTrainersPage = () => {
         await api.delete(`/api/v1/admin/trainers/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        localStorage.removeItem(`userAvatar_${id}`);
         toast.success('Treinador removido!');
         fetchTrainers();
       } catch (error) {
@@ -97,35 +123,42 @@ const AdminTrainersPage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {trainers.map((trainer) => (
-          <Card key={trainer.id} padding="p-0" className="overflow-hidden flex flex-col">
-            <div className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg border border-primary/30">
-                    {trainer.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-text">{trainer.name}</h3>
-                    <p className="text-sm text-gray-400">Treinador</p>
+        {trainers.map((trainer) => {
+          const savedAvatar = localStorage.getItem(`userAvatar_${trainer.id}`);
+          return (
+            <Card key={trainer.id} padding="p-0" className="overflow-hidden flex flex-col">
+              <div className="p-6">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-4">
+                    {savedAvatar ? (
+                      <img src={savedAvatar} alt={trainer.name} className="h-12 w-12 rounded-full object-cover border border-primary/30" />
+                    ) : (
+                      <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg border border-primary/30">
+                        {trainer.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="font-semibold text-text">{trainer.name}</h3>
+                      <p className="text-sm text-gray-400">Treinador</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="bg-surface px-6 py-3 border-t border-gray-800 flex justify-between items-center mt-auto">
-              <span className="text-xs font-medium text-gray-400 bg-background px-2 py-1 rounded-md border border-gray-700">
-                {trainer.email}
-              </span>
-              <button 
-                onClick={() => handleDelete(trainer.id)} 
-                className="text-gray-400 hover:text-danger transition-colors" 
-                title="Excluir Treinador"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-          </Card>
-        ))}
+              <div className="bg-surface px-6 py-3 border-t border-gray-800 flex justify-between items-center mt-auto">
+                <span className="text-xs font-medium text-gray-400 bg-background px-2 py-1 rounded-md border border-gray-700">
+                  {trainer.email}
+                </span>
+                <button 
+                  onClick={() => handleDelete(trainer.id)} 
+                  className="text-gray-400 hover:text-danger transition-colors" 
+                  title="Excluir Treinador"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            </Card>
+          );
+        })}
         
         {trainers.length === 0 && !isLoading && (
           <div className="col-span-full py-12 text-center text-gray-400">
@@ -146,6 +179,22 @@ const AdminTrainersPage = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="flex justify-center mb-4">
+                <div className="relative h-20 w-20 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                  {avatar ? (
+                    <img src={avatar} alt="Preview" className="h-20 w-20 rounded-full object-cover border-2 border-primary/50" />
+                  ) : (
+                    <div className="h-20 w-20 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/30">
+                      <Camera className="h-6 w-6" />
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full shadow">
+                    <Camera className="h-3 w-3" />
+                  </div>
+                  <input type="file" ref={fileInputRef} onChange={handlePhotoUpload} accept="image/*" className="hidden" />
+                </div>
+              </div>
+
               <Input 
                 label="Nome Completo" 
                 placeholder="Ex: Carlos Treinador" 

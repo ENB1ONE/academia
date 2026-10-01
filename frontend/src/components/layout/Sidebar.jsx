@@ -1,16 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Activity, Users, Dumbbell, Heart, Brain, BarChart3, LogOut, Menu, X, Flower2, Zap, Shield, User } from 'lucide-react';
+import { Activity, Users, Dumbbell, Heart, Brain, LogOut, Menu, X, Flower2, Zap, Shield, User } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import Logo from '../ui/Logo';
 
 const Sidebar = () => {
   const { user, logout } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
+  
+  const [avatar, setAvatar] = useState(null);
+  const [name, setName] = useState(user?.name || 'Usuário');
 
   const isAdmin = user?.role === 'admin';
   const isTreinador = user?.role === 'treinador' || isAdmin;
   const isAtleta = user?.role === 'atleta';
+
+  useEffect(() => {
+    if (user?.id) {
+      const savedAvatar = localStorage.getItem(`userAvatar_${user.id}`);
+      if (savedAvatar) setAvatar(savedAvatar);
+      
+      const savedName = localStorage.getItem(`userName_${user.id}`);
+      if (savedName) setName(savedName);
+      else if (user?.name) setName(user.name);
+      
+      // Setup interval to listen for changes since this is a global mock
+      const interval = setInterval(() => {
+        const currentAvatar = localStorage.getItem(`userAvatar_${user.id}`);
+        if (currentAvatar !== avatar) setAvatar(currentAvatar);
+        
+        const currentName = localStorage.getItem(`userName_${user.id}`);
+        if (currentName && currentName !== name) setName(currentName);
+      }, 1000);
+      
+      return () => clearInterval(interval);
+    }
+  }, [user?.id, user?.name, avatar, name]);
 
   const links = [
     { to: '/dashboard', icon: Activity, label: isAtleta ? 'Meu Painel' : 'Dashboard', show: true },
@@ -22,7 +47,6 @@ const Sidebar = () => {
     { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual', show: true },
     { to: '/monitoring/physical-tests', icon: Zap, label: 'Testes Físicos', show: isTreinador },
     { to: '/profile', icon: User, label: 'Meu Perfil', show: true },
-    // Only Admin can manage trainers. We'll add the route later.
     { to: '/admin/trainers', icon: Shield, label: 'Treinadores', show: isAdmin },
   ].filter(link => link.show);
 
@@ -72,11 +96,15 @@ const Sidebar = () => {
 
         <div className="p-4 border-t border-gray-800">
           <div className="flex items-center gap-3 mb-4 px-2">
-            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold border border-primary/30 shrink-0">
-              {user?.name?.charAt(0) || 'U'}
-            </div>
+            {avatar ? (
+              <img src={avatar} alt="Avatar" className="h-10 w-10 rounded-full object-cover border border-primary/30 shrink-0" />
+            ) : (
+              <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold border border-primary/30 shrink-0">
+                {name.charAt(0).toUpperCase() || 'U'}
+              </div>
+            )}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-text truncate">{user?.name || 'Usuário'}</p>
+              <p className="text-sm font-medium text-text truncate">{name}</p>
               <p className="text-xs text-gray-400 truncate capitalize">{user?.role || 'Visitante'}</p>
             </div>
           </div>
