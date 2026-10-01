@@ -14,6 +14,8 @@ import CreateWorkoutPage from './pages/workouts/CreateWorkoutPage';
 import PsePage from './pages/monitoring/PsePage';
 import WellnessPage from './pages/monitoring/WellnessPage';
 
+import PainMapPage from './pages/monitoring/PainMapPage';
+
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuthStore();
   if (!isAuthenticated) return <Navigate to="/" replace />;
@@ -38,6 +40,7 @@ function App() {
         <Route path="workouts/new" element={<CreateWorkoutPage />} />
         <Route path="monitoring/pse" element={<PsePage />} />
         <Route path="monitoring/wellness" element={<WellnessPage />} />
+        <Route path="monitoring/pain" element={<PainMapPage />} />
       </Route>
       
       {/* Catch all */}

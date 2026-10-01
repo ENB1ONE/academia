@@ -13,6 +13,7 @@ const Sidebar = () => {
     { to: '/workouts/new', icon: Dumbbell, label: 'Novo Treino' },
     { to: '/monitoring/pse', icon: Brain, label: 'Registrar PSE' },
     { to: '/monitoring/wellness', icon: Heart, label: 'Bem-Estar' },
+    { to: '/monitoring/pain', icon: Activity, label: 'Mapa de Dor' },
   ];
 
   const navClass = ({ isActive }) =>
