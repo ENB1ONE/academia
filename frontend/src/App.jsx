@@ -13,8 +13,8 @@ import AthleteDetailPage from './pages/athletes/AthleteDetailPage';
 import CreateWorkoutPage from './pages/workouts/CreateWorkoutPage';
 import PsePage from './pages/monitoring/PsePage';
 import WellnessPage from './pages/monitoring/WellnessPage';
-
 import PainMapPage from './pages/monitoring/PainMapPage';
+import MenstrualCyclePage from './pages/monitoring/MenstrualCyclePage';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuthStore();
@@ -41,6 +41,7 @@ function App() {
         <Route path="monitoring/pse" element={<PsePage />} />
         <Route path="monitoring/wellness" element={<WellnessPage />} />
         <Route path="monitoring/pain" element={<PainMapPage />} />
+        <Route path="monitoring/menstrual" element={<MenstrualCyclePage />} />
       </Route>
       
       {/* Catch all */}
