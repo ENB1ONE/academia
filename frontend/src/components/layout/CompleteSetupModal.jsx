@@ -24,21 +24,21 @@ const CompleteSetupModal = () => {
     setError('');
 
     if (needsPasswordChange && password.length < 6) {
-      setError('A nova senha deve ter no m�nimo 6 caracteres.');
+      setError('A nova senha deve ter no mínimo 6 caracteres.');
       return;
     }
 
     if (needsPasswordChange && password !== confirmPassword) {
-      setError('As senhas n�o coincidem.');
+      setError('As senhas não coincidem.');
       return;
     }
 
     if (needsTerms && !acceptedTerms) {
-      setError('Voc� precisa aceitar os Termos de Uso e Pol�tica de Privacidade.');
+      setError('Você precisa aceitar os Termos de Uso e Política de Privacidade.');
       return;
     }
     if (user?.role === 'treinador' && !acceptedConfidentiality) {
-      setError('Voc� precisa aceitar o Termo de Confidencialidade e Sigilo.');
+      setError('Você precisa aceitar o Termo de Confidencialidade e Sigilo.');
       return;
     }
 
@@ -53,9 +53,9 @@ const CompleteSetupModal = () => {
       const updatedUser = { ...user, force_password_change: false, terms_accepted_at: new Date().toISOString() };
       setUser(updatedUser);
       
-      toast.success('Configura��o conclu�da com sucesso!');
+      toast.success('Configuração concluída com sucesso!');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Erro ao salvar configura��es.');
+      setError(err.response?.data?.detail || 'Erro ao salvar configurações.');
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +70,7 @@ const CompleteSetupModal = () => {
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">Bem-vindo(a)!</h2>
           <p className="text-gray-400 text-sm">
-            Para continuar, precisamos que voc� conclua a configura��o da sua conta.
+            Para continuar, precisamos que você conclua a configuração da sua conta.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ const CompleteSetupModal = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="block w-full pl-10 bg-background border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary sm:text-sm px-3 py-2"
-                    placeholder="M�nimo 6 caracteres"
+                    placeholder="Mínimo 6 caracteres"
                     required
                   />
                 </div>
@@ -136,7 +136,7 @@ const CompleteSetupModal = () => {
                     />
                   </div>
                   <div className="text-sm text-gray-400">
-                    Li e concordo com a <a href="#" className="text-primary hover:underline">Pol�tica de Privacidade</a> e autorizo o tratamento dos meus dados sens�veis (f�sicos e de sa�de) conforme a LGPD.
+                    Li e concordo com a <a href="#" className="text-primary hover:underline">Política de Privacidade</a> e autorizo o tratamento dos meus dados sensíveis (físicos e de saúde) conforme a LGPD.
                   </div>
                 </label>
               </div>
@@ -153,7 +153,7 @@ const CompleteSetupModal = () => {
                       />
                     </div>
                     <div className="text-sm text-gray-400">
-                      <span className="font-bold text-gray-300">Termo de Confidencialidade:</span> Declaro sob as penas da lei que manterei sigilo absoluto sobre os dados m�dicos, f�sicos e de sa�de dos atletas acessados nesta plataforma, n�o os compartilhando com terceiros.
+                      <span className="font-bold text-gray-300">Termo de Confidencialidade:</span> Declaro sob as penas da lei que manterei sigilo absoluto sobre os dados médicos, físicos e de saúde dos atletas acessados nesta plataforma, não os compartilhando com terceiros.
                     </div>
                   </label>
                 </div>
@@ -166,7 +166,7 @@ const CompleteSetupModal = () => {
             disabled={isLoading}
             className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg transition-colors mt-6 disabled:opacity-50"
           >
-            {isLoading ? "Salvando..." : "Concluir Configura��o"}
+            {isLoading ? "Salvando..." : "Concluir Configuração"}
           </button>
         </form>
       </div>
