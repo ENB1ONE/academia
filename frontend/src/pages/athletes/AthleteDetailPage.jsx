@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import toast from 'react-hot-toast';
+import { Download } from 'lucide-react';
 import Card from '../../components/ui/Card';
 import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
 import LoadChart from '../../components/charts/LoadChart';
 import WellnessChart from '../../components/charts/WellnessChart';
 
 const AthleteDetailPage = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('treinos');
+  const [isExporting, setIsExporting] = useState(false);
 
   // Mock data
   const athlete = { name: 'Lucas Silva', age: 24, sport: 'Futebol', position: 'Atacante', height: '1.82m', weight: '78kg' };
@@ -19,8 +25,41 @@ const AthleteDetailPage = () => {
     { id: 'perfil', label: 'Perfil' },
   ];
 
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    const toastId = toast.loading('Gerando PDF...');
+    
+    try {
+      const element = document.getElementById('pdf-content');
+      const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#111827' });
+      const imgData = canvas.toDataURL('image/png');
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${athlete.name.replace(/\s+/g, '_')}_Relatorio.pdf`);
+      
+      toast.success('Relatório exportado!', { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error('Erro ao exportar o PDF', { id: toastId });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="pdf-content">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-text">Detalhes do Atleta</h1>
+        <Button onClick={handleExportPDF} disabled={isExporting} className="flex items-center gap-2">
+          <Download className="w-4 h-4" />
+          {isExporting ? 'Gerando...' : 'Exportar Relatório PDF'}
+        </Button>
+      </div>
+
       <Card padding="p-6">
         <div className="flex items-center gap-6">
           <div className="h-20 w-20 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-3xl border border-primary/30">
@@ -109,7 +148,6 @@ const AthleteDetailPage = () => {
                 <p className="text-sm text-gray-400">Esporte</p>
                 <p className="font-medium text-text">{athlete.sport}</p>
               </div>
-              {/* More profile fields can go here */}
             </div>
           </Card>
         )}
