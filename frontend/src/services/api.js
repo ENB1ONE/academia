@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../store/authStore';
 
 const api = axios.create({
-  baseURL: 'https://from-gathered-substantial-sustained.trycloudflare.com',
+  baseURL: 'https://estates-assistance-documentary-professionals.trycloudflare.com',
   headers: {
     'Content-Type': 'application/json',
   },
