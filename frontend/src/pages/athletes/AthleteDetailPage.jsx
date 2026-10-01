@@ -18,19 +18,22 @@ const AthleteDetailPage = () => {
   const [athlete, setAthlete] = useState(null);
   const [pseHistory, setPseHistory] = useState([]);
   const [wellnessHistory, setWellnessHistory] = useState([]);
+  const [workouts, setWorkouts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [athRes, pseRes, wellRes] = await Promise.all([
+        const [athRes, pseRes, wellRes, workRes] = await Promise.all([
           api.get(`/api/v1/athletes/${id}`),
           api.get(`/api/v1/monitoring/pse/${id}`),
-          api.get(`/api/v1/monitoring/wellness/${id}`)
+          api.get(`/api/v1/monitoring/wellness/${id}`),
+          api.get(`/api/v1/workouts/?athlete_id=${id}`)
         ]);
         setAthlete(athRes.data);
         setPseHistory(pseRes.data);
         setWellnessHistory(wellRes.data);
+        setWorkouts(workRes.data);
       } catch (error) {
         toast.error('Erro ao carregar dados do atleta');
       } finally {
@@ -129,9 +132,21 @@ const AthleteDetailPage = () => {
       <div className="mt-6">
         {activeTab === 'treinos' && (
           <div className="space-y-4">
-            <Card padding="p-8" className="text-center text-gray-400">
-              <p>Nenhum treino atribuído recentemente.</p>
-            </Card>
+            {workouts.length > 0 ? (
+              workouts.map(workout => (
+                <Card key={workout.id} padding="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="font-semibold text-text">{workout.name}</h3>
+                    <span className="text-sm text-gray-400">Data: {workout.scheduled_date || 'N/A'}</span>
+                  </div>
+                  <p className="text-sm text-gray-400">Tipo: {workout.workout_type} | {workout.exercises?.length || 0} exercícios</p>
+                </Card>
+              ))
+            ) : (
+              <Card padding="p-8" className="text-center text-gray-400">
+                <p>Nenhum treino atribuído recentemente.</p>
+              </Card>
+            )}
           </div>
         )}
 
