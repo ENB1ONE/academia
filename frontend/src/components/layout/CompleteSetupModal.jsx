@@ -24,21 +24,21 @@ const CompleteSetupModal = () => {
     setError('');
 
     if (needsPasswordChange && password.length < 6) {
-      setError('A nova senha deve ter no mínimo 6 caracteres.');
+      setError('A nova senha deve ter no mï¿½nimo 6 caracteres.');
       return;
     }
 
     if (needsPasswordChange && password !== confirmPassword) {
-      setError('As senhas não coincidem.');
+      setError('As senhas nï¿½o coincidem.');
       return;
     }
 
     if (needsTerms && !acceptedTerms) {
-      setError('Você precisa aceitar os Termos de Uso e Política de Privacidade.');
+      setError('Vocï¿½ precisa aceitar os Termos de Uso e Polï¿½tica de Privacidade.');
       return;
     }
     if (user?.role === 'treinador' && !acceptedConfidentiality) {
-      setError('Você precisa aceitar o Termo de Confidencialidade e Sigilo.');
+      setError('Vocï¿½ precisa aceitar o Termo de Confidencialidade e Sigilo.');
       return;
     }
 
@@ -53,9 +53,9 @@ const CompleteSetupModal = () => {
       const updatedUser = { ...user, force_password_change: false, terms_accepted_at: new Date().toISOString() };
       setUser(updatedUser);
       
-      toast.success('Configuração concluída com sucesso!');
+      toast.success('Configuraï¿½ï¿½o concluï¿½da com sucesso!');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Erro ao salvar configurações.');
+      setError(err.response?.data?.detail || 'Erro ao salvar configuraï¿½ï¿½es.');
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +70,7 @@ const CompleteSetupModal = () => {
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">Bem-vindo(a)!</h2>
           <p className="text-gray-400 text-sm">
-            Para continuar, precisamos que você conclua a configuração da sua conta.
+            Para continuar, precisamos que vocï¿½ conclua a configuraï¿½ï¿½o da sua conta.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ const CompleteSetupModal = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="block w-full pl-10 bg-background border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary sm:text-sm px-3 py-2"
-                    placeholder="Mínimo 6 caracteres"
+                    placeholder="Mï¿½nimo 6 caracteres"
                     required
                   />
                 </div>
@@ -136,12 +136,12 @@ const CompleteSetupModal = () => {
                     />
                   </div>
                   <div className="text-sm text-gray-400">
-                    Li e concordo com a <a href="#" className="text-primary hover:underline">Política de Privacidade</a> e autorizo o tratamento dos meus dados sensíveis (físicos e de saúde) conforme a LGPD.
+                    Li e concordo com a <a href="#" className="text-primary hover:underline">Polï¿½tica de Privacidade</a> e autorizo o tratamento dos meus dados sensï¿½veis (fï¿½sicos e de saï¿½de) conforme a LGPD.
                   </div>
                 </label>
               </div>
 
-              {user?.role === 'treinador' && (
+              {user?.role === "treinador" && (
                 <div className="pt-4 border-t border-gray-700/50">
                   <label className="flex items-start gap-3 cursor-pointer group mt-2">
                     <div className="flex items-center h-5">
@@ -153,7 +153,7 @@ const CompleteSetupModal = () => {
                       />
                     </div>
                     <div className="text-sm text-gray-400">
-                      <span className="font-bold text-gray-300">Termo de Confidencialidade:</span> Declaro sob as penas da lei que manterei sigilo absoluto sobre os dados médicos, físicos e de saúde dos atletas acessados nesta plataforma, não os compartilhando com terceiros.
+                      <span className="font-bold text-gray-300">Termo de Confidencialidade:</span> Declaro sob as penas da lei que manterei sigilo absoluto sobre os dados mï¿½dicos, fï¿½sicos e de saï¿½de dos atletas acessados nesta plataforma, nï¿½o os compartilhando com terceiros.
                     </div>
                   </label>
                 </div>
@@ -166,7 +166,7 @@ const CompleteSetupModal = () => {
             disabled={isLoading}
             className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg transition-colors mt-6 disabled:opacity-50"
           >
-            {isLoading ? 'Salvando...' : 'Concluir Configuração'}
+            {isLoading ? "Salvando..." : "Concluir Configuraï¿½ï¿½o"}
           </button>
         </form>
       </div>

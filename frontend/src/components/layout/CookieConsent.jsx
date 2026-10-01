@@ -37,11 +37,11 @@ const CookieConsent = () => {
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
               <Shield className="text-primary w-6 h-6" />
-              <h3 className="text-lg font-bold text-text">Sua Privacidade é Importante</h3>
+              <h3 className="text-lg font-bold text-text">Sua Privacidade ï¿½ Importante</h3>
             </div>
             <p className="text-sm text-gray-300">
               Utilizamos cookies e tecnologias semelhantes para garantir o funcionamento da plataforma, 
-              melhorar sua experiência e analisar nosso tráfego. Em conformidade com a LGPD, você pode 
+              melhorar sua experiï¿½ncia e analisar nosso trï¿½fego. Em conformidade com a LGPD, vocï¿½ pode 
               escolher quais cookies deseja permitir.
             </p>
           </div>
@@ -56,7 +56,7 @@ const CookieConsent = () => {
               onClick={() => handleConsent('necessary')}
               className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors bg-background rounded-lg border border-gray-700 hover:bg-gray-800 w-full md:w-auto"
             >
-              Apenas Necessários
+              Apenas Necessï¿½rios
             </button>
             <button
               onClick={() => handleConsent('all')}
