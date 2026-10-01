@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Activity } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -38,6 +38,7 @@ const PainMapPage = () => {
   const isAtleta = user?.role === 'atleta';
 
   const [athleteId, setAthleteId] = useState('');
+  const formRef = useRef(null);
   const [selectedPart, setSelectedPart] = useState(null);
   const [records, setRecords] = useState({});
   const [painData, setPainData] = useState({
@@ -166,6 +167,7 @@ const PainMapPage = () => {
         <div className="space-y-4">
           {selectedPart ? (
             <Card padding="p-6" className="border-primary border">
+              <div ref={formRef}></div>
               <h3 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
                 <Activity className="h-5 w-5" /> {selectedPart.label}
               </h3>

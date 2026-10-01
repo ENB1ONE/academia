@@ -18,13 +18,14 @@ const AthleteDetailPage = () => {
   const [athlete, setAthlete] = useState(null);
   const [pseHistory, setPseHistory] = useState([]);
   const [wellnessHistory, setWellnessHistory] = useState([]);
+  const [painHistory, setPainHistory] = useState([]);
   const [workouts, setWorkouts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [athRes, pseRes, wellRes, workRes] = await Promise.all([
+        const [athRes, pseRes, wellRes, workRes, painRes] = await Promise.all([
           api.get(`/api/v1/athletes/${id}`),
           api.get(`/api/v1/monitoring/pse/${id}`),
           api.get(`/api/v1/monitoring/wellness/${id}`),
@@ -33,6 +34,7 @@ const AthleteDetailPage = () => {
         setAthlete(athRes.data);
         setPseHistory(pseRes.data);
         setWellnessHistory(wellRes.data);
+        setPainHistory(painRes.data);
         setWorkouts(workRes.data);
       } catch (error) {
         toast.error('Erro ao carregar dados do atleta');
@@ -48,6 +50,7 @@ const AthleteDetailPage = () => {
     { id: 'pse', label: 'Carga & PSE' },
     { id: 'bem-estar', label: 'Bem-Estar' },
     { id: 'perfil', label: 'Perfil' },
+    { id: 'dor', label: 'Mapa de Dor' },
   ];
 
   const handleExportPDF = async () => {
@@ -175,6 +178,31 @@ const AthleteDetailPage = () => {
                 </div>
               ) : (
                 <div className="py-12 text-center text-gray-500">Nenhum registro de Bem-Estar.</div>
+              )}
+            </Card>
+          </div>
+        )}
+
+        {activeTab === 'dor' && (
+          <div className="space-y-6">
+            <Card>
+              <h3 className="text-lg font-semibold text-text mb-6">Hist�rico de Dores</h3>
+              {painHistory.length > 0 ? (
+                <div className="space-y-4">
+                  {painHistory.map(pain => (
+                    <div key={pain.id} className="p-4 bg-surface rounded-lg border border-gray-800 flex justify-between items-center">
+                      <div>
+                        <p className="font-semibold text-text">{pain.body_part} <span className="text-sm font-normal text-gray-400">({pain.pain_type})</span></p>
+                        <p className="text-sm text-gray-400">Data: {new Date(pain.date).toLocaleDateString('pt-BR')} {pain.notes ? `| Obs: ${pain.notes}` : ''}</p>
+                      </div>
+                      <Badge variant={pain.intensity >= 7 ? 'danger' : pain.intensity >= 4 ? 'warning' : 'success'}>
+                        N�vel {pain.intensity}/10
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-12 text-center text-gray-500">Nenhum registro de dor.</div>
               )}
             </Card>
           </div>
