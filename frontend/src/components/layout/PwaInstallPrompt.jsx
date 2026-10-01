@@ -14,6 +14,12 @@ const PwaInstallPrompt = () => {
 
     if (isStandaloneMode) return;
 
+    // Apenas mostrar em dispositivos m�veis
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (!isMobileDevice) {
+      return;
+    }
+
     // Handle Android (Chrome/Edge)
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
