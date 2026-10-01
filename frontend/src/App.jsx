@@ -39,24 +39,24 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       
       {/* Protected Routes */}
-      <Route path="/" element={
+      <Route element={
         <ProtectedRoute>
           <DashboardLayout />
         </ProtectedRoute>
       }>
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="athletes" element={<AthletesPage />} />
-        <Route path="athletes/:id" element={<AthleteDetailPage />} />
-        <Route path="workouts/new" element={<CreateWorkoutPage />} />
-        <Route path="monitoring/pse" element={<PsePage />} />
-        <Route path="monitoring/wellness" element={<WellnessPage />} />
-        <Route path="monitoring/pain" element={<PainMapPage />} />
-        <Route path="monitoring/menstrual" element={<MenstrualCyclePage />} />
-        <Route path="monitoring/physical-tests" element={<PhysicalTestsPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/athletes" element={<AthletesPage />} />
+        <Route path="/athletes/:id" element={<AthleteDetailPage />} />
+        <Route path="/workouts/new" element={<CreateWorkoutPage />} />
+        <Route path="/monitoring/pse" element={<PsePage />} />
+        <Route path="/monitoring/wellness" element={<WellnessPage />} />
+        <Route path="/monitoring/pain" element={<PainMapPage />} />
+        <Route path="/monitoring/menstrual" element={<MenstrualCyclePage />} />
+        <Route path="/monitoring/physical-tests" element={<PhysicalTestsPage />} />
         
         {/* Admin only route */}
-        <Route path="admin/trainers" element={
+        <Route path="/admin/trainers" element={
           <ProtectedRoute requiredRole="admin">
             <AdminTrainersPage />
           </ProtectedRoute>

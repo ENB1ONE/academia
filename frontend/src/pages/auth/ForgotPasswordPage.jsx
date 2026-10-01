@@ -21,11 +21,11 @@ const ForgotPasswordPage = () => {
 
     try {
       setIsLoading(true);
-      // Simulaçǜo de chamada  API para a apresentao
+      // Simulacao de chamada API para a apresentacao
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       setIsSent(true);
-      toast.success('Instrues enviadas com sucesso!');
+      toast.success('Instruções enviadas com sucesso!');
     } catch (error) {
       toast.error('Erro ao enviar email. Tente novamente.');
     } finally {
@@ -51,7 +51,7 @@ const ForgotPasswordPage = () => {
           Esqueceu a senha?
         </h2>
         <p className="mt-2 text-center text-sm text-gray-400">
-          Vamos te ajudar a recuperar o acesso  sua conta.
+          Vamos te ajudar a recuperar o acesso à sua conta.
         </p>
       </div>
 
