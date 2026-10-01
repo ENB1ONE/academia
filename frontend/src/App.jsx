@@ -17,6 +17,7 @@ import PainMapPage from './pages/monitoring/PainMapPage';
 import MenstrualCyclePage from './pages/monitoring/MenstrualCyclePage';
 import PhysicalTestsPage from './pages/monitoring/PhysicalTestsPage';
 import AdminTrainersPage from './pages/admin/AdminTrainersPage';
+import ProfilePage from './pages/auth/ProfilePage';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -42,6 +43,7 @@ function App() {
         </ProtectedRoute>
       }>
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="profile" element={<ProfilePage />} />
         <Route path="athletes" element={<AthletesPage />} />
         <Route path="athletes/:id" element={<AthleteDetailPage />} />
         <Route path="workouts/new" element={<CreateWorkoutPage />} />

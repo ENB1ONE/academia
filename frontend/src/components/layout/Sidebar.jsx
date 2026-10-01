@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Activity, Users, Dumbbell, Heart, Brain, BarChart3, LogOut, Menu, X, Flower2, Zap, Shield } from 'lucide-react';
+import { Activity, Users, Dumbbell, Heart, Brain, BarChart3, LogOut, Menu, X, Flower2, Zap, Shield, User } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import Logo from '../ui/Logo';
 
@@ -21,6 +21,7 @@ const Sidebar = () => {
     { to: '/monitoring/pain', icon: Activity, label: 'Mapa de Dor', show: true },
     { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual', show: true },
     { to: '/monitoring/physical-tests', icon: Zap, label: 'Testes Físicos', show: isTreinador },
+    { to: '/profile', icon: User, label: 'Meu Perfil', show: true },
     // Only Admin can manage trainers. We'll add the route later.
     { to: '/admin/trainers', icon: Shield, label: 'Treinadores', show: isAdmin },
   ].filter(link => link.show);
