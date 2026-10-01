@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Activity } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import { Activity } from 'lucide-react';
+import useAthleteStore from '../../store/athleteStore';
+import useMonitoringStore from '../../store/monitoringStore';
 
 const BODY_PARTS = [
   { id: 'head', label: 'Cabeça', cx: 150, cy: 30 },
@@ -24,6 +27,11 @@ const BODY_PARTS = [
 ];
 
 const PainMapPage = () => {
+  const navigate = useNavigate();
+  const { athletes, fetchAthletes } = useAthleteStore();
+  const { createPainMap, isLoading } = useMonitoringStore();
+
+  const [athleteId, setAthleteId] = useState('');
   const [selectedPart, setSelectedPart] = useState(null);
   const [painData, setPainData] = useState({
     intensity: 5,
@@ -32,6 +40,10 @@ const PainMapPage = () => {
   });
   
   const [records, setRecords] = useState({});
+
+  useEffect(() => {
+    fetchAthletes();
+  }, [fetchAthletes]);
 
   const handlePartClick = (part) => {
     setSelectedPart(part);
@@ -51,12 +63,33 @@ const PainMapPage = () => {
     setSelectedPart(null);
   };
 
-  const handleSaveAll = () => {
+  const handleSaveAll = async () => {
+    if (!athleteId) {
+      toast.error('Selecione o atleta.');
+      return;
+    }
     if (Object.keys(records).length === 0) {
       toast.error('Nenhuma dor registrada.');
       return;
     }
-    toast.success('Mapa de Dor salvo com sucesso!');
+    
+    try {
+      // For simplicity, we loop and await, or could Promise.all
+      for (const partId of Object.keys(records)) {
+        await createPainMap({
+          athlete_id: parseInt(athleteId),
+          date: new Date().toISOString().split('T')[0],
+          body_part: BODY_PARTS.find(p => p.id === partId).label,
+          pain_type: records[partId].pain_type,
+          intensity: records[partId].intensity,
+          notes: records[partId].notes
+        });
+      }
+      toast.success('Mapa de Dor salvo com sucesso!');
+      navigate('/dashboard');
+    } catch(err) {
+      toast.error('Erro ao salvar dores');
+    }
   };
 
   return (
@@ -65,6 +98,17 @@ const PainMapPage = () => {
         <h1 className="text-2xl font-bold text-text">Mapa de Dor</h1>
         <p className="text-gray-400 mt-1">Indique o local, tipo e intensidade da dor</p>
       </div>
+
+      <Card padding="p-4" className="mb-4">
+        <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
+        <select 
+          className="block w-full rounded-lg bg-background border border-gray-700 text-text p-2.5"
+          value={athleteId} onChange={(e) => setAthleteId(e.target.value)}
+        >
+          <option value="">Selecione o atleta...</option>
+          {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+        </select>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* SVG Diagram */}
@@ -171,7 +215,7 @@ const PainMapPage = () => {
             </Card>
           )}
 
-          <Button onClick={handleSaveAll} className="w-full" size="lg" disabled={Object.keys(records).length === 0}>
+          <Button onClick={handleSaveAll} className="w-full" size="lg" disabled={Object.keys(records).length === 0} isLoading={isLoading}>
             Salvar Registros de Dor
           </Button>
         </div>

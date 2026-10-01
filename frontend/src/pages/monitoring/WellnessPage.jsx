@@ -1,25 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
+import useAthleteStore from '../../store/athleteStore';
+import useMonitoringStore from '../../store/monitoringStore';
 
 const questions = [
-  { id: 'sono', title: 'Qualidade do Sono', low: 'Péssimo', high: 'Ótimo' },
-  { id: 'fadiga', title: 'Nível de Fadiga', low: 'Exausto', high: 'Com Energia' },
-  { id: 'dor', title: 'Dor Muscular', low: 'Muita Dor', high: 'Sem Dor' },
-  { id: 'estresse', title: 'Nível de Estresse', low: 'Muito Estressado', high: 'Relaxado' },
-  { id: 'humor', title: 'Estado de Humor', low: 'Irritado/Triste', high: 'Muito Feliz' },
+  { id: 'sleep_quality', title: 'Qualidade do Sono', low: 'Péssimo', high: 'Ótimo' },
+  { id: 'fatigue_level', title: 'Nível de Fadiga', low: 'Exausto', high: 'Com Energia' },
+  { id: 'muscle_soreness', title: 'Dor Muscular', low: 'Muita Dor', high: 'Sem Dor' },
+  { id: 'stress_level', title: 'Nível de Estresse', low: 'Muito Estressado', high: 'Relaxado' },
+  { id: 'mood', title: 'Estado de Humor', low: 'Irritado/Triste', high: 'Muito Feliz' },
 ];
 
 const WellnessPage = () => {
+  const navigate = useNavigate();
+  const { athletes, fetchAthletes } = useAthleteStore();
+  const { createWellness, isLoading } = useMonitoringStore();
+
+  const [athleteId, setAthleteId] = useState('');
   const [answers, setAnswers] = useState({
-    sono: 3, fadiga: 3, dor: 3, estresse: 3, humor: 3
+    sleep_quality: 3, fatigue_level: 3, muscle_soreness: 3, stress_level: 3, mood: 3
   });
+
+  useEffect(() => {
+    fetchAthletes();
+  }, [fetchAthletes]);
 
   const average = (Object.values(answers).reduce((a, b) => a + b, 0) / 5).toFixed(1);
 
-  const handleSave = () => {
-    toast.success('Questionário salvo com sucesso!');
+  const handleSave = async () => {
+    if (!athleteId) {
+      toast.error('Selecione um atleta');
+      return;
+    }
+    try {
+      await createWellness({
+        athlete_id: parseInt(athleteId),
+        date: new Date().toISOString().split('T')[0],
+        ...answers,
+        notes: ''
+      });
+      toast.success('Questionário salvo com sucesso!');
+      navigate('/dashboard');
+    } catch (err) {
+      toast.error('Erro ao salvar questionário');
+    }
   };
 
   return (
@@ -32,8 +59,13 @@ const WellnessPage = () => {
       <Card>
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
-          <select className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5">
-            <option>Lucas Silva</option>
+          <select 
+            className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
+            value={athleteId}
+            onChange={(e) => setAthleteId(e.target.value)}
+          >
+            <option value="">Selecione...</option>
+            {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
           </select>
         </div>
 
@@ -72,7 +104,7 @@ const WellnessPage = () => {
         </div>
       </Card>
 
-      <Button onClick={handleSave} className="w-full" size="lg">
+      <Button onClick={handleSave} className="w-full" size="lg" isLoading={isLoading}>
         Salvar Respostas
       </Button>
     </div>

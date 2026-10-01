@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/ui/Card';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
+import useAthleteStore from '../../store/athleteStore';
+import useMonitoringStore from '../../store/monitoringStore';
 
 const pseScale = [
   { level: 1, desc: 'Muito Leve', color: 'bg-green-500' },
@@ -18,9 +21,19 @@ const pseScale = [
 ];
 
 const PsePage = () => {
+  const navigate = useNavigate();
+  const { athletes, fetchAthletes } = useAthleteStore();
+  const { createPse, isLoading } = useMonitoringStore();
+
+  const [athleteId, setAthleteId] = useState('');
+  const [sessionType, setSessionType] = useState('Treino');
   const [duration, setDuration] = useState('');
   const [selectedPse, setSelectedPse] = useState(null);
   const [load, setLoad] = useState(0);
+
+  useEffect(() => {
+    fetchAthletes();
+  }, [fetchAthletes]);
 
   useEffect(() => {
     if (duration && selectedPse) {
@@ -30,12 +43,25 @@ const PsePage = () => {
     }
   }, [duration, selectedPse]);
 
-  const handleSave = () => {
-    if (!duration || !selectedPse) {
-      toast.error('Preencha a duração e selecione a PSE');
+  const handleSave = async () => {
+    if (!athleteId || !duration || !selectedPse) {
+      toast.error('Preencha atleta, duração e a PSE');
       return;
     }
-    toast.success('PSE registrada com sucesso!');
+    try {
+      await createPse({
+        athlete_id: parseInt(athleteId),
+        date: new Date().toISOString().split('T')[0],
+        session_type: sessionType,
+        duration_minutes: parseInt(duration),
+        pse_value: selectedPse,
+        notes: ''
+      });
+      toast.success('PSE registrada com sucesso!');
+      navigate('/dashboard');
+    } catch(err) {
+      toast.error('Erro ao registrar PSE');
+    }
   };
 
   return (
@@ -50,16 +76,25 @@ const PsePage = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
-              <select className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5">
-                <option>Lucas Silva</option>
+              <select 
+                className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
+                value={athleteId}
+                onChange={(e) => setAthleteId(e.target.value)}
+              >
+                <option value="">Selecione...</option>
+                {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Tipo de Sessão</label>
-              <select className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5">
-                <option>Treino</option>
-                <option>Jogo</option>
-                <option>Fisioterapia</option>
+              <select 
+                className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
+                value={sessionType}
+                onChange={(e) => setSessionType(e.target.value)}
+              >
+                <option value="Treino">Treino</option>
+                <option value="Jogo">Jogo</option>
+                <option value="Fisioterapia">Fisioterapia</option>
               </select>
             </div>
           </div>
@@ -103,7 +138,7 @@ const PsePage = () => {
         </div>
       </Card>
 
-      <Button onClick={handleSave} className="w-full" size="lg">
+      <Button onClick={handleSave} className="w-full" size="lg" isLoading={isLoading}>
         Salvar Registro
       </Button>
     </div>
