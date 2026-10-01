@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import CookieConsent from './components/layout/CookieConsent';
 import PwaInstallPrompt from './components/layout/PwaInstallPrompt';
 import useAuthStore from './store/authStore';
 
@@ -37,6 +38,7 @@ function App() {
   return (
     <>
       <PwaInstallPrompt />
+      <CookieConsent />
       <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
