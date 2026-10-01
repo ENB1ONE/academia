@@ -238,16 +238,16 @@ const AthletesPage = () => {
               <Input label="Data de Nascimento" type="date" value={formData.birth_date} onChange={(e) => setFormData({...formData, birth_date: e.target.value})} />
               <div className="grid grid-cols-2 gap-4">
                 <Input label="Modalidade" placeholder="Ex: Futebol" value={formData.sport} onChange={(e) => setFormData({...formData, sport: e.target.value})} />
-                <Input label="PosiÃ§Ã£o" placeholder="Ex: Goleiro" value={formData.position} onChange={(e) => setFormData({...formData, position: e.target.value})} />
+                <Input label="Posição" placeholder="Ex: Goleiro" value={formData.position} onChange={(e) => setFormData({...formData, position: e.target.value})} />
               </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">GÃªnero</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Gênero</label>
                   <select 
                     value={formData.gender || ''} 
                     onChange={(e) => setFormData({...formData, gender: e.target.value})}
                     className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm px-3 py-2"
                   >
-                    <option value="">Selecione o gÃªnero...</option>
+                    <option value="">Selecione o gênero...</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Feminino">Feminino</option>
                   </select>
