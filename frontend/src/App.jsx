@@ -16,10 +16,17 @@ import WellnessPage from './pages/monitoring/WellnessPage';
 import PainMapPage from './pages/monitoring/PainMapPage';
 import MenstrualCyclePage from './pages/monitoring/MenstrualCyclePage';
 import PhysicalTestsPage from './pages/monitoring/PhysicalTestsPage';
+import AdminTrainersPage from './pages/admin/AdminTrainersPage';
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuthStore();
+const ProtectedRoute = ({ children, requiredRole }) => {
+  const { isAuthenticated, user } = useAuthStore();
+  
   if (!isAuthenticated) return <Navigate to="/" replace />;
+  
+  if (requiredRole && user?.role !== requiredRole) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  
   return children;
 };
 
@@ -43,6 +50,13 @@ function App() {
         <Route path="monitoring/pain" element={<PainMapPage />} />
         <Route path="monitoring/menstrual" element={<MenstrualCyclePage />} />
         <Route path="monitoring/physical-tests" element={<PhysicalTestsPage />} />
+        
+        {/* Admin only route */}
+        <Route path="admin/trainers" element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminTrainersPage />
+          </ProtectedRoute>
+        } />
       </Route>
       
       {/* Catch all */}

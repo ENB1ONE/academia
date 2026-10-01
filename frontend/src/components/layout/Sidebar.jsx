@@ -22,7 +22,7 @@ const Sidebar = () => {
     { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual', show: true },
     { to: '/monitoring/physical-tests', icon: Zap, label: 'Testes Físicos', show: isTreinador },
     // Only Admin can manage trainers. We'll add the route later.
-    // { to: '/admin/trainers', icon: Shield, label: 'Treinadores', show: isAdmin },
+    { to: '/admin/trainers', icon: Shield, label: 'Treinadores', show: isAdmin },
   ].filter(link => link.show);
 
   const navClass = ({ isActive }) =>
