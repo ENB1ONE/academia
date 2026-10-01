@@ -6,6 +6,7 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import useAthleteStore from '../../store/athleteStore';
 import useMonitoringStore from '../../store/monitoringStore';
+import useAuthStore from '../../store/authStore';
 
 const pseScale = [
   { level: 1, desc: 'Muito Leve', color: 'bg-green-500' },
@@ -24,16 +25,23 @@ const PsePage = () => {
   const navigate = useNavigate();
   const { athletes, fetchAthletes } = useAthleteStore();
   const { createPse, isLoading } = useMonitoringStore();
+  const { user, athleteProfile } = useAuthStore();
 
   const [athleteId, setAthleteId] = useState('');
   const [sessionType, setSessionType] = useState('Treino');
-  const [duration, setDuraçãon] = useState('');
+  const [duration, setDuration] = useState('');
   const [selectedPse, setSelectedPse] = useState(null);
   const [load, setLoad] = useState(0);
 
+  const isAtleta = user?.role === 'atleta';
+
   useEffect(() => {
-    fetchAthletes();
-  }, [fetchAthletes]);
+    if (!isAtleta) {
+      fetchAthletes();
+    } else if (athleteProfile) {
+      setAthleteId(athleteProfile.id.toString());
+    }
+  }, [fetchAthletes, isAtleta, athleteProfile]);
 
   useEffect(() => {
     if (duration && selectedPse) {
@@ -74,18 +82,21 @@ const PsePage = () => {
       <Card>
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
-              <select 
-                className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
-                value={athleteId}
-                onChange={(e) => setAthleteId(e.target.value)}
-              >
-                <option value="">Selecione...</option>
-                {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
-              </select>
-            </div>
-            <div>
+            {!isAtleta && (
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
+                <select 
+                  className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
+                  value={athleteId}
+                  onChange={(e) => setAthleteId(e.target.value)}
+                >
+                  <option value="">Selecione...</option>
+                  {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+                </select>
+              </div>
+            )}
+            
+            <div className={isAtleta ? "col-span-2" : ""}>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Tipo de Sessão</label>
               <select 
                 className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
@@ -104,7 +115,7 @@ const PsePage = () => {
             type="number" 
             placeholder="Ex: 90" 
             value={duration} 
-            onChange={(e) => setDuraçãon(e.target.value)} 
+            onChange={(e) => setDuration(e.target.value)} 
           />
 
           <div>

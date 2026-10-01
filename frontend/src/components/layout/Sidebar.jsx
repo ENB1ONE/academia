@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Activity, Users, Dumbbell, Heart, Brain, BarChart3, LogOut, Menu, X, Flower2, Zap } from 'lucide-react';
+import { Activity, Users, Dumbbell, Heart, Brain, BarChart3, LogOut, Menu, X, Flower2, Zap, Shield } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import Logo from '../ui/Logo';
 
@@ -8,16 +8,22 @@ const Sidebar = () => {
   const { user, logout } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
 
+  const isAdmin = user?.role === 'admin';
+  const isTreinador = user?.role === 'treinador' || isAdmin;
+  const isAtleta = user?.role === 'atleta';
+
   const links = [
-    { to: '/dashboard', icon: Activity, label: 'Dashboard' },
-    { to: '/athletes', icon: Users, label: 'Atletas' },
-    { to: '/workouts/new', icon: Dumbbell, label: 'Novo Treino' },
-    { to: '/monitoring/pse', icon: Brain, label: 'Registrar PSE' },
-    { to: '/monitoring/wellness', icon: Heart, label: 'Bem-Estar' },
-    { to: '/monitoring/pain', icon: Activity, label: 'Mapa de Dor' },
-    { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual' },
-    { to: '/monitoring/physical-tests', icon: Zap, label: 'Testes Físicos' },
-  ];
+    { to: '/dashboard', icon: Activity, label: isAtleta ? 'Meu Painel' : 'Dashboard', show: true },
+    { to: '/athletes', icon: Users, label: 'Atletas', show: isTreinador },
+    { to: '/workouts/new', icon: Dumbbell, label: 'Novo Treino', show: isTreinador },
+    { to: '/monitoring/pse', icon: Brain, label: 'Registrar PSE', show: true },
+    { to: '/monitoring/wellness', icon: Heart, label: 'Bem-Estar', show: true },
+    { to: '/monitoring/pain', icon: Activity, label: 'Mapa de Dor', show: true },
+    { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual', show: true },
+    { to: '/monitoring/physical-tests', icon: Zap, label: 'Testes Físicos', show: isTreinador },
+    // Only Admin can manage trainers. We'll add the route later.
+    // { to: '/admin/trainers', icon: Shield, label: 'Treinadores', show: isAdmin },
+  ].filter(link => link.show);
 
   const navClass = ({ isActive }) =>
     `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
@@ -69,8 +75,8 @@ const Sidebar = () => {
               {user?.name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-text truncate">{user?.name || 'Treinador'}</p>
-              <p className="text-xs text-gray-400 truncate capitalize">{user?.role || 'Admin'}</p>
+              <p className="text-sm font-medium text-text truncate">{user?.name || 'Usuário'}</p>
+              <p className="text-xs text-gray-400 truncate capitalize">{user?.role || 'Visitante'}</p>
             </div>
           </div>
           <button 

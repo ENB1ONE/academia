@@ -1,168 +1,279 @@
 import React, { useEffect, useState } from 'react';
-import { Users, Calendar, AlertTriangle, Heart, Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../../store/authStore';
+import { Activity, Users, Dumbbell, AlertTriangle, TrendingUp, Heart } from 'lucide-react';
 import useAthleteStore from '../../store/athleteStore';
-import useWorkoutStore from '../../store/workoutStore';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import Badge from '../../components/ui/Badge';
+import useAuthStore from '../../store/authStore';
 import api from '../../services/api';
+import Card from '../../components/ui/Card';
 
 const DashboardPage = () => {
-  const { user } = useAuthStore();
   const { athletes, fetchAthletes } = useAthleteStore();
-  const { workouts, fetchWorkouts } = useWorkoutStore();
-  const navigate = useNavigate();
-
-  const [recentAlerts, setRecentAlerts] = useState([]);
-  const [wellnessAvg, setWellnessAvg] = useState(0);
-  const [pseAlertsCount, setPseAlertsCount] = useState(0);
-
-  useEffect(() => {
-    fetchAthletes();
-    fetchWorkouts(); // gets all workouts for trainer
-  }, [fetchAthletes, fetchWorkouts]);
+  const { user, athleteProfile } = useAuthStore();
+  const [metrics, setMetrics] = useState({
+    workoutsToday: 0,
+    wellnessAvg: 0,
+    alerts: []
+  });
 
   useEffect(() => {
-    const loadMonitoringData = async () => {
+    if (user?.role === 'treinador' || user?.role === 'admin') {
+      fetchAthletes();
+    }
+  }, [fetchAthletes, user]);
+
+  useEffect(() => {
+    const loadMetrics = async () => {
+      if (user?.role === 'atleta') {
+        // Lógica simples do atleta para o dashboard
+        if (athleteProfile?.id) {
+          try {
+            const [pseRes, wellRes] = await Promise.all([
+              api.get(`/api/v1/monitoring/pse/${athleteProfile.id}`),
+              api.get(`/api/v1/monitoring/wellness/${athleteProfile.id}`)
+            ]);
+            const pses = pseRes.data;
+            const wells = wellRes.data;
+            const today = new Date().toISOString().split('T')[0];
+            
+            let wAvg = 0;
+            if (wells.length > 0) {
+              const recent = wells.slice(0, 5);
+              wAvg = (recent.reduce((acc, curr) => acc + curr.average_score, 0) / recent.length).toFixed(1);
+            }
+
+            const alerts = [];
+            const latestPse = pses[0];
+            if (latestPse && latestPse.pse_value >= 8) {
+              alerts.push({
+                athlete: user.name,
+                type: 'PSE Alto',
+                value: latestPse.pse_value,
+                date: latestPse.date
+              });
+            }
+
+            setMetrics({
+              workoutsToday: pses.filter(p => p.date === today).length,
+              wellnessAvg: wAvg,
+              alerts
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        return;
+      }
+
+      // Lógica do Treinador
       if (athletes.length === 0) return;
-
-      let totalWellness = 0;
-      let wellnessCount = 0;
-      let pseAlerts = 0;
-      let alerts = [];
-
       try {
-        const promises = athletes.map(async (athlete) => {
+        const today = new Date().toISOString().split('T')[0];
+        let totalWorkouts = 0;
+        let totalWellness = 0;
+        let wellnessCount = 0;
+        const allAlerts = [];
+
+        await Promise.all(athletes.map(async (athlete) => {
           const [pseRes, wellRes] = await Promise.all([
-            api.get(`/api/v1/monitoring/pse/${athlete.id}`),
-            api.get(`/api/v1/monitoring/wellness/${athlete.id}`)
+            api.get(`/api/v1/monitoring/pse/${athlete.id}`).catch(() => ({ data: [] })),
+            api.get(`/api/v1/monitoring/wellness/${athlete.id}`).catch(() => ({ data: [] }))
           ]);
 
-          const latestPse = pseRes.data.length > 0 ? pseRes.data[0] : null;
-          const latestWell = wellRes.data.length > 0 ? wellRes.data[0] : null;
+          const pses = pseRes.data;
+          const wells = wellRes.data;
 
-          if (latestWell) {
-            totalWellness += latestWell.average_score;
-            wellnessCount += 1;
+          totalWorkouts += pses.filter(p => p.date === today).length;
+
+          if (wells.length > 0) {
+            totalWellness += wells[0].average_score;
+            wellnessCount++;
+            if (wells[0].average_score < 3) {
+              allAlerts.push({
+                athlete: athlete.name,
+                type: 'Baixo Bem-estar',
+                value: wells[0].average_score.toFixed(1),
+                date: wells[0].date
+              });
+            }
           }
 
-          let hasAlert = false;
-          if (latestPse && latestPse.pse_value >= 8) {
-            pseAlerts += 1;
-            hasAlert = true;
+          if (pses.length > 0) {
+            if (pses[0].pse_value >= 8) {
+              allAlerts.push({
+                athlete: athlete.name,
+                type: 'PSE Alto',
+                value: pses[0].pse_value,
+                date: pses[0].date
+              });
+            }
           }
-          if (latestWell && latestWell.average_score <= 2.5) {
-            hasAlert = true;
-          }
+        }));
 
-          if (hasAlert) {
-            alerts.push({
-              athlete,
-              latestPse,
-              latestWell
-            });
-          }
+        setMetrics({
+          workoutsToday: totalWorkouts,
+          wellnessAvg: wellnessCount > 0 ? (totalWellness / wellnessCount).toFixed(1) : 0,
+          alerts: allAlerts.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5)
         });
 
-        await Promise.all(promises);
-
-        setWellnessAvg(wellnessCount > 0 ? (totalWellness / wellnessCount).toFixed(1) : '-');
-        setPseAlertsCount(pseAlerts);
-        setRecentAlerts(alerts);
       } catch (error) {
-        console.error("Error loading dashboard stats", error);
+        console.error("Erro ao carregar métricas:", error);
       }
     };
 
-    loadMonitoringData();
-  }, [athletes]);
+    loadMetrics();
+  }, [athletes, user, athleteProfile]);
 
-  // Calc workouts today
-  const todayStr = new Date().toISOString().split('T')[0];
-  const workoutsToday = workouts.filter(w => w.scheduled_date === todayStr).length;
-
-  const stats = [
-    { title: 'Total Atletas', value: athletes.length, icon: Users, color: 'text-primary' },
-    { title: 'Treinos Hoje', value: workoutsToday, icon: Calendar, color: 'text-secondary' },
-    { title: 'Alertas PSE', value: pseAlertsCount, icon: AlertTriangle, color: 'text-danger' },
-    { title: 'Média Bem-Estar', value: wellnessAvg, icon: Heart, color: 'text-success' },
-  ];
-
-  return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+  if (user?.role === 'atleta') {
+    return (
+      <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-text">Olá, {user?.name?.split(' ')[0] || 'Treinador'}</h1>
-          <p className="text-gray-400 mt-1">Aqui está o resumo das suas equipes hoje.</p>
+          <h1 className="text-2xl font-bold text-text">Meu Painel</h1>
+          <p className="text-gray-400 mt-1">Bem-vindo, {user?.name}</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={() => navigate('/workouts/new')} variant="secondary" className="gap-2">
-            <Plus className="h-4 w-4" /> Novo Treino
-          </Button>
-          <Button onClick={() => navigate('/monitoring/pse')} variant="primary" className="gap-2">
-            Registrar PSE
-          </Button>
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={index} padding="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-400">{stat.title}</p>
-                  <p className="text-2xl font-bold text-text mt-1">{stat.value}</p>
-                </div>
-                <div className={`p-3 rounded-lg bg-surface border border-gray-700 ${stat.color}`}>
-                  <Icon className="h-6 w-6" />
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">Meu Bem-Estar (Média Recente)</p>
+                <p className="text-3xl font-bold text-text mt-2">{metrics.wellnessAvg}/5</p>
               </div>
-            </Card>
-          );
-        })}
-      </div>
+              <div className="h-12 w-12 bg-primary/20 rounded-full flex items-center justify-center">
+                <Heart className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+          </Card>
 
-      <div>
-        <h2 className="text-xl font-bold text-text mb-4">Atenção Recente</h2>
-        {recentAlerts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {recentAlerts.map(alert => (
-              <Card key={alert.athlete.id} padding="p-4" className="flex items-center justify-between cursor-pointer hover:bg-gray-800 transition-colors" onClick={() => navigate(`/athletes/${alert.athlete.id}`)}>
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
-                    {alert.athlete.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-medium text-text">{alert.athlete.name}</p>
-                    <div className="flex gap-2 mt-1">
-                      {alert.latestPse && (
-                        <Badge variant={alert.latestPse.pse_value >= 8 ? 'danger' : 'success'}>
-                          PSE {alert.latestPse.pse_value}
-                        </Badge>
-                      )}
-                      {alert.latestWell && (
-                        <Badge variant={alert.latestWell.average_score <= 2.5 ? 'warning' : 'info'}>
-                          Bem-Estar {alert.latestWell.average_score.toFixed(1)}
-                        </Badge>
-                      )}
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">Treinos Registrados Hoje</p>
+                <p className="text-3xl font-bold text-text mt-2">{metrics.workoutsToday}</p>
+              </div>
+              <div className="h-12 w-12 bg-success/20 rounded-full flex items-center justify-center">
+                <Activity className="h-6 w-6 text-success" />
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {metrics.alerts.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-text mb-4">Meus Alertas</h2>
+            <div className="grid gap-4">
+              {metrics.alerts.map((alert, i) => (
+                <Card key={i} className="border-l-4 border-l-warning">
+                  <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 bg-warning/20 rounded-full flex items-center justify-center">
+                      <AlertTriangle className="h-5 w-5 text-warning" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-text">{alert.type}</h4>
+                      <p className="text-sm text-gray-400">
+                        Valor registrado: {alert.value} em {alert.date.split('-').reverse().join('/')}
+                      </p>
                     </div>
                   </div>
-                </div>
-                <AlertTriangle className="h-5 w-5 text-danger" />
-              </Card>
-            ))}
+                </Card>
+              ))}
+            </div>
           </div>
-        ) : (
-          <Card padding="p-8" className="text-center text-gray-400 flex flex-col items-center justify-center">
-            <Heart className="h-8 w-8 text-gray-600 mb-2" />
-            <p>Nenhum alerta crítico no momento.</p>
-            <p className="text-sm mt-1">Os atletas que reportarem PSE alta ou Bem-Estar baixo aparecerão aqui.</p>
-          </Card>
         )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-text">Dashboard</h1>
+        <p className="text-gray-400 mt-1">Visão geral do desempenho da equipe</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-400">Total de Atletas</p>
+              <p className="text-3xl font-bold text-text mt-2">{athletes.length}</p>
+            </div>
+            <div className="h-12 w-12 bg-primary/20 rounded-full flex items-center justify-center">
+              <Users className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-400">Treinos Hoje</p>
+              <p className="text-3xl font-bold text-text mt-2">{metrics.workoutsToday}</p>
+            </div>
+            <div className="h-12 w-12 bg-success/20 rounded-full flex items-center justify-center">
+              <Dumbbell className="h-6 w-6 text-success" />
+            </div>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-400">Alertas de PSE</p>
+              <p className="text-3xl font-bold text-text mt-2">
+                {metrics.alerts.filter(a => a.type === 'PSE Alto').length}
+              </p>
+            </div>
+            <div className="h-12 w-12 bg-warning/20 rounded-full flex items-center justify-center">
+              <AlertTriangle className="h-6 w-6 text-warning" />
+            </div>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-400">Média Bem-Estar</p>
+              <p className="text-3xl font-bold text-text mt-2">{metrics.wellnessAvg}/5</p>
+            </div>
+            <div className="h-12 w-12 bg-info/20 rounded-full flex items-center justify-center">
+              <TrendingUp className="h-6 w-6 text-info" />
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-text">Alertas Recentes</h3>
+            <button className="text-sm text-primary hover:text-primary/80">Ver todos</button>
+          </div>
+          <div className="space-y-4">
+            {metrics.alerts.length > 0 ? metrics.alerts.map((alert, i) => (
+              <div key={i} className="flex items-center justify-between p-3 bg-background rounded-lg border border-gray-800">
+                <div className="flex items-center gap-3">
+                  <div className={`h-2 w-2 rounded-full ${alert.type === 'PSE Alto' ? 'bg-warning' : 'bg-danger'}`} />
+                  <div>
+                    <p className="text-sm font-medium text-text">{alert.athlete}</p>
+                    <p className="text-xs text-gray-400">{alert.type} ({alert.value})</p>
+                  </div>
+                </div>
+                <span className="text-xs text-gray-500">{alert.date.split('-').reverse().join('/')}</span>
+              </div>
+            )) : (
+              <p className="text-gray-400 text-sm">Nenhum alerta recente.</p>
+            )}
+          </div>
+        </Card>
+
+        <Card>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-text">Visão Geral da Equipe</h3>
+            <button className="text-sm text-primary hover:text-primary/80">Ver detalhes</button>
+          </div>
+          <div className="h-48 flex items-center justify-center border border-dashed border-gray-700 rounded-lg">
+            <p className="text-gray-400">Gráfico de Carga em desenvolvimento</p>
+          </div>
+        </Card>
       </div>
     </div>
   );

@@ -5,13 +5,13 @@ const useAuthStore = create((set) => ({
   user: JSON.parse(localStorage.getItem('user')) || null,
   token: localStorage.getItem('token') || null,
   isAuthenticated: !!localStorage.getItem('token'),
+  athleteProfile: JSON.parse(localStorage.getItem('athleteProfile')) || null,
   
   login: async (email, password) => {
     try {
-      // Fallback EXCLUSIVO para apresentação no iPhone onde o HTTP pode ser bloqueado
+      // Fallback exclusivo para apresentação admin
       if (email === 'admin@formclub.com.br' && password === 'FormaClub123') {
         try {
-          // Tenta via API real primeiro
           const formData = new URLSearchParams();
           formData.append('username', email);
           formData.append('password', password);
@@ -28,7 +28,6 @@ const useAuthStore = create((set) => ({
           set({ user, token, isAuthenticated: true });
           return true;
         } catch (e) {
-          // Se falhar (ex: bloqueio de Mixed Content no iOS Safari), libera acesso local
           console.warn("API bloqueada. Usando fallback de apresentação.");
           const fakeToken = "demo_token_admin";
           const fakeUser = { id: 1, email: "admin@formclub.com.br", name: "Administrador", role: "admin" };
@@ -39,7 +38,7 @@ const useAuthStore = create((set) => ({
         }
       }
 
-      // Fluxo normal para outros usuários
+      // Fluxo normal
       const formData = new URLSearchParams();
       formData.append('username', email);
       formData.append('password', password);
@@ -59,8 +58,21 @@ const useAuthStore = create((set) => ({
       
       const user = userResponse.data;
       localStorage.setItem('user', JSON.stringify(user));
+
+      let athleteProfile = null;
+      if (user.role === 'atleta') {
+        try {
+          const profileRes = await api.get('/api/v1/athletes/me/profile', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          athleteProfile = profileRes.data;
+          localStorage.setItem('athleteProfile', JSON.stringify(athleteProfile));
+        } catch(e) {
+          console.error("Erro ao buscar perfil do atleta", e);
+        }
+      }
       
-      set({ user, token, isAuthenticated: true });
+      set({ user, token, isAuthenticated: true, athleteProfile });
       return true;
     } catch (error) {
       console.error('Login error', error);
@@ -68,26 +80,19 @@ const useAuthStore = create((set) => ({
     }
   },
   
-  register: async (data) => {
-    try {
-      await api.post('/api/v1/auth/register', data);
-      return true;
-    } catch (error) {
-      throw error;
-    }
-  },
-  
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    set({ user: null, token: null, isAuthenticated: false });
+    localStorage.removeItem('athleteProfile');
+    set({ user: null, token: null, isAuthenticated: false, athleteProfile: null });
   },
   
   loadUser: () => {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
+    const athleteProfile = JSON.parse(localStorage.getItem('athleteProfile'));
     if (token && user) {
-      set({ user, token, isAuthenticated: true });
+      set({ user, token, isAuthenticated: true, athleteProfile });
     }
   }
 }));
