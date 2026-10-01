@@ -48,16 +48,19 @@ const LoginPage = () => {
           src={logo}
           alt="FormClub"
         />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-text">
-          Acesse sua conta
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-400">
-          Painel de Monitoramento de Atletas
-        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <Card className="shadow-2xl border-gray-800 backdrop-blur-sm bg-surface/80">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-extrabold text-text">
+              Acesse sua conta
+            </h2>
+            <p className="mt-2 text-sm text-gray-400">
+              Painel de Monitoramento de Atletas
+            </p>
+          </div>
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <Input
               label="Email"
