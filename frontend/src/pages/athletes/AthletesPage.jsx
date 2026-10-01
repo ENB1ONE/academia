@@ -260,12 +260,12 @@ const AthletesPage = () => {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">N�vel de Experi�ncia</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-1.5">Nível de Experiência</label>
                     <select value={formData.experience_level || ''} onChange={(e) => setFormData({...formData, experience_level: e.target.value})} className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm px-3 py-2">
                       <option value="">Selecione...</option>
                       <option value="Iniciante">Iniciante</option>
-                      <option value="Intermedi�rio">Intermedi�rio</option>
-                      <option value="Avan�ado">Avan�ado</option>
+                      <option value="Intermediário">Intermediário</option>
+                      <option value="Avançado">Avançado</option>
                     </select>
                   </div>
                   <div>
@@ -286,8 +286,8 @@ const AthletesPage = () => {
                     <option value="Hipertrofia">Hipertrofia</option>
                     <option value="Emagrecimento">Emagrecimento</option>
                     <option value="Condicionamento Base">Condicionamento Base</option>
-                    <option value="For�a">For�a</option>
-                    <option value="Reabilita��o">Reabilita��o</option>
+                    <option value="Força">Força</option>
+                    <option value="Reabilitação">Reabilitação</option>
                   </select>
                 </div>
 

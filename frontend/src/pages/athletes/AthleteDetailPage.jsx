@@ -232,7 +232,7 @@ const AthleteDetailPage = () => {
                 <p className="font-medium text-text">{athlete.sport || '-'}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-400">Posi��o</p>
+                <p className="text-sm text-gray-400">Posição</p>
                 <p className="font-medium text-text">{athlete.position || '-'}</p>
               </div>
               {athlete.weight && (
