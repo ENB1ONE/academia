@@ -221,20 +221,7 @@ const AdminTrainersPage = () => {
                 required
               />
 
-              <div className="grid grid-cols-2 gap-4">
-                <Input 
-                  label="Especialidade" 
-                  placeholder="Ex: Fisioterapeuta, Preparador..." 
-                  value={formData.specialty} 
-                  onChange={(e) => setFormData({...formData, specialty: e.target.value})} 
-                />
-                <Input 
-                  label="CREF / Registro" 
-                  placeholder="Ex: 000000-G/SP" 
-                  value={formData.cref} 
-                  onChange={(e) => setFormData({...formData, cref: e.target.value})} 
-                />
-              </div>
+              
 
               <Input 
                 label="Senha Inicial" 
@@ -245,20 +232,7 @@ const AdminTrainersPage = () => {
                 required
               />
 
-              <div className="grid grid-cols-2 gap-4">
-                <Input 
-                  label="Especialidade" 
-                  placeholder="Ex: Fisioterapeuta, Preparador..." 
-                  value={formData.specialty} 
-                  onChange={(e) => setFormData({...formData, specialty: e.target.value})} 
-                />
-                <Input 
-                  label="CREF / Registro" 
-                  placeholder="Ex: 000000-G/SP" 
-                  value={formData.cref} 
-                  onChange={(e) => setFormData({...formData, cref: e.target.value})} 
-                />
-              </div>
+              
 
               
               <Button type="submit" className="w-full mt-6" isLoading={isLoading}>
