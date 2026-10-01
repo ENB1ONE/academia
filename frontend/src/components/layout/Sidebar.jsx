@@ -31,7 +31,7 @@ const Sidebar = () => {
       {/* Mobile Top Bar */}
       <div className="md:hidden flex items-center justify-between p-4 bg-surface border-b border-gray-800 shrink-0">
         <div className="flex items-center gap-2">
-          <Logo className="scale-75 origin-left" />
+          <Logo className="h-8" />
         </div>
         <button 
           className="p-2 bg-background rounded-lg text-text border border-gray-700"
@@ -47,13 +47,11 @@ const Sidebar = () => {
         transform transition-transform duration-300 flex flex-col
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
-        <div className="p-6">
-          <div className="flex items-center gap-2">
-            <Logo className="scale-90 origin-left" />
-          </div>
+        <div className="p-6 flex justify-center border-b border-gray-800">
+          <Logo className="h-12" />
         </div>
 
-        <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
+        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
           {links.map((link) => {
             const Icon = link.icon;
             return (
@@ -67,12 +65,12 @@ const Sidebar = () => {
 
         <div className="p-4 border-t border-gray-800">
           <div className="flex items-center gap-3 mb-4 px-2">
-            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold border border-primary/30">
+            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold border border-primary/30 shrink-0">
               {user?.name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-text truncate">{user?.name || 'Usuário'}</p>
-              <p className="text-xs text-gray-400 truncate capitalize">{user?.role || 'treinador'}</p>
+              <p className="text-sm font-medium text-text truncate">{user?.name || 'Treinador'}</p>
+              <p className="text-xs text-gray-400 truncate capitalize">{user?.role || 'Admin'}</p>
             </div>
           </div>
           <button 

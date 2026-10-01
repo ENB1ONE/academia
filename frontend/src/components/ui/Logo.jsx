@@ -6,8 +6,8 @@ const Logo = ({ className = '' }) => {
     <div className={`flex items-center justify-center ${className}`}>
       <img 
         src={logoImg} 
-        alt="FORMCLUB Human Performance Center" 
-        className="max-h-full w-auto object-contain"
+        alt="FORMCLUB" 
+        className="h-full w-auto object-contain"
         style={{ mixBlendMode: 'screen' }}
       />
     </div>

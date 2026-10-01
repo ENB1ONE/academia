@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Activity, Mail, Lock } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import toast from 'react-hot-toast';
 import Button from '../../components/ui/Button';
@@ -38,7 +38,8 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <Logo className="scale-125 mb-4" />
+          {/* Constrain logo height on mobile so it doesn't break the layout */}
+          <Logo className="h-16 md:h-24 mb-4" />
         </div>
 
         <Card>
