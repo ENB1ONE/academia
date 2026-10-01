@@ -95,7 +95,7 @@ const AthletesPage = () => {
       }
       handleCloseModal();
     } catch (error) {
-      toast.error('Erro ao salvar atleta. Verifique os dados.');
+      toast.error(error.response?.data?.detail || 'Erro ao salvar atleta. Verifique os dados.');
     }
   };
 
