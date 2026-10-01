@@ -29,7 +29,8 @@ const AthleteDetailPage = () => {
           api.get(`/api/v1/athletes/${id}`),
           api.get(`/api/v1/monitoring/pse/${id}`),
           api.get(`/api/v1/monitoring/wellness/${id}`),
-          api.get(`/api/v1/workouts/?athlete_id=${id}`)
+          api.get(`/api/v1/workouts/?athlete_id=${id}`),
+          api.get(`/api/v1/monitoring/pain/${id}`)
         ]);
         setAthlete(athRes.data);
         setPseHistory(pseRes.data);
@@ -193,7 +194,7 @@ const AthleteDetailPage = () => {
         {activeTab === 'dor' && (
           <div className="space-y-6">
             <Card>
-              <h3 className="text-lg font-semibold text-text mb-6">Hist�rico de Dores</h3>
+              <h3 className="text-lg font-semibold text-text mb-6">Histórico de Dores</h3>
               {painHistory.length > 0 ? (
                 <div className="space-y-4">
                   {painHistory.map(pain => (
@@ -203,7 +204,7 @@ const AthleteDetailPage = () => {
                         <p className="text-sm text-gray-400">Data: {new Date(pain.date).toLocaleDateString('pt-BR')} {pain.notes ? `| Obs: ${pain.notes}` : ''}</p>
                       </div>
                       <Badge variant={pain.intensity >= 7 ? 'danger' : pain.intensity >= 4 ? 'warning' : 'success'}>
-                        N�vel {pain.intensity}/10
+                        Nível {pain.intensity}/10
                       </Badge>
                     </div>
                   ))}
