@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../store/authStore';
 
 const api = axios.create({
-  baseURL: 'http://204.216.180.87:8000',
+  baseURL: 'https://group-design-brings-string.trycloudflare.com',
   headers: {
     'Content-Type': 'application/json',
   },
