@@ -5,6 +5,7 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import useAthleteStore from '../../store/athleteStore';
 import useMonitoringStore from '../../store/monitoringStore';
+import useAuthStore from '../../store/authStore';
 
 const questions = [
   { id: 'sleep_quality', title: 'Qualidade do Sono', low: 'Péssimo', high: 'Ótimo' },
@@ -18,6 +19,8 @@ const WellnessPage = () => {
   const navigate = useNavigate();
   const { athletes, fetchAthletes } = useAthleteStore();
   const { createWellness, isLoading } = useMonitoringStore();
+  const { user, athleteProfile } = useAuthStore();
+  const isAtleta = user?.role === 'atleta';
 
   const [athleteId, setAthleteId] = useState('');
   const [answers, setAnswers] = useState({
@@ -25,8 +28,12 @@ const WellnessPage = () => {
   });
 
   useEffect(() => {
-    fetchAthletes();
-  }, [fetchAthletes]);
+    if (!isAtleta) {
+      fetchAthletes();
+    } else if (athleteProfile?.id) {
+      setAthleteId(athleteProfile.id.toString());
+    }
+  }, [fetchAthletes, isAtleta, athleteProfile]);
 
   const average = (Object.values(answers).reduce((a, b) => a + b, 0) / 5).toFixed(1);
 
@@ -57,17 +64,19 @@ const WellnessPage = () => {
       </div>
 
       <Card>
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
-          <select 
-            className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
-            value={athleteId}
-            onChange={(e) => setAthleteId(e.target.value)}
-          >
-            <option value="">Selecione...</option>
-            {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
-          </select>
-        </div>
+        {!isAtleta && (
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
+            <select 
+              className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
+              value={athleteId}
+              onChange={(e) => setAthleteId(e.target.value)}
+            >
+              <option value="">Selecione...</option>
+              {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+            </select>
+          </div>
+        )}
 
         <div className="space-y-8">
           {questions.map((q) => (

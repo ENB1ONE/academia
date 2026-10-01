@@ -5,11 +5,14 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import useAthleteStore from '../../store/athleteStore';
 import useMonitoringStore from '../../store/monitoringStore';
+import useAuthStore from '../../store/authStore';
 
 const MenstrualCyclePage = () => {
   const navigate = useNavigate();
   const { athletes, fetchAthletes } = useAthleteStore();
   const { createMenstrual, isLoading } = useMonitoringStore();
+  const { user, athleteProfile } = useAuthStore();
+  const isAtleta = user?.role === 'atleta';
 
   const [athleteId, setAthleteId] = useState('');
   const [formData, setFormData] = useState({
@@ -21,8 +24,12 @@ const MenstrualCyclePage = () => {
   });
 
   useEffect(() => {
-    fetchAthletes();
-  }, [fetchAthletes]);
+    if (!isAtleta) {
+      fetchAthletes();
+    } else if (athleteProfile?.id) {
+      setAthleteId(athleteProfile.id.toString());
+    }
+  }, [fetchAthletes, isAtleta, athleteProfile]);
 
   const handleSave = async () => {
     if (!athleteId) {
@@ -46,8 +53,6 @@ const MenstrualCyclePage = () => {
     }
   };
 
-  // Filter only female athletes? Not strictly necessary unless we have gender in athletes, we'll just show all for now.
-
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
@@ -56,14 +61,18 @@ const MenstrualCyclePage = () => {
       </div>
 
       <Card padding="p-6">
-        <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
-        <select 
-          className="block w-full rounded-lg bg-background border border-gray-700 text-text p-2.5 mb-6"
-          value={athleteId} onChange={(e) => setAthleteId(e.target.value)}
-        >
-          <option value="">Selecione a atleta...</option>
-          {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
-        </select>
+        {!isAtleta && (
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
+            <select 
+              className="block w-full rounded-lg bg-background border border-gray-700 text-text p-2.5"
+              value={athleteId} onChange={(e) => setAthleteId(e.target.value)}
+            >
+              <option value="">Selecione a atleta...</option>
+              {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+            </select>
+          </div>
+        )}
 
         <div className="space-y-6">
           <div className="flex items-center justify-between p-4 bg-surface rounded-lg border border-gray-700">

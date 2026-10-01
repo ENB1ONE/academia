@@ -6,44 +6,53 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import useAthleteStore from '../../store/athleteStore';
 import useMonitoringStore from '../../store/monitoringStore';
+import useAuthStore from '../../store/authStore';
 
 const BODY_PARTS = [
   { id: 'head', label: 'Cabeça', cx: 150, cy: 30 },
-  { id: 'neck', label: 'Pescoço', cx: 150, cy: 70 },
-  { id: 'left_shoulder', label: 'Ombro E.', cx: 100, cy: 90 },
-  { id: 'right_shoulder', label: 'Ombro D.', cx: 200, cy: 90 },
-  { id: 'chest', label: 'Peito', cx: 150, cy: 120 },
-  { id: 'abdomen', label: 'Abdômen', cx: 150, cy: 180 },
-  { id: 'left_elbow', label: 'Cotovelo E.', cx: 70, cy: 150 },
-  { id: 'right_elbow', label: 'Cotovelo D.', cx: 230, cy: 150 },
-  { id: 'left_hand', label: 'Mão E.', cx: 50, cy: 220 },
-  { id: 'right_hand', label: 'Mão D.', cx: 250, cy: 220 },
-  { id: 'left_hip', label: 'Quadril E.', cx: 120, cy: 230 },
-  { id: 'right_hip', label: 'Quadril D.', cx: 180, cy: 230 },
-  { id: 'left_knee', label: 'Joelho E.', cx: 110, cy: 330 },
-  { id: 'right_knee', label: 'Joelho D.', cx: 190, cy: 330 },
-  { id: 'left_foot', label: 'Pé E.', cx: 110, cy: 430 },
-  { id: 'right_foot', label: 'Pé D.', cx: 190, cy: 430 },
+  { id: 'neck', label: 'Pescoço', cx: 150, cy: 60 },
+  { id: 'left_shoulder', label: 'Ombro E', cx: 100, cy: 90 },
+  { id: 'right_shoulder', label: 'Ombro D', cx: 200, cy: 90 },
+  { id: 'chest', label: 'Peitoral', cx: 150, cy: 110 },
+  { id: 'abdomen', label: 'Abdômen', cx: 150, cy: 150 },
+  { id: 'left_elbow', label: 'Cotovelo E', cx: 70, cy: 150 },
+  { id: 'right_elbow', label: 'Cotovelo D', cx: 230, cy: 150 },
+  { id: 'left_wrist', label: 'Punho E', cx: 50, cy: 220 },
+  { id: 'right_wrist', label: 'Punho D', cx: 250, cy: 220 },
+  { id: 'hip', label: 'Quadril', cx: 150, cy: 200 },
+  { id: 'left_thigh', label: 'Coxa E', cx: 120, cy: 260 },
+  { id: 'right_thigh', label: 'Coxa D', cx: 180, cy: 260 },
+  { id: 'left_knee', label: 'Joelho E', cx: 110, cy: 330 },
+  { id: 'right_knee', label: 'Joelho D', cx: 190, cy: 330 },
+  { id: 'left_calf', label: 'Panturrilha E', cx: 110, cy: 380 },
+  { id: 'right_calf', label: 'Panturrilha D', cx: 190, cy: 380 },
+  { id: 'left_ankle', label: 'Tornozelo E', cx: 110, cy: 430 },
+  { id: 'right_ankle', label: 'Tornozelo D', cx: 190, cy: 430 }
 ];
 
 const PainMapPage = () => {
   const navigate = useNavigate();
   const { athletes, fetchAthletes } = useAthleteStore();
   const { createPainMap, isLoading } = useMonitoringStore();
+  const { user, athleteProfile } = useAuthStore();
+  const isAtleta = user?.role === 'atleta';
 
   const [athleteId, setAthleteId] = useState('');
   const [selectedPart, setSelectedPart] = useState(null);
+  const [records, setRecords] = useState({});
   const [painData, setPainData] = useState({
     intensity: 5,
     pain_type: 'Muscular',
     notes: ''
   });
-  
-  const [records, setRecords] = useState({});
 
   useEffect(() => {
-    fetchAthletes();
-  }, [fetchAthletes]);
+    if (!isAtleta) {
+      fetchAthletes();
+    } else if (athleteProfile?.id) {
+      setAthleteId(athleteProfile.id.toString());
+    }
+  }, [fetchAthletes, isAtleta, athleteProfile]);
 
   const handlePartClick = (part) => {
     setSelectedPart(part);
@@ -74,7 +83,6 @@ const PainMapPage = () => {
     }
     
     try {
-      // For simplicity, we loop and await, or could Promise.all
       for (const partId of Object.keys(records)) {
         await createPainMap({
           athlete_id: parseInt(athleteId),
@@ -99,23 +107,23 @@ const PainMapPage = () => {
         <p className="text-gray-400 mt-1">Indique o local, tipo e intensidade da dor</p>
       </div>
 
-      <Card padding="p-4" className="mb-4">
-        <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
-        <select 
-          className="block w-full rounded-lg bg-background border border-gray-700 text-text p-2.5"
-          value={athleteId} onChange={(e) => setAthleteId(e.target.value)}
-        >
-          <option value="">Selecione o atleta...</option>
-          {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
-        </select>
-      </Card>
+      {!isAtleta && (
+        <Card padding="p-4" className="mb-4">
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
+          <select 
+            className="block w-full rounded-lg bg-background border border-gray-700 text-text p-2.5"
+            value={athleteId} onChange={(e) => setAthleteId(e.target.value)}
+          >
+            <option value="">Selecione o atleta...</option>
+            {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+          </select>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* SVG Diagram */}
         <Card className="flex flex-col items-center justify-center py-8">
           <div className="relative">
             <svg width="300" height="480" className="bg-surface rounded-xl border border-gray-800 shadow-inner">
-              {/* Lines connecting joints */}
               <line x1="150" y1="30" x2="150" y2="70" stroke="#374151" strokeWidth="4" />
               <line x1="150" y1="70" x2="100" y2="90" stroke="#374151" strokeWidth="4" />
               <line x1="150" y1="70" x2="200" y2="90" stroke="#374151" strokeWidth="4" />
@@ -134,11 +142,11 @@ const PainMapPage = () => {
               {BODY_PARTS.map(part => {
                 const hasRecord = !!records[part.id];
                 const intensity = hasRecord ? records[part.id].intensity : 0;
-                let color = '#4B5563'; // gray
+                let color = '#4B5563';
                 if (hasRecord) {
-                  if (intensity <= 3) color = '#10B981'; // green
-                  else if (intensity <= 6) color = '#F59E0B'; // yellow/orange
-                  else color = '#EF4444'; // red
+                  if (intensity <= 3) color = '#10B981';
+                  else if (intensity <= 6) color = '#F59E0B';
+                  else color = '#EF4444';
                 }
 
                 return (
@@ -155,7 +163,6 @@ const PainMapPage = () => {
           </div>
         </Card>
 
-        {/* Right side form */}
         <div className="space-y-4">
           {selectedPart ? (
             <Card padding="p-6" className="border-primary border">
