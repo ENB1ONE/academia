@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Activity, Users, Dumbbell, AlertTriangle, TrendingUp, Heart } from 'lucide-react';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import useAthleteStore from '../../store/athleteStore';
 import useAuthStore from '../../store/authStore';
 import api from '../../services/api';
@@ -11,7 +12,8 @@ const DashboardPage = () => {
   const [metrics, setMetrics] = useState({
     workoutsToday: 0,
     wellnessAvg: 0,
-    alerts: []
+    alerts: [],
+    chartData: []
   });
 
   useEffect(() => {
@@ -23,7 +25,6 @@ const DashboardPage = () => {
   useEffect(() => {
     const loadMetrics = async () => {
       if (user?.role === 'atleta') {
-        // Lógica simples do atleta para o dashboard
         if (athleteProfile?.id) {
           try {
             const [pseRes, wellRes] = await Promise.all([
@@ -35,9 +36,17 @@ const DashboardPage = () => {
             const today = new Date().toISOString().split('T')[0];
             
             let wAvg = 0;
+            let chartData = [];
+
             if (wells.length > 0) {
               const recent = wells.slice(0, 5);
               wAvg = (recent.reduce((acc, curr) => acc + curr.average_score, 0) / recent.length).toFixed(1);
+              
+              // Sort chronologically for the line chart
+              chartData = [...wells].sort((a, b) => new Date(a.date) - new Date(b.date)).slice(-7).map(w => ({
+                date: w.date.substring(5).replace('-', '/'),
+                BemEstar: parseFloat(w.average_score.toFixed(1))
+              }));
             }
 
             const alerts = [];
@@ -54,7 +63,8 @@ const DashboardPage = () => {
             setMetrics({
               workoutsToday: pses.filter(p => p.date === today).length,
               wellnessAvg: wAvg,
-              alerts
+              alerts,
+              chartData
             });
           } catch (e) {
             console.error(e);
@@ -63,7 +73,7 @@ const DashboardPage = () => {
         return;
       }
 
-      // Lógica do Treinador
+      // Treinador / Admin
       if (athletes.length === 0) return;
       try {
         const today = new Date().toISOString().split('T')[0];
@@ -71,6 +81,7 @@ const DashboardPage = () => {
         let totalWellness = 0;
         let wellnessCount = 0;
         const allAlerts = [];
+        const teamChartData = [];
 
         await Promise.all(athletes.map(async (athlete) => {
           const [pseRes, wellRes] = await Promise.all([
@@ -84,13 +95,20 @@ const DashboardPage = () => {
           totalWorkouts += pses.filter(p => p.date === today).length;
 
           if (wells.length > 0) {
-            totalWellness += wells[0].average_score;
+            const avg = wells[0].average_score;
+            totalWellness += avg;
             wellnessCount++;
-            if (wells[0].average_score < 3) {
+            
+            teamChartData.push({
+              name: athlete.name.split(' ')[0],
+              BemEstar: parseFloat(avg.toFixed(1))
+            });
+
+            if (avg < 3) {
               allAlerts.push({
                 athlete: athlete.name,
                 type: 'Baixo Bem-estar',
-                value: wells[0].average_score.toFixed(1),
+                value: avg.toFixed(1),
                 date: wells[0].date
               });
             }
@@ -111,7 +129,8 @@ const DashboardPage = () => {
         setMetrics({
           workoutsToday: totalWorkouts,
           wellnessAvg: wellnessCount > 0 ? (totalWellness / wellnessCount).toFixed(1) : 0,
-          alerts: allAlerts.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5)
+          alerts: allAlerts.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5),
+          chartData: teamChartData
         });
 
       } catch (error) {
@@ -155,6 +174,32 @@ const DashboardPage = () => {
             </div>
           </Card>
         </div>
+
+        <Card>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-text">Meu Bem-Estar (Últimos Dias)</h3>
+          </div>
+          <div className="h-64">
+            {metrics.chartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={metrics.chartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis dataKey="date" stroke="#9CA3AF" fontSize={12} />
+                  <YAxis domain={[1, 5]} stroke="#9CA3AF" fontSize={12} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px', color: '#F3F4F6' }}
+                    itemStyle={{ color: '#8B5CF6' }}
+                  />
+                  <Line type="monotone" dataKey="BemEstar" stroke="#8B5CF6" strokeWidth={3} dot={{ r: 4, fill: '#8B5CF6' }} />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center border border-dashed border-gray-700 rounded-lg">
+                <p className="text-gray-400">Nenhum dado de bem-estar registrado recentemente.</p>
+              </div>
+            )}
+          </div>
+        </Card>
 
         {metrics.alerts.length > 0 && (
           <div>
@@ -267,11 +312,29 @@ const DashboardPage = () => {
 
         <Card>
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-bold text-text">Visão Geral da Equipe</h3>
-            <button className="text-sm text-primary hover:text-primary/80">Ver detalhes</button>
+            <h3 className="font-bold text-text">Bem-Estar da Equipe (Último Registro)</h3>
           </div>
-          <div className="h-48 flex items-center justify-center border border-dashed border-gray-700 rounded-lg">
-            <p className="text-gray-400">Gráfico de Carga em desenvolvimento</p>
+          <div className="h-64">
+            {metrics.chartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={metrics.chartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
+                  <XAxis dataKey="name" stroke="#9CA3AF" fontSize={12} />
+                  <YAxis domain={[0, 5]} stroke="#9CA3AF" fontSize={12} />
+                  <Tooltip 
+                    cursor={{ fill: '#374151', opacity: 0.4 }}
+                    contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px', color: '#F3F4F6' }}
+                    itemStyle={{ color: '#8B5CF6' }}
+                  />
+                  <Bar dataKey="BemEstar" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center border border-dashed border-gray-700 rounded-lg">
+                <Activity className="h-8 w-8 text-gray-600 mb-2" />
+                <p className="text-gray-400">Ainda não há dados suficientes para gerar gráficos.</p>
+              </div>
+            )}
           </div>
         </Card>
       </div>

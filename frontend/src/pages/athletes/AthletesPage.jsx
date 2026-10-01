@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, Users } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAthleteStore from '../../store/athleteStore';
 import Button from '../../components/ui/Button';
@@ -143,8 +143,24 @@ const AthletesPage = () => {
             </Card>
           ))
         ) : (
-          <div className="col-span-full text-center py-12 text-gray-400">
-            Nenhum atleta encontrado.
+          <div className="col-span-full py-16 flex flex-col items-center justify-center border-2 border-dashed border-gray-700 rounded-xl bg-surface/50">
+            <div className="h-20 w-20 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+              <Users className="h-10 w-10 text-primary" />
+            </div>
+            <h3 className="text-xl font-bold text-text mb-2">
+              {searchTerm ? 'Nenhum atleta encontrado' : 'Você ainda não tem atletas'}
+            </h3>
+            <p className="text-gray-400 max-w-md text-center mb-6">
+              {searchTerm 
+                ? 'Tente buscar com termos diferentes.' 
+                : 'Cadastre seu primeiro atleta agora mesmo e comece a monitorar a carga de treino e o bem-estar dele!'}
+            </p>
+            {!searchTerm && (
+              <Button onClick={() => handleOpenModal()} className="gap-2 px-6">
+                <Plus className="h-5 w-5" />
+                Cadastrar meu 1º Atleta
+              </Button>
+            )}
           </div>
         )}
       </div>

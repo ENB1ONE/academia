@@ -7,6 +7,7 @@ import DashboardLayout from './components/layout/DashboardLayout';
 // Pages
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import AthletesPage from './pages/athletes/AthletesPage';
 import AthleteDetailPage from './pages/athletes/AthleteDetailPage';
@@ -35,6 +36,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       
       {/* Protected Routes */}
       <Route path="/" element={
