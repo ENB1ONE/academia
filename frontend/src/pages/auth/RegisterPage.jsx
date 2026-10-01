@@ -50,7 +50,7 @@ const RegisterPage = () => {
             <Activity className="h-8 w-8 text-primary" />
           </div>
           <h1 className="text-3xl font-bold text-text tracking-tight">Criar Conta</h1>
-          <p className="text-gray-400 mt-2">Junte-se ao FormClub</p>
+          <p className="text-gray-400 mt-2">Junte-se ao FormaSync</p>
         </div>
 
         <Card>

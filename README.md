@@ -1,7 +1,7 @@
-# 🏋️ FormClub Training
+# 🏋️ FormaSync
 
 Plataforma de gestão de treinamento para atletas e treinadores.
 
 > Versão de testes - Em desenvolvimento
 
-© FormClub 2026
+© FormaSync 2026

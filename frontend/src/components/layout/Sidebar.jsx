@@ -41,7 +41,7 @@ const Sidebar = () => {
         <div className="p-6">
           <div className="flex items-center gap-2 text-primary font-bold text-2xl tracking-tight">
             <Activity className="h-8 w-8" />
-            <span>FormClub</span>
+            <span>FormaSync</span>
           </div>
         </div>
 

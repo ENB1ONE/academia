@@ -40,7 +40,7 @@ const LoginPage = () => {
           <div className="h-16 w-16 bg-primary/20 rounded-full flex items-center justify-center mb-4 border border-primary/30">
             <Activity className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold text-text tracking-tight">FormClub</h1>
+          <h1 className="text-3xl font-bold text-text tracking-tight">FormaSync</h1>
           <p className="text-gray-400 mt-2">Gestão de Carga e Treinamento</p>
         </div>
 
