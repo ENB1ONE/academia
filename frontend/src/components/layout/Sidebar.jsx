@@ -24,13 +24,19 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile toggle */}
-      <button 
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-surface rounded-lg text-text border border-gray-700"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-      </button>
+      {/* Mobile Top Bar */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-surface border-b border-gray-800 shrink-0">
+        <div className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight">
+          <Activity className="h-6 w-6" />
+          <span>FormaSync</span>
+        </div>
+        <button 
+          className="p-2 bg-background rounded-lg text-text border border-gray-700"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+      </div>
 
       {/* Sidebar */}
       <aside className={`
