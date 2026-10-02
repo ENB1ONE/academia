@@ -11,7 +11,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         onClick={onClose}
       />
       
-      <div className="bg-surface border border-gray-800 rounded-xl shadow-2xl w-full max-w-md relative z-10 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+      <div className="bg-surface border border-gray-800 rounded-xl shadow-2xl w-full max-w-md relative z-10 animate-in fade-in zoom-in-95 duration-200 max-h-[80dvh] flex flex-col">
         <div className="flex items-center justify-between p-4 border-b border-gray-800">
           <h3 className="text-lg font-semibold text-text">{title}</h3>
           <button

@@ -48,7 +48,7 @@ const ForcePasswordChangeModal = () => {
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999] p-4 backdrop-blur-sm">
-      <div className="bg-surface border border-primary/30 rounded-xl p-8 max-w-md w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div className="bg-surface border border-primary/30 rounded-xl p-8 max-w-md w-full shadow-2xl relative max-h-[80dvh] overflow-y-auto">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary"></div>
         
         <div className="flex flex-col items-center mb-6 text-center">
