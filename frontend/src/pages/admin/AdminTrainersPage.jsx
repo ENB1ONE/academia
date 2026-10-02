@@ -180,7 +180,7 @@ const AdminTrainersPage = () => {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-md" padding="p-6">
+          <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto" padding="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-text">Novo Treinador</h2>
               <button onClick={handleCloseModal} className="text-gray-400 hover:text-white">
