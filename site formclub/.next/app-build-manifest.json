@@ -1,0 +1,95 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/app/_not-found/page-6b05e1f50599bbc2.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/css/34203888a3feb12e.css",
+      "static/css/f1afd6c480d16080.css",
+      "static/chunks/619-ba102abea3e3d0e4.js",
+      "static/chunks/924-96dc4147dd4cdec8.js",
+      "static/chunks/app/layout-3c93f41344d6f7b3.js"
+    ],
+    "/api/leads/route": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/app/api/leads/route-c3fe913c6e66c3aa.js"
+    ],
+    "/robots.txt/route": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/app/robots.txt/route-c3fe913c6e66c3aa.js"
+    ],
+    "/sitemap.xml/route": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/app/sitemap.xml/route-c3fe913c6e66c3aa.js"
+    ],
+    "/agendar/page": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/619-ba102abea3e3d0e4.js",
+      "static/chunks/924-96dc4147dd4cdec8.js",
+      "static/chunks/app/agendar/page-7236a8aafffddee6.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/619-ba102abea3e3d0e4.js",
+      "static/chunks/356-d14a7b6ee551e1ea.js",
+      "static/chunks/467-22bf0df93a01b3b9.js",
+      "static/chunks/924-96dc4147dd4cdec8.js",
+      "static/chunks/app/page-eea925f97bad931f.js"
+    ],
+    "/estrutura/page": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/356-d14a7b6ee551e1ea.js",
+      "static/chunks/app/estrutura/page-31e6bce9ff67a4a1.js"
+    ],
+    "/modalidades/page": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/356-d14a7b6ee551e1ea.js",
+      "static/chunks/app/modalidades/page-31e6bce9ff67a4a1.js"
+    ],
+    "/wellhub/page": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/924-96dc4147dd4cdec8.js",
+      "static/chunks/app/wellhub/page-42619ea1bc9447fa.js"
+    ],
+    "/privacidade/page": [
+      "static/chunks/webpack-a27f1b9ff8164d67.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-4804d1a70e0386d3.js",
+      "static/chunks/main-app-8eaa155fd5b7897b.js",
+      "static/chunks/619-ba102abea3e3d0e4.js",
+      "static/chunks/app/privacidade/page-f338d0eb88bbae58.js"
+    ]
+  }
+}

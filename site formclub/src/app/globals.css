@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-obsidian: #0A0A0B;
+  --bg-charcoal: #121316;
+  --surface-glass: rgba(24, 25, 29, 0.72);
+  --text-alabaster: #F4F4F6;
+  --text-muted: #A1A1AA;
+  --accent-bronze: #C8A97E;
+  --accent-gold: #D4AF37;
+  --accent-volt: #E2F163;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg-obsidian);
+  color: var(--text-alabaster);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #C8A97E;
+  color: #0A0A0B;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A0A0B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222328;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C8A97E;
+}
+
+/* Luxury Glassmorphism Utilities */
+@layer components {
+  .glass-surface {
+    background: rgba(18, 19, 22, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card-hover {
+    background: rgba(18, 19, 22, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card-hover:hover {
+    border-color: rgba(200, 169, 126, 0.4);
+    box-shadow: 0 12px 30px -10px rgba(200, 169, 126, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #FFF4E3 0%, #DFC7A7 40%, #C8A97E 80%, #997F24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-white {
+    background: linear-gradient(180deg, #FFFFFF 0%, #D4D4D8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gold-border-glow {
+    position: relative;
+  }
+
+  .gold-border-glow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(200, 169, 126, 0.5), transparent 60%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
