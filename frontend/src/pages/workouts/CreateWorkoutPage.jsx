@@ -62,7 +62,7 @@ const CreateWorkoutPage = () => {
       exercises: exercises.map((ex, idx) => ({
         exercise_name: ex.exercise_name || 'Exercício ' + (idx + 1),
         sets: parseInt(ex.sets) || 0,
-        reps: parseInt(ex.reps) || 0,
+        reps: String(ex.reps || '10'),
         load_kg: parseFloat(ex.load_kg) || 0,
         rest_seconds: parseInt(ex.rest_seconds) || 0,
         order: idx + 1,
