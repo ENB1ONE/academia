@@ -75,7 +75,7 @@ const CreateWorkoutPage = () => {
       toast.success('Treino salvo com sucesso!');
       navigate('/dashboard'); // or redirect to somewhere useful
     } catch (error) {
-      toast.error('Erro ao salvar treino');
+      toast.error(error.response?.data?.detail || 'Erro ao salvar treino');
     }
   };
 

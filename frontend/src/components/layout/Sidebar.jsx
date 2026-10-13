@@ -109,7 +109,7 @@ const Sidebar = () => {
             </div>
           </div>
           <button 
-            onClick={logout}
+            onClick={() => { logout(); window.location.href = '/academia/'; }}
             className="flex items-center gap-3 w-full px-4 py-2 text-sm font-medium text-gray-400 hover:text-danger hover:bg-danger/10 rounded-lg transition-colors"
           >
             <LogOut className="h-4 w-4" />
