@@ -41,14 +41,17 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="group flex items-center gap-1.5 focus:outline-none"
-            aria-label="FORMCLUB - Centro de Treinamento e Performance"
+            className="group flex items-center gap-2 focus:outline-none"
+            aria-label="FORMCLUB - Human Performance Center"
           >
-            <span className="font-heading font-extrabold text-xl sm:text-2xl tracking-tighter text-white">
-              FORM<span className="text-bronze">CLUB</span>
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-bronze transition-transform group-hover:scale-150" />
-            <span className="hidden sm:inline-block ml-2 px-2 py-0.5 rounded-full text-[9px] font-mono tracking-widest uppercase bg-white/5 border border-white/10 text-zinc-400">
+            <div className="relative h-10 w-44 sm:h-12 sm:w-52">
+              <img
+                src="/formclub.com.br/images/formclub-logo.png"
+                alt="FORMCLUB - Human Performance Center"
+                className="w-full h-full object-contain filter brightness-105"
+              />
+            </div>
+            <span className="hidden md:inline-block px-2 py-0.5 rounded-full text-[9px] font-mono tracking-widest uppercase bg-white/5 border border-white/10 text-zinc-400">
               Vila Galvão
             </span>
           </Link>

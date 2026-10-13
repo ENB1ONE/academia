@@ -55,12 +55,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/sitemap.xml": {
-      "initialHeaders": {
-        "cache-control": "public, max-age=0, must-revalidate",
-        "content-type": "application/xml",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/sitemap.xml/layout,_N_T_/sitemap.xml/route,_N_T_/sitemap.xml/"
-      },
+    "/agendar": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -73,8 +68,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/sitemap.xml",
-      "dataRoute": null,
+      "srcRoute": "/agendar",
+      "dataRoute": "/agendar.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -84,7 +79,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/estrutura": {
+    "/": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -97,8 +92,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/estrutura",
-      "dataRoute": "/estrutura.rsc",
+      "srcRoute": "/",
+      "dataRoute": "/index.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -180,7 +175,12 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/agendar": {
+    "/sitemap.xml": {
+      "initialHeaders": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "application/xml",
+        "x-next-cache-tags": "_N_T_/layout,_N_T_/sitemap.xml/layout,_N_T_/sitemap.xml/route,_N_T_/sitemap.xml/"
+      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -193,8 +193,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/agendar",
-      "dataRoute": "/agendar.rsc",
+      "srcRoute": "/sitemap.xml",
+      "dataRoute": null,
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -204,7 +204,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/": {
+    "/estrutura": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -217,8 +217,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/",
-      "dataRoute": "/index.rsc",
+      "srcRoute": "/estrutura",
+      "dataRoute": "/estrutura.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -232,8 +232,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "893d1b120f9a2330728edd713424bae4",
-    "previewModeSigningKey": "4a74f893f74030e384e010f17b67effaa34cde92b4c01560a294a044ba997790",
-    "previewModeEncryptionKey": "74a8368b197659102d60abf5fc7580eca012d3af4afb10aa0bbde673cd3e47e6"
+    "previewModeId": "03d79dc56168967d15bcd71035bbcbc5",
+    "previewModeSigningKey": "8d47768987806ecef50a3a88f7d001e535d9d8f7fcc524f775fa819243947878",
+    "previewModeEncryptionKey": "5c94b6f1e10ad4b0a4c21779c16987ad7968afc5680b7fcce17f8d558beff199"
   }
 }

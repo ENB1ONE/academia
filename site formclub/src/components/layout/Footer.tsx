@@ -22,9 +22,13 @@ export default function Footer() {
           {/* Col 1: Brand & Identity */}
           <div className="space-y-4">
             <Link href="/" className="inline-block focus:outline-none">
-              <span className="font-heading font-extrabold text-2xl tracking-tighter text-white">
-                FORM<span className="text-bronze">CLUB</span>
-              </span>
+              <div className="relative h-12 w-52 mb-2">
+                <img
+                  src="/formclub.com.br/images/formclub-logo.png"
+                  alt="FORMCLUB - Human Performance Center"
+                  className="w-full h-full object-contain filter brightness-110"
+                />
+              </div>
             </Link>
             <p className="text-xs text-zinc-400 leading-relaxed">
               Centro de Treinamento e Performance de alto padrão na Vila Galvão, Guarulhos. A união entre ciência biomecânica, exclusividade de horário e hospitalidade boutique.
