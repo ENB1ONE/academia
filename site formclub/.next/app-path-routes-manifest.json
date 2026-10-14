@@ -1,12 +1,12 @@
 {
   "/_not-found/page": "/_not-found",
   "/api/leads/route": "/api/leads",
-  "/sitemap.xml/route": "/sitemap.xml",
   "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml",
   "/agendar/page": "/agendar",
   "/page": "/",
+  "/estrutura/page": "/estrutura",
   "/modalidades/page": "/modalidades",
-  "/privacidade/page": "/privacidade",
   "/wellhub/page": "/wellhub",
-  "/estrutura/page": "/estrutura"
+  "/privacidade/page": "/privacidade"
 }

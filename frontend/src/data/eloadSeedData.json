@@ -1,0 +1,1642 @@
+{
+  "summary": {
+    "total_athletes": 98,
+    "workouts_7d": 38,
+    "avg_readiness_pct": 84.5,
+    "active_pain_records": 3,
+    "gabbett_risk_count": 6
+  },
+  "gabbett_matrix": {
+    "destraining": 14,
+    "optimal": 68,
+    "attention": 10,
+    "high_risk": 6
+  },
+  "low_readiness_athletes": [
+    {
+      "name": "THEO ALVES",
+      "readiness_pct": 64,
+      "sleep_quality": 2,
+      "fatigue": 2,
+      "muscle_soreness": 2
+    },
+    {
+      "name": "RENAN SOUZA",
+      "readiness_pct": 68,
+      "sleep_quality": 3,
+      "fatigue": 2,
+      "muscle_soreness": 2
+    }
+  ],
+  "recent_activity": [
+    {
+      "athlete_name": "ADRIELLI",
+      "description": "Ciclo menstrual: Fluxo fraco, Dor 1",
+      "time_ago": "Hoje"
+    },
+    {
+      "athlete_name": "FERNANDO GOMES",
+      "description": "Questionário de bem-estar: 88% de prontidão",
+      "time_ago": "Hoje"
+    },
+    {
+      "athlete_name": "ARTUR LUZ",
+      "description": "Questionário de bem-estar: 80% de prontidão",
+      "time_ago": "Ontem"
+    },
+    {
+      "athlete_name": "LUIZ KICHIMOTO",
+      "description": "Treino: ESTABILIDADE UNIPODAL 60 min PSE 6",
+      "time_ago": "Ontem"
+    },
+    {
+      "athlete_name": "LEONARDO SGUAÇABIA",
+      "description": "Registro de PSE: Carga 480 UA",
+      "time_ago": "2 dias atrás"
+    },
+    {
+      "athlete_name": "GABRIELE COSTA DE MACEDO",
+      "description": "Check-in Pré-Treino PSR 7/10",
+      "time_ago": "2 dias atrás"
+    }
+  ],
+  "athletes": [
+    {
+      "id": 30445,
+      "name": "ADRIELLI",
+      "email": "adrielli@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1982-07-06",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 44,
+      "photo_url": null
+    },
+    {
+      "id": 30045,
+      "name": "ALECSANDER REIS",
+      "email": "alecsander.reis@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1994-02-09",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 32,
+      "photo_url": null
+    },
+    {
+      "id": 12165,
+      "name": "ALEX LOGE",
+      "email": "alex.loge@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "PERIODO COMPETITIVO",
+      "birth_date": "2012-11-09",
+      "gender": "Masculino",
+      "group_id": 1639,
+      "group_name": "PERIODO COMPETITIVO",
+      "age": 13,
+      "photo_url": null
+    },
+    {
+      "id": 28465,
+      "name": "AMAURI DERATO",
+      "email": "amauri.derato@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1980-04-18",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 46,
+      "photo_url": null
+    },
+    {
+      "id": 29434,
+      "name": "ANA PAULA DE OLIVEIRA",
+      "email": "ana.paula.de.oliveira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1987-02-03",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 39,
+      "photo_url": null
+    },
+    {
+      "id": 30231,
+      "name": "ANDREA DE CAMRGO",
+      "email": "andrea.de.camrgo@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1973-01-12",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 53,
+      "photo_url": null
+    },
+    {
+      "id": 20337,
+      "name": "ARTHUR RIBEIRO",
+      "email": "arthur.ribeiro@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2010-01-07",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 16,
+      "photo_url": null
+    },
+    {
+      "id": 21597,
+      "name": "ARTHUR RIBEIRO FERREIRA",
+      "email": "arthur.ribeiro.ferreira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-09-17",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/d1912195-8b76-4b58-bcbe-5e260ef0ac81.jpeg"
+    },
+    {
+      "id": 23573,
+      "name": "ARTUR LUZ",
+      "email": "artur.luz@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1982-01-19",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 44,
+      "photo_url": null
+    },
+    {
+      "id": 29316,
+      "name": "BEATRIZ BARONE",
+      "email": "beatriz.barone@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2001-08-23",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 25,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/5c45b033-ac38-4b67-ac3c-1053496c6263.jpeg"
+    },
+    {
+      "id": 29264,
+      "name": "BRYAN JEAN",
+      "email": "bryan.jean@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-03-21",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/edd3ad93-f06f-4b06-8148-3f3ab6e2f987.jpeg"
+    },
+    {
+      "id": 16446,
+      "name": "CARLOS JOSÉ MESSIAS DE OLIVEIRA",
+      "email": "carlos.josé.messias.de.oliveira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1970-03-01",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 56,
+      "photo_url": null
+    },
+    {
+      "id": 29850,
+      "name": "DAVI LUCAS",
+      "email": "davi.lucas@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2013-05-22",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 13,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/92d75dad-3522-4861-85dc-5c20ec0d1e86.jpeg"
+    },
+    {
+      "id": 24042,
+      "name": "DAVI MAGHETTI",
+      "email": "davi.maghetti@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2014-01-12",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 12,
+      "photo_url": null
+    },
+    {
+      "id": 30405,
+      "name": "DAVIDSON AMORIM",
+      "email": "davidson.amorim@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1989-06-22",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 37,
+      "photo_url": null
+    },
+    {
+      "id": 20435,
+      "name": "EDER MOURA",
+      "email": "eder.moura@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2009-06-14",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 17,
+      "photo_url": null
+    },
+    {
+      "id": 25141,
+      "name": "EDUARDO PETRUCCI",
+      "email": "eduardo.petrucci@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2006-06-07",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 20,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/f0cfa235-4674-4b77-90c5-e2a75f7d7fd0.jpeg"
+    },
+    {
+      "id": 29751,
+      "name": "ENZO FERNANDO PINHEIRO",
+      "email": "enzo.fernando.pinheiro@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2010-08-26",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 16,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/41677c67-5eec-4354-8101-482c1de728f1.jpeg"
+    },
+    {
+      "id": 14049,
+      "name": "ENZO SCARLASSARE",
+      "email": "enzo.scarlassare@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2009-08-29",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 17,
+      "photo_url": null
+    },
+    {
+      "id": 24449,
+      "name": "FELIPE CREMON",
+      "email": "felipe.cremon@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2004-12-07",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 21,
+      "photo_url": null
+    },
+    {
+      "id": 28508,
+      "name": "FELIPE MORAES",
+      "email": "felipe.moraes@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2008-08-07",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 18,
+      "photo_url": null
+    },
+    {
+      "id": 21301,
+      "name": "FELLIPE TURRI",
+      "email": "fellipe.turri@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-03-04",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": null
+    },
+    {
+      "id": 27790,
+      "name": "FERNANDO GOMES",
+      "email": "fernando.gomes@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2008-09-06",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 18,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/e124d531-e71d-462d-b6fc-03b35d4e53a2.jpeg"
+    },
+    {
+      "id": 30373,
+      "name": "FLAVIANA VITORIO",
+      "email": "flaviana.vitorio@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1976-07-08",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 50,
+      "photo_url": null
+    },
+    {
+      "id": 22655,
+      "name": "GABRIEL BICALHO",
+      "email": "gabriel.bicalho@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1999-06-06",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 27,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/9192b263-c315-487f-bcf6-218f30caf02e.jpeg"
+    },
+    {
+      "id": 20456,
+      "name": "GABRIEL CARDOSO",
+      "email": "gabriel.cardoso@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1996-11-20",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 29,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/9e4cbeaa-1fc4-43b1-b649-7b1ef4a10347.jpeg"
+    },
+    {
+      "id": 20201,
+      "name": "GABRIEL DE OLIVEIRA MAZARIO",
+      "email": "gabriel.de.oliveira.mazario@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2006-04-20",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 20,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/51cb2c01-d67a-4bc7-b750-77cd658afb80.jpeg"
+    },
+    {
+      "id": 16687,
+      "name": "GABRIEL DIAS",
+      "email": "gabriel.dias@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-03-20",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/3e2c5ea9-9be2-4eef-9931-d4f1578665b1.jpeg"
+    },
+    {
+      "id": 18536,
+      "name": "GABRIEL GRAZIOTTO",
+      "email": "gabriel.graziotto@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2009-04-30",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 17,
+      "photo_url": null
+    },
+    {
+      "id": 30594,
+      "name": "GABRIEL LACERDA",
+      "email": "gabriel.lacerda@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1996-02-07",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 30,
+      "photo_url": null
+    },
+    {
+      "id": 29565,
+      "name": "GABRIEL PASTUCH",
+      "email": "gabriel.pastuch@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2004-06-15",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 22,
+      "photo_url": null
+    },
+    {
+      "id": 29855,
+      "name": "GABRIELA CALDEIRA",
+      "email": "gabriela.caldeira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1993-08-30",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 33,
+      "photo_url": null
+    },
+    {
+      "id": 30610,
+      "name": "GABRIELE COSTA DE MACEDO",
+      "email": "gabriele.costa.de.macedo@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2000-11-29",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 25,
+      "photo_url": null
+    },
+    {
+      "id": 28121,
+      "name": "GABRIELLY PEREIRA",
+      "email": "gabrielly.pereira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2003-10-28",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 22,
+      "photo_url": null
+    },
+    {
+      "id": 30533,
+      "name": "GIOVANA FERREIRA",
+      "email": "giovana.ferreira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2004-09-29",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 22,
+      "photo_url": null
+    },
+    {
+      "id": 15845,
+      "name": "GUILHERME ALVES DE HOLANDA",
+      "email": "guilherme.alves.de.holanda@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2011-04-19",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 15,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/1b4d5809-ed68-4198-abd9-f964a60f9816.jpeg"
+    },
+    {
+      "id": 30365,
+      "name": "GUILHERME ALVES MASETTI",
+      "email": "guilherme.alves.masetti@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-08-27",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": null
+    },
+    {
+      "id": 11999,
+      "name": "GUILHERME AMORIM",
+      "email": "guilherme.amorim@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "PERIODO COMPETITIVO",
+      "birth_date": "2011-05-22",
+      "gender": "Masculino",
+      "group_id": 1639,
+      "group_name": "PERIODO COMPETITIVO",
+      "age": 15,
+      "photo_url": null
+    },
+    {
+      "id": 29754,
+      "name": "GUSTAVO PATRICK",
+      "email": "gustavo.patrick@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1999-07-03",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 27,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/c5288377-8d6f-42f8-a6f2-13dd81362e11.jpeg"
+    },
+    {
+      "id": 29571,
+      "name": "GUSTAVO RIBEIRO",
+      "email": "gustavo.ribeiro@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2011-01-31",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 15,
+      "photo_url": null
+    },
+    {
+      "id": 28033,
+      "name": "GUSTAVO TOMIO",
+      "email": "gustavo.tomio@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2001-12-11",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 24,
+      "photo_url": null
+    },
+    {
+      "id": 30498,
+      "name": "HEDIPO SILVA",
+      "email": "hedipo.silva@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1991-12-10",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 34,
+      "photo_url": null
+    },
+    {
+      "id": 26622,
+      "name": "HENRICO PHILLIP",
+      "email": "henrico.phillip@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2009-04-09",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 17,
+      "photo_url": null
+    },
+    {
+      "id": 26289,
+      "name": "ISABELLY SANTOS DANTAS",
+      "email": "isabelly.santos.dantas@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2014-04-01",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 12,
+      "photo_url": null
+    },
+    {
+      "id": 23639,
+      "name": "ISIS MARQUES",
+      "email": "isis.marques@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1982-09-23",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 44,
+      "photo_url": null
+    },
+    {
+      "id": 26628,
+      "name": "IZABELLA VITORIO",
+      "email": "izabella.vitorio@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2005-01-30",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 21,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/7fb83843-5f6a-49b9-96ba-b6962c025491.jpeg"
+    },
+    {
+      "id": 23375,
+      "name": "JHUAN CARVALHO",
+      "email": "jhuan.carvalho@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-08-21",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": null
+    },
+    {
+      "id": 22455,
+      "name": "JOAO MENEZES",
+      "email": "joao.menezes@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-07-30",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/800731d9-f200-4e07-ba01-ab1c6779bf6e.jpeg"
+    },
+    {
+      "id": 26597,
+      "name": "JOÃO MONÇÃO",
+      "email": "joão.monção@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2010-06-30",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 16,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/1cb205b8-97b7-4d6a-84c1-5d2e5679ca01.jpeg"
+    },
+    {
+      "id": 24043,
+      "name": "JOAO PEDRO MAGHETTI",
+      "email": "joao.pedro.maghetti@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-11-03",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 13,
+      "photo_url": null
+    },
+    {
+      "id": 28599,
+      "name": "JOAO PEREIRA",
+      "email": "joao.pereira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2001-02-19",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 25,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/ddb5bea6-be06-49b3-92bb-2d5dc22ae895.jpeg"
+    },
+    {
+      "id": 22464,
+      "name": "JOAO PUSCH",
+      "email": "joao.pusch@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2003-06-10",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 23,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/c2b63a5d-5970-4d6c-8d28-debe1f74ff14.jpeg"
+    },
+    {
+      "id": 27798,
+      "name": "JOAO VICTOR CAMAROZANO",
+      "email": "joao.victor.camarozano@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2008-04-08",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 18,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/ebb1be88-7e44-43f7-8d88-d366ab8dae0b.jpeg"
+    },
+    {
+      "id": 29089,
+      "name": "JULIA STREITENBERGER",
+      "email": "julia.streitenberger@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2009-02-28",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 17,
+      "photo_url": null
+    },
+    {
+      "id": 24160,
+      "name": "KAIC ALEXANDRINO RAPE",
+      "email": "kaic.alexandrino.rape@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2010-03-10",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 16,
+      "photo_url": null
+    },
+    {
+      "id": 30646,
+      "name": "KAUAN ROCHA FERREIRA",
+      "email": "kauan.rocha.ferreira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2011-06-11",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 15,
+      "photo_url": null
+    },
+    {
+      "id": 28386,
+      "name": "LAURA LIMA",
+      "email": "laura.lima@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-06-11",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/d417b39c-1b7e-49e6-a64a-ba72446ffb44.jpeg"
+    },
+    {
+      "id": 17365,
+      "name": "LEONARDO PETRELLA",
+      "email": "leonardo.petrella@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-02-02",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": null
+    },
+    {
+      "id": 28697,
+      "name": "LEONARDO SGUAÇABIA",
+      "email": "leonardo.sguaçabia@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1998-03-30",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 28,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/dea04c8e-d967-4e44-a8e5-a7bc60aebd30.jpeg"
+    },
+    {
+      "id": 30241,
+      "name": "LETICIA CERUTTI",
+      "email": "leticia.cerutti@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1993-10-04",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 33,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/17fd7d26-b22a-42c8-a15e-87c4f46aa5b8.jpeg"
+    },
+    {
+      "id": 30515,
+      "name": "LUCAS AMMAR",
+      "email": "lucas.ammar@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2001-07-30",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 25,
+      "photo_url": null
+    },
+    {
+      "id": 30347,
+      "name": "LUCAS BIACSI",
+      "email": "lucas.biacsi@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2008-08-22",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 18,
+      "photo_url": null
+    },
+    {
+      "id": 16981,
+      "name": "LUIZ KICHIMOTO",
+      "email": "luiz.kichimoto@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2007-03-17",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 19,
+      "photo_url": null
+    },
+    {
+      "id": 29564,
+      "name": "MARCELO JOAQUIM",
+      "email": "marcelo.joaquim@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2010-10-01",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 16,
+      "photo_url": null
+    },
+    {
+      "id": 24658,
+      "name": "MARCELO JOSE DOS SANTOS",
+      "email": "marcelo.jose.dos.santos@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1993-12-18",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 32,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/dd777962-1c68-408c-944c-613d2f442701.jpeg"
+    },
+    {
+      "id": 26782,
+      "name": "MARIA LUIZA SALLES",
+      "email": "maria.luiza.salles@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2008-07-17",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 18,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/70f7100f-3118-44a1-964c-16880affb6f1.jpeg"
+    },
+    {
+      "id": 29784,
+      "name": "MARIANA MANA",
+      "email": "mariana.mana@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2002-03-25",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 24,
+      "photo_url": null
+    },
+    {
+      "id": 29090,
+      "name": "MARIANE DE AMORIM",
+      "email": "mariane.de.amorim@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2009-08-23",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 17,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/d713cab8-3aa3-46e2-95df-4d5d5e4e969a.jpeg"
+    },
+    {
+      "id": 26618,
+      "name": "MATEUS LIMEIRA DE SOUZA",
+      "email": "mateus.limeira.de.souza@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2013-02-22",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 13,
+      "photo_url": null
+    },
+    {
+      "id": 28667,
+      "name": "MATHEUS MATUEDA",
+      "email": "matheus.matueda@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2007-05-09",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 19,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/f3ce25ca-caf0-4465-9446-5ebd2616ad2c.jpeg"
+    },
+    {
+      "id": 12325,
+      "name": "MATHEUS RAINERI",
+      "email": "matheus.raineri@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2014-07-02",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 12,
+      "photo_url": null
+    },
+    {
+      "id": 28091,
+      "name": "MAX",
+      "email": "max@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2003-07-07",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 23,
+      "photo_url": null
+    },
+    {
+      "id": 30423,
+      "name": "MIGUEL BUTZKE",
+      "email": "miguel.butzke@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2014-02-13",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 12,
+      "photo_url": null
+    },
+    {
+      "id": 23899,
+      "name": "MIGUEL LUIZ",
+      "email": "miguel.luiz@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2011-12-05",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/1699bcee-8c22-477a-88e3-8f5b9591b4ec.jpeg"
+    },
+    {
+      "id": 29752,
+      "name": "MIGUEL PINHEIRO",
+      "email": "miguel.pinheiro@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2014-05-16",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 12,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/0a7f0ed6-a0e3-445b-8359-b5146af7bfc4.jpeg"
+    },
+    {
+      "id": 22970,
+      "name": "MOISES SANTOS SOARES",
+      "email": "moises.santos.soares@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2010-03-22",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 16,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/39721c1d-7213-4eeb-82c7-fd19dad179b5.jpeg"
+    },
+    {
+      "id": 12032,
+      "name": "OLAVO REIS",
+      "email": "olavo.reis@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2009-08-05",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 17,
+      "photo_url": null
+    },
+    {
+      "id": 28707,
+      "name": "PEDRO ALEXANDRE FERRARI",
+      "email": "pedro.alexandre.ferrari@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2010-03-30",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 16,
+      "photo_url": null
+    },
+    {
+      "id": 28122,
+      "name": "PEDRO HENRIQUE TERRIBILE",
+      "email": "pedro.henrique.terribile@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2001-11-12",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 24,
+      "photo_url": null
+    },
+    {
+      "id": 20862,
+      "name": "PEDRO LUIZ DUARTE",
+      "email": "pedro.luiz.duarte@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-02-05",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/edf03f72-719c-49be-abc2-15fb187b1ba7.jpeg"
+    },
+    {
+      "id": 30243,
+      "name": "PEDRO OLETO",
+      "email": "pedro.oleto@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1989-12-27",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 36,
+      "photo_url": null
+    },
+    {
+      "id": 16965,
+      "name": "RAFAEL DIAS",
+      "email": "rafael.dias@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-03-20",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/feac674d-1b16-47e3-88e5-dd897424c03f.jpeg"
+    },
+    {
+      "id": 24423,
+      "name": "RAFAEL DINIZ",
+      "email": "rafael.diniz@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2006-12-13",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 19,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/4569c0ab-93b6-4dcb-9b7a-921a3c7ded81.jpeg"
+    },
+    {
+      "id": 17388,
+      "name": "RAFAELA DOS REIS",
+      "email": "rafaela.dos.reis@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-05-07",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": null
+    },
+    {
+      "id": 27803,
+      "name": "RENAN SOUZA",
+      "email": "renan.souza@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2003-04-24",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 23,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/538b31d3-3b83-464e-a42c-d09181579236.jpeg"
+    },
+    {
+      "id": 28676,
+      "name": "RHYAN DOS SANTOS SENA",
+      "email": "rhyan.dos.santos.sena@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2007-03-16",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 19,
+      "photo_url": null
+    },
+    {
+      "id": 27242,
+      "name": "RODRIGO MACEDO",
+      "email": "rodrigo.macedo@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1978-03-14",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 48,
+      "photo_url": null
+    },
+    {
+      "id": 30597,
+      "name": "STEPHANIE RODRIGUES",
+      "email": "stephanie.rodrigues@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1999-04-06",
+      "gender": "Feminino",
+      "group_id": null,
+      "group_name": null,
+      "age": 27,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/8e9b29a4-9f85-4430-8acc-50938572dd2b.jpeg"
+    },
+    {
+      "id": 29803,
+      "name": "SUELK FERREIRA",
+      "email": "suelk.ferreira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2011-04-25",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 15,
+      "photo_url": null
+    },
+    {
+      "id": 25433,
+      "name": "THEO ALVES",
+      "email": "theo.alves@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2015-11-05",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 10,
+      "photo_url": null
+    },
+    {
+      "id": 29246,
+      "name": "VALENTINA",
+      "email": "valentina@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2015-09-07",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 11,
+      "photo_url": null
+    },
+    {
+      "id": 21596,
+      "name": "VICTOR RIBEIRO FERREIRA",
+      "email": "victor.ribeiro.ferreira@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2012-09-17",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 14,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/efa582bf-7c02-40ea-8eec-77298f1ce38f.jpeg"
+    },
+    {
+      "id": 28007,
+      "name": "VICTOR SILVA",
+      "email": "victor.silva@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2008-08-28",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 18,
+      "photo_url": null
+    },
+    {
+      "id": 28092,
+      "name": "VINICIUS MELLO",
+      "email": "vinicius.mello@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2008-07-25",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 18,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/1975e3cf-58d1-4385-8ae5-e62c43564364.jpeg"
+    },
+    {
+      "id": 29000,
+      "name": "VINICIUS ZAVARIZE",
+      "email": "vinicius.zavarize@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1994-03-30",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 32,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/c2f769bb-3922-447b-a464-362d47042419.jpeg"
+    },
+    {
+      "id": 25611,
+      "name": "VITOR IWAMA",
+      "email": "vitor.iwama@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1998-06-26",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 28,
+      "photo_url": null
+    },
+    {
+      "id": 29384,
+      "name": "WALACE FASIO",
+      "email": "walace.fasio@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "2008-10-15",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 17,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/aecd6d23-7469-432e-b6ca-2755decd7e9d.jpeg"
+    },
+    {
+      "id": 29681,
+      "name": "WEBERTE SAMPAIO",
+      "email": "weberte.sampaio@atleta.formclub.com.br",
+      "sport": "Preparação Física / Performance",
+      "position": "Geral",
+      "birth_date": "1990-05-17",
+      "gender": "Masculino",
+      "group_id": null,
+      "group_name": null,
+      "age": 36,
+      "photo_url": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/46e7a765-61d8-4901-8eb7-c2ef4a84dd95.jpeg"
+    }
+  ],
+  "groups": [
+    {
+      "id": 1651,
+      "name": "ALFA ACADEMY",
+      "description": "Grupo ALFA ACADEMY",
+      "athlete_count": 0
+    },
+    {
+      "id": 1642,
+      "name": "INTER TEMPORADA",
+      "description": "Grupo INTER TEMPORADA",
+      "athlete_count": 0
+    },
+    {
+      "id": 1639,
+      "name": "PERIODO COMPETITIVO",
+      "description": "Grupo PERIODO COMPETITIVO",
+      "athlete_count": 0
+    },
+    {
+      "id": 1640,
+      "name": "PÓS  OPERATORIO",
+      "description": "Grupo PÓS  OPERATORIO",
+      "athlete_count": 0
+    },
+    {
+      "id": 1641,
+      "name": "PRÉ TEMPORADA",
+      "description": "Grupo PRÉ TEMPORADA",
+      "athlete_count": 0
+    }
+  ],
+  "workout_types": [
+    {
+      "id": 5980,
+      "name": null,
+      "color": "#8b5cf6",
+      "description": "PERFORMANCE"
+    },
+    {
+      "id": 5982,
+      "name": null,
+      "color": "#3b82f6",
+      "description": "VELOCIDADE"
+    },
+    {
+      "id": 5983,
+      "name": null,
+      "color": "#10b981",
+      "description": "ACELERAÇÃO"
+    },
+    {
+      "id": 5984,
+      "name": null,
+      "color": "#f59e0b",
+      "description": "RECOVERY E PREVENTIVOS"
+    },
+    {
+      "id": 5985,
+      "name": null,
+      "color": "#ef4444",
+      "description": "CORE"
+    },
+    {
+      "id": 5986,
+      "name": null,
+      "color": "#06b6d4",
+      "description": "FORÇA MMII"
+    },
+    {
+      "id": 5987,
+      "name": null,
+      "color": "#ec4899",
+      "description": "FORÇA MMSS"
+    },
+    {
+      "id": 5988,
+      "name": null,
+      "color": "#6366f1",
+      "description": "DESACELERAÇÃO"
+    },
+    {
+      "id": 5989,
+      "name": null,
+      "color": "#14b8a6",
+      "description": "FÍSICO TÉCNICO"
+    },
+    {
+      "id": 5990,
+      "name": null,
+      "color": "#f97316",
+      "description": "NEURAL"
+    },
+    {
+      "id": 5996,
+      "name": null,
+      "color": "#84cc16",
+      "description": "CAMPO"
+    },
+    {
+      "id": 6002,
+      "name": null,
+      "color": "#a855f7",
+      "description": "POTENCIA MMII"
+    },
+    {
+      "id": 6003,
+      "name": null,
+      "color": "#0ea5e9",
+      "description": "PUXA MMII"
+    },
+    {
+      "id": 6004,
+      "name": null,
+      "color": "#eab308",
+      "description": "POTENCIA MMSS"
+    },
+    {
+      "id": 6005,
+      "name": null,
+      "color": "#d946ef",
+      "description": "EMPURRA MMII"
+    },
+    {
+      "id": 6006,
+      "name": null,
+      "color": "#64748b",
+      "description": "EMPURRA MMSS"
+    },
+    {
+      "id": 6007,
+      "name": null,
+      "color": "#22c55e",
+      "description": "FORÇA UNIPODAL"
+    },
+    {
+      "id": 6016,
+      "name": null,
+      "color": "#38bdf8",
+      "description": "R.F MMII"
+    },
+    {
+      "id": 6017,
+      "name": null,
+      "color": "#fb7185",
+      "description": "R.F MMSS"
+    },
+    {
+      "id": 6018,
+      "name": null,
+      "color": "#f43f5e",
+      "description": "MMSS + CORE"
+    },
+    {
+      "id": 6019,
+      "name": null,
+      "color": "#4f46e5",
+      "description": "MMII + CORE"
+    },
+    {
+      "id": 6020,
+      "name": null,
+      "color": "#7c3aed",
+      "description": "TRIPLEX EMPURRA"
+    },
+    {
+      "id": 6021,
+      "name": null,
+      "color": "#2563eb",
+      "description": "TRIPLEX PUXA"
+    },
+    {
+      "id": 6022,
+      "name": null,
+      "color": "#059669",
+      "description": "TRIPLEX MMII"
+    },
+    {
+      "id": 6023,
+      "name": null,
+      "color": "#d97706",
+      "description": "PUXA MMSS"
+    },
+    {
+      "id": 7001,
+      "name": null,
+      "color": "#dc2626",
+      "description": "ESTABILIDADE  UNIPODAL"
+    },
+    {
+      "id": 7002,
+      "name": null,
+      "color": "#0891b2",
+      "description": "ESTABILIDADE"
+    },
+    {
+      "id": 7523,
+      "name": null,
+      "color": "#db2777",
+      "description": "HIPERTROFIA MMII"
+    },
+    {
+      "id": 7524,
+      "name": null,
+      "color": "#4338ca",
+      "description": "HIPERTROFIA MMSS"
+    },
+    {
+      "id": 7531,
+      "name": null,
+      "color": "#6d28d9",
+      "description": "FORÇA EMPURRA"
+    },
+    {
+      "id": 7532,
+      "name": null,
+      "color": "#1d4ed8",
+      "description": "FORÇA PUXA"
+    },
+    {
+      "id": 7962,
+      "name": null,
+      "color": "#047857",
+      "description": "FORTALECIMENTO ESPECÍFICO"
+    },
+    {
+      "id": 8047,
+      "name": null,
+      "color": "#b45309",
+      "description": "C.O.D"
+    },
+    {
+      "id": 10044,
+      "name": null,
+      "color": "#b91c1c",
+      "description": "TRIPLEX GERAL"
+    }
+  ],
+  "assessment_types": [
+    {
+      "id": 1,
+      "name": "Salto CMJ (Countermovement Jump)",
+      "unit": "cm",
+      "category": "Potência",
+      "description": "Salto vertical com contramovimento e mãos na cintura"
+    },
+    {
+      "id": 2,
+      "name": "Salto SJ (Squat Jump)",
+      "unit": "cm",
+      "category": "Potência",
+      "description": "Salto vertical saindo da posição estática de agachamento 90°"
+    },
+    {
+      "id": 3,
+      "name": "Sprint 10m",
+      "unit": "s",
+      "category": "Velocidade",
+      "description": "Aceleração inicial e tempo em 10 metros"
+    },
+    {
+      "id": 4,
+      "name": "Sprint 30m",
+      "unit": "s",
+      "category": "Velocidade",
+      "description": "Velocidade máxima e tempo em 30 metros"
+    },
+    {
+      "id": 5,
+      "name": "Massa Corporal",
+      "unit": "kg",
+      "category": "Antropometria",
+      "description": "Peso corporal aferido"
+    },
+    {
+      "id": 6,
+      "name": "Percentual de Gordura (% BF)",
+      "unit": "pct",
+      "category": "Antropometria",
+      "description": "Protocolo Pollock ou bioimpedância"
+    },
+    {
+      "id": 7,
+      "name": "Mobilidade Tornozelo (Lunge Test)",
+      "unit": "cm",
+      "category": "Mobilidade",
+      "description": "Distância hálux-parede com calcanhar no solo"
+    },
+    {
+      "id": 8,
+      "name": "Supino 1RM",
+      "unit": "kg",
+      "category": "Força",
+      "description": "Carga máxima ou estimada para 1 repetição máxima"
+    },
+    {
+      "id": 9,
+      "name": "Agachamento 1RM",
+      "unit": "kg",
+      "category": "Força",
+      "description": "Carga máxima em agachamento livre"
+    }
+  ]
+}

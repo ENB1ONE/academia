@@ -1,31 +1,6 @@
 {
   "version": 4,
   "routes": {
-    "/_not-found": {
-      "initialStatus": 404,
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/_not-found",
-      "dataRoute": "/_not-found.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
     "/robots.txt": {
       "initialHeaders": {
         "cache-control": "public, max-age=0, must-revalidate",
@@ -46,6 +21,60 @@
       "initialRevalidateSeconds": false,
       "srcRoute": "/robots.txt",
       "dataRoute": null,
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/sitemap.xml": {
+      "initialHeaders": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "application/xml",
+        "x-next-cache-tags": "_N_T_/layout,_N_T_/sitemap.xml/layout,_N_T_/sitemap.xml/route,_N_T_/sitemap.xml/"
+      },
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/sitemap.xml",
+      "dataRoute": null,
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/_not-found": {
+      "initialStatus": 404,
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/_not-found",
+      "dataRoute": "/_not-found.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -103,7 +132,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/estrutura": {
+    "/modalidades": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -116,8 +145,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/estrutura",
-      "dataRoute": "/estrutura.rsc",
+      "srcRoute": "/modalidades",
+      "dataRoute": "/modalidades.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -175,12 +204,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/sitemap.xml": {
-      "initialHeaders": {
-        "cache-control": "public, max-age=0, must-revalidate",
-        "content-type": "application/xml",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/sitemap.xml/layout,_N_T_/sitemap.xml/route,_N_T_/sitemap.xml/"
-      },
+    "/estrutura": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -193,32 +217,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/sitemap.xml",
-      "dataRoute": null,
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/modalidades": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/modalidades",
-      "dataRoute": "/modalidades.rsc",
+      "srcRoute": "/estrutura",
+      "dataRoute": "/estrutura.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -232,8 +232,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "4cefa422eb11a3823abc7aaf0ae3bad4",
-    "previewModeSigningKey": "e627254ac14fb59adaea7a1dc9536bc3ab27eeca3e648eed4fc087a34c2d577e",
-    "previewModeEncryptionKey": "5aa709306ac7e846e41505e235708079bc8a397d0b9a1c48b5e3636583b62ccf"
+    "previewModeId": "c8989263a927c82900f55007b2e9290d",
+    "previewModeSigningKey": "1230ff7c19caa6e458e1194a5fd8e10385e44b7d96abfebba253b272f2257552",
+    "previewModeEncryptionKey": "cb309e141090d2fea5c4859f1ff5225639d9022da98b3d3b1eb8bfa6f15a62e1"
   }
 }

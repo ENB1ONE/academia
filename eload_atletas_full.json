@@ -1,0 +1,989 @@
+{
+  "data": [
+    {
+      "codigoAtleta": 30445,
+      "nome": "ADRIELLI",
+      "idade": "44",
+      "dataNascimento": "1982-07-06T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30045,
+      "nome": "ALECSANDER REIS",
+      "idade": "32",
+      "dataNascimento": "1994-02-09T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 12165,
+      "nome": "ALEX LOGE",
+      "idade": "13",
+      "dataNascimento": "2012-11-09T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": "PERIODO COMPETITIVO",
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28465,
+      "nome": "AMAURI DERATO",
+      "idade": "46",
+      "dataNascimento": "1980-04-18T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29434,
+      "nome": "ANA PAULA DE OLIVEIRA",
+      "idade": "39",
+      "dataNascimento": "1987-02-03T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30231,
+      "nome": "ANDREA DE CAMRGO",
+      "idade": "53",
+      "dataNascimento": "1973-01-12T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 20337,
+      "nome": "ARTHUR RIBEIRO",
+      "idade": "16",
+      "dataNascimento": "2010-01-07T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 21597,
+      "nome": "ARTHUR RIBEIRO FERREIRA",
+      "idade": "14",
+      "dataNascimento": "2012-09-17T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/d1912195-8b76-4b58-bcbe-5e260ef0ac81.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 23573,
+      "nome": "ARTUR LUZ",
+      "idade": "44",
+      "dataNascimento": "1982-01-19T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29316,
+      "nome": "BEATRIZ BARONE",
+      "idade": "25",
+      "dataNascimento": "2001-08-23T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/5c45b033-ac38-4b67-ac3c-1053496c6263.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29264,
+      "nome": "BRYAN JEAN",
+      "idade": "14",
+      "dataNascimento": "2012-03-21T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/edd3ad93-f06f-4b06-8148-3f3ab6e2f987.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 16446,
+      "nome": "CARLOS JOSÉ MESSIAS DE OLIVEIRA",
+      "idade": "56",
+      "dataNascimento": "1970-03-01T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29850,
+      "nome": "DAVI LUCAS",
+      "idade": "13",
+      "dataNascimento": "2013-05-22T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/92d75dad-3522-4861-85dc-5c20ec0d1e86.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 24042,
+      "nome": "DAVI MAGHETTI",
+      "idade": "12",
+      "dataNascimento": "2014-01-12T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30405,
+      "nome": "DAVIDSON AMORIM",
+      "idade": "37",
+      "dataNascimento": "1989-06-22T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 20435,
+      "nome": "EDER MOURA",
+      "idade": "17",
+      "dataNascimento": "2009-06-14T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 25141,
+      "nome": "EDUARDO PETRUCCI",
+      "idade": "20",
+      "dataNascimento": "2006-06-07T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/f0cfa235-4674-4b77-90c5-e2a75f7d7fd0.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29751,
+      "nome": "ENZO FERNANDO PINHEIRO",
+      "idade": "16",
+      "dataNascimento": "2010-08-26T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/41677c67-5eec-4354-8101-482c1de728f1.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 14049,
+      "nome": "ENZO SCARLASSARE",
+      "idade": "17",
+      "dataNascimento": "2009-08-29T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 24449,
+      "nome": "FELIPE CREMON",
+      "idade": "21",
+      "dataNascimento": "2004-12-07T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28508,
+      "nome": "FELIPE MORAES",
+      "idade": "18",
+      "dataNascimento": "2008-08-07T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 21301,
+      "nome": "FELLIPE TURRI",
+      "idade": "14",
+      "dataNascimento": "2012-03-04T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 27790,
+      "nome": "FERNANDO GOMES",
+      "idade": "18",
+      "dataNascimento": "2008-09-06T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/e124d531-e71d-462d-b6fc-03b35d4e53a2.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30373,
+      "nome": "FLAVIANA VITORIO",
+      "idade": "50",
+      "dataNascimento": "1976-07-08T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 22655,
+      "nome": "GABRIEL BICALHO",
+      "idade": "27",
+      "dataNascimento": "1999-06-06T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/9192b263-c315-487f-bcf6-218f30caf02e.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 20456,
+      "nome": "GABRIEL CARDOSO",
+      "idade": "29",
+      "dataNascimento": "1996-11-20T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/9e4cbeaa-1fc4-43b1-b649-7b1ef4a10347.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 20201,
+      "nome": "GABRIEL DE OLIVEIRA MAZARIO",
+      "idade": "20",
+      "dataNascimento": "2006-04-20T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/51cb2c01-d67a-4bc7-b750-77cd658afb80.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 16687,
+      "nome": "GABRIEL DIAS",
+      "idade": "14",
+      "dataNascimento": "2012-03-20T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/3e2c5ea9-9be2-4eef-9931-d4f1578665b1.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 18536,
+      "nome": "GABRIEL GRAZIOTTO",
+      "idade": "17",
+      "dataNascimento": "2009-04-30T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30594,
+      "nome": "GABRIEL LACERDA",
+      "idade": "30",
+      "dataNascimento": "1996-02-07T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29565,
+      "nome": "GABRIEL PASTUCH",
+      "idade": "22",
+      "dataNascimento": "2004-06-15T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29855,
+      "nome": "GABRIELA CALDEIRA",
+      "idade": "33",
+      "dataNascimento": "1993-08-30T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30610,
+      "nome": "GABRIELE COSTA DE MACEDO",
+      "idade": "25",
+      "dataNascimento": "2000-11-29T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28121,
+      "nome": "GABRIELLY PEREIRA",
+      "idade": "22",
+      "dataNascimento": "2003-10-28T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30533,
+      "nome": "GIOVANA FERREIRA",
+      "idade": "22",
+      "dataNascimento": "2004-09-29T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 15845,
+      "nome": "GUILHERME ALVES DE HOLANDA",
+      "idade": "15",
+      "dataNascimento": "2011-04-19T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/1b4d5809-ed68-4198-abd9-f964a60f9816.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30365,
+      "nome": "GUILHERME ALVES MASETTI",
+      "idade": "14",
+      "dataNascimento": "2012-08-27T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 11999,
+      "nome": "GUILHERME AMORIM",
+      "idade": "15",
+      "dataNascimento": "2011-05-22T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": "PERIODO COMPETITIVO",
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29754,
+      "nome": "GUSTAVO PATRICK",
+      "idade": "27",
+      "dataNascimento": "1999-07-03T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/c5288377-8d6f-42f8-a6f2-13dd81362e11.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29571,
+      "nome": "GUSTAVO RIBEIRO",
+      "idade": "15",
+      "dataNascimento": "2011-01-31T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28033,
+      "nome": "GUSTAVO TOMIO",
+      "idade": "24",
+      "dataNascimento": "2001-12-11T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30498,
+      "nome": "HEDIPO SILVA",
+      "idade": "34",
+      "dataNascimento": "1991-12-10T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 26622,
+      "nome": "HENRICO PHILLIP",
+      "idade": "17",
+      "dataNascimento": "2009-04-09T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 26289,
+      "nome": "ISABELLY SANTOS DANTAS",
+      "idade": "12",
+      "dataNascimento": "2014-04-01T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 23639,
+      "nome": "ISIS MARQUES",
+      "idade": "44",
+      "dataNascimento": "1982-09-23T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 26628,
+      "nome": "IZABELLA VITORIO",
+      "idade": "21",
+      "dataNascimento": "2005-01-30T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/7fb83843-5f6a-49b9-96ba-b6962c025491.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 23375,
+      "nome": "JHUAN CARVALHO",
+      "idade": "14",
+      "dataNascimento": "2012-08-21T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 22455,
+      "nome": "JOAO MENEZES",
+      "idade": "14",
+      "dataNascimento": "2012-07-30T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/800731d9-f200-4e07-ba01-ab1c6779bf6e.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 26597,
+      "nome": "JOÃO MONÇÃO",
+      "idade": "16",
+      "dataNascimento": "2010-06-30T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/1cb205b8-97b7-4d6a-84c1-5d2e5679ca01.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 24043,
+      "nome": "JOAO PEDRO MAGHETTI",
+      "idade": "13",
+      "dataNascimento": "2012-11-03T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28599,
+      "nome": "JOAO PEREIRA",
+      "idade": "25",
+      "dataNascimento": "2001-02-19T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/ddb5bea6-be06-49b3-92bb-2d5dc22ae895.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 22464,
+      "nome": "JOAO PUSCH",
+      "idade": "23",
+      "dataNascimento": "2003-06-10T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/c2b63a5d-5970-4d6c-8d28-debe1f74ff14.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 27798,
+      "nome": "JOAO VICTOR CAMAROZANO",
+      "idade": "18",
+      "dataNascimento": "2008-04-08T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/ebb1be88-7e44-43f7-8d88-d366ab8dae0b.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29089,
+      "nome": "JULIA STREITENBERGER",
+      "idade": "17",
+      "dataNascimento": "2009-02-28T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 24160,
+      "nome": "KAIC ALEXANDRINO RAPE",
+      "idade": "16",
+      "dataNascimento": "2010-03-10T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30646,
+      "nome": "KAUAN ROCHA FERREIRA",
+      "idade": "15",
+      "dataNascimento": "2011-06-11T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28386,
+      "nome": "LAURA LIMA",
+      "idade": "14",
+      "dataNascimento": "2012-06-11T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/d417b39c-1b7e-49e6-a64a-ba72446ffb44.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 17365,
+      "nome": "LEONARDO PETRELLA",
+      "idade": "14",
+      "dataNascimento": "2012-02-02T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28697,
+      "nome": "LEONARDO SGUAÇABIA",
+      "idade": "28",
+      "dataNascimento": "1998-03-30T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/dea04c8e-d967-4e44-a8e5-a7bc60aebd30.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30241,
+      "nome": "LETICIA CERUTTI",
+      "idade": "33",
+      "dataNascimento": "1993-10-04T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/17fd7d26-b22a-42c8-a15e-87c4f46aa5b8.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30515,
+      "nome": "LUCAS AMMAR",
+      "idade": "25",
+      "dataNascimento": "2001-07-30T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30347,
+      "nome": "LUCAS BIACSI",
+      "idade": "18",
+      "dataNascimento": "2008-08-22T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 16981,
+      "nome": "LUIZ KICHIMOTO",
+      "idade": "19",
+      "dataNascimento": "2007-03-17T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29564,
+      "nome": "MARCELO JOAQUIM",
+      "idade": "16",
+      "dataNascimento": "2010-10-01T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 24658,
+      "nome": "MARCELO JOSE DOS SANTOS",
+      "idade": "32",
+      "dataNascimento": "1993-12-18T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/dd777962-1c68-408c-944c-613d2f442701.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 26782,
+      "nome": "MARIA LUIZA SALLES",
+      "idade": "18",
+      "dataNascimento": "2008-07-17T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/70f7100f-3118-44a1-964c-16880affb6f1.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29784,
+      "nome": "MARIANA MANA",
+      "idade": "24",
+      "dataNascimento": "2002-03-25T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29090,
+      "nome": "MARIANE DE AMORIM",
+      "idade": "17",
+      "dataNascimento": "2009-08-23T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/d713cab8-3aa3-46e2-95df-4d5d5e4e969a.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 26618,
+      "nome": "MATEUS LIMEIRA DE SOUZA",
+      "idade": "13",
+      "dataNascimento": "2013-02-22T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28667,
+      "nome": "MATHEUS MATUEDA",
+      "idade": "19",
+      "dataNascimento": "2007-05-09T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/f3ce25ca-caf0-4465-9446-5ebd2616ad2c.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 12325,
+      "nome": "MATHEUS RAINERI",
+      "idade": "12",
+      "dataNascimento": "2014-07-02T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28091,
+      "nome": "MAX",
+      "idade": "23",
+      "dataNascimento": "2003-07-07T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30423,
+      "nome": "MIGUEL BUTZKE",
+      "idade": "12",
+      "dataNascimento": "2014-02-13T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 23899,
+      "nome": "MIGUEL LUIZ",
+      "idade": "14",
+      "dataNascimento": "2011-12-05T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/1699bcee-8c22-477a-88e3-8f5b9591b4ec.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29752,
+      "nome": "MIGUEL PINHEIRO",
+      "idade": "12",
+      "dataNascimento": "2014-05-16T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/0a7f0ed6-a0e3-445b-8359-b5146af7bfc4.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 22970,
+      "nome": "MOISES SANTOS SOARES",
+      "idade": "16",
+      "dataNascimento": "2010-03-22T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/39721c1d-7213-4eeb-82c7-fd19dad179b5.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 12032,
+      "nome": "OLAVO REIS",
+      "idade": "17",
+      "dataNascimento": "2009-08-05T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28707,
+      "nome": "PEDRO ALEXANDRE FERRARI",
+      "idade": "16",
+      "dataNascimento": "2010-03-30T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28122,
+      "nome": "PEDRO HENRIQUE TERRIBILE",
+      "idade": "24",
+      "dataNascimento": "2001-11-12T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 20862,
+      "nome": "PEDRO LUIZ DUARTE",
+      "idade": "14",
+      "dataNascimento": "2012-02-05T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/edf03f72-719c-49be-abc2-15fb187b1ba7.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30243,
+      "nome": "PEDRO OLETO",
+      "idade": "36",
+      "dataNascimento": "1989-12-27T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 16965,
+      "nome": "RAFAEL DIAS",
+      "idade": "14",
+      "dataNascimento": "2012-03-20T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/feac674d-1b16-47e3-88e5-dd897424c03f.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 24423,
+      "nome": "RAFAEL DINIZ",
+      "idade": "19",
+      "dataNascimento": "2006-12-13T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/4569c0ab-93b6-4dcb-9b7a-921a3c7ded81.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 17388,
+      "nome": "RAFAELA DOS REIS",
+      "idade": "14",
+      "dataNascimento": "2012-05-07T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 27803,
+      "nome": "RENAN SOUZA",
+      "idade": "23",
+      "dataNascimento": "2003-04-24T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/538b31d3-3b83-464e-a42c-d09181579236.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28676,
+      "nome": "RHYAN DOS SANTOS SENA",
+      "idade": "19",
+      "dataNascimento": "2007-03-16T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 27242,
+      "nome": "RODRIGO MACEDO",
+      "idade": "48",
+      "dataNascimento": "1978-03-14T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 30597,
+      "nome": "STEPHANIE RODRIGUES",
+      "idade": "27",
+      "dataNascimento": "1999-04-06T00:00:00",
+      "descricaoGenero": "Feminino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/8e9b29a4-9f85-4430-8acc-50938572dd2b.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29803,
+      "nome": "SUELK FERREIRA",
+      "idade": "15",
+      "dataNascimento": "2011-04-25T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 25433,
+      "nome": "THEO ALVES",
+      "idade": "10",
+      "dataNascimento": "2015-11-05T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29246,
+      "nome": "VALENTINA",
+      "idade": "11",
+      "dataNascimento": "2015-09-07T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 21596,
+      "nome": "VICTOR RIBEIRO FERREIRA",
+      "idade": "14",
+      "dataNascimento": "2012-09-17T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/efa582bf-7c02-40ea-8eec-77298f1ce38f.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28007,
+      "nome": "VICTOR SILVA",
+      "idade": "18",
+      "dataNascimento": "2008-08-28T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 28092,
+      "nome": "VINICIUS MELLO",
+      "idade": "18",
+      "dataNascimento": "2008-07-25T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/1975e3cf-58d1-4385-8ae5-e62c43564364.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29000,
+      "nome": "VINICIUS ZAVARIZE",
+      "idade": "32",
+      "dataNascimento": "1994-03-30T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/c2f769bb-3922-447b-a464-362d47042419.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 25611,
+      "nome": "VITOR IWAMA",
+      "idade": "28",
+      "dataNascimento": "1998-06-26T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "/images/foto-atleta/avatar-default.svg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29384,
+      "nome": "WALACE FASIO",
+      "idade": "17",
+      "dataNascimento": "2008-10-15T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/aecd6d23-7469-432e-b6ca-2755decd7e9d.jpeg",
+      "vinculadoAoApp": false
+    },
+    {
+      "codigoAtleta": 29681,
+      "nome": "WEBERTE SAMPAIO",
+      "idade": "36",
+      "dataNascimento": "1990-05-17T00:00:00",
+      "descricaoGenero": "Masculino",
+      "nomeGrupo": null,
+      "nomeArquivoFoto": "https://blobprdeastus201.blob.core.windows.net/foto-atleta/46e7a765-61d8-4901-8eb7-c2ef4a84dd95.jpeg",
+      "vinculadoAoApp": false
+    }
+  ],
+  "draw": [
+    "1"
+  ],
+  "recordsFiltered": 98,
+  "recordsTotal": 98
+}

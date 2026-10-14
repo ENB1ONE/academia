@@ -1,0 +1,74 @@
+{
+  "data": [
+    {
+      "codigoGrupo": 1651,
+      "codigoTreinador": 1234,
+      "nome": "ALFA ACADEMY",
+      "codigoLink": "f9f7310e-7808-4c67-935b-38c29f3d6a30",
+      "atletas": null,
+      "treinador": null,
+      "planejamentosTreinosColetivos": null,
+      "dataCadastro": "2025-02-26T15:26:16.11246",
+      "dataUltimaAlteracao": null,
+      "codigoUsuarioCadastro": 1203,
+      "processoCadastro": "/Grupo/Novo"
+    },
+    {
+      "codigoGrupo": 1642,
+      "codigoTreinador": 1234,
+      "nome": "INTER TEMPORADA",
+      "codigoLink": "06860f12-0c70-4460-88c3-41eb091e8e15",
+      "atletas": null,
+      "treinador": null,
+      "planejamentosTreinosColetivos": null,
+      "dataCadastro": "2025-02-20T19:11:46.149727",
+      "dataUltimaAlteracao": null,
+      "codigoUsuarioCadastro": 1203,
+      "processoCadastro": "/Grupo/Novo"
+    },
+    {
+      "codigoGrupo": 1639,
+      "codigoTreinador": 1234,
+      "nome": "PERIODO COMPETITIVO",
+      "codigoLink": "aee91819-f726-492d-b866-3c9395166b8a",
+      "atletas": null,
+      "treinador": null,
+      "planejamentosTreinosColetivos": null,
+      "dataCadastro": "2025-02-20T19:08:49.581354",
+      "dataUltimaAlteracao": null,
+      "codigoUsuarioCadastro": 1203,
+      "processoCadastro": "/Grupo/Novo"
+    },
+    {
+      "codigoGrupo": 1640,
+      "codigoTreinador": 1234,
+      "nome": "PÓS  OPERATORIO",
+      "codigoLink": "74c61fed-a77d-4016-bf6f-55d3de0b4cc9",
+      "atletas": null,
+      "treinador": null,
+      "planejamentosTreinosColetivos": null,
+      "dataCadastro": "2025-02-20T19:09:05.930707",
+      "dataUltimaAlteracao": null,
+      "codigoUsuarioCadastro": 1203,
+      "processoCadastro": "/Grupo/Novo"
+    },
+    {
+      "codigoGrupo": 1641,
+      "codigoTreinador": 1234,
+      "nome": "PRÉ TEMPORADA",
+      "codigoLink": "9dc56476-e72b-44df-bb4d-90308e7b30a9",
+      "atletas": null,
+      "treinador": null,
+      "planejamentosTreinosColetivos": null,
+      "dataCadastro": "2025-02-20T19:09:18.909013",
+      "dataUltimaAlteracao": null,
+      "codigoUsuarioCadastro": 1203,
+      "processoCadastro": "/Grupo/Novo"
+    }
+  ],
+  "draw": [
+    "1"
+  ],
+  "recordsFiltered": 5,
+  "recordsTotal": 5
+}

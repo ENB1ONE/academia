@@ -10,7 +10,8 @@ const useAthleteStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await api.get('/api/v1/athletes/');
-      set({ athletes: response.data.athletes || [], isLoading: false });
+      const list = Array.isArray(response.data) ? response.data : (response.data?.athletes || []);
+      set({ athletes: list, isLoading: false });
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }
