@@ -26,13 +26,161 @@ export function ReportPrintModal({
     setGeneralNotes('');
   };
 
-  const handlePrint = () => {
-    window.print();
+  // Impressão Isolada em iframe A4 Limpo com Dimensões e Estilos Congelados
+  const handlePrintExactA4 = () => {
+    const sheetEl = document.getElementById('a4-report-sheet');
+    if (!sheetEl) {
+      window.print();
+      return;
+    }
+
+    // 1. Clonar o elemento da folha branca A4
+    const clone = sheetEl.cloneNode(true);
+
+    // 2. Congelar as dimensões exatas de todos os <svg> dos gráficos
+    const origSvgs = sheetEl.querySelectorAll('svg');
+    const clonedSvgs = clone.querySelectorAll('svg');
+
+    origSvgs.forEach((origSvg, i) => {
+      if (clonedSvgs[i]) {
+        const rect = origSvg.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          clonedSvgs[i].setAttribute('width', Math.round(rect.width));
+          clonedSvgs[i].setAttribute('height', Math.round(rect.height));
+          clonedSvgs[i].style.width = Math.round(rect.width) + 'px';
+          clonedSvgs[i].style.height = Math.round(rect.height) + 'px';
+        }
+      }
+    });
+
+    // 3. Substituir textarea de anotações no clone por bloco formatado com o texto digitado
+    const textareaInClone = clone.querySelector('textarea');
+    if (textareaInClone) {
+      const noteDiv = document.createElement('div');
+      noteDiv.style.fontSize = '12px';
+      noteDiv.style.color = '#1e293b';
+      noteDiv.style.lineHeight = '1.5';
+      noteDiv.style.whiteSpace = 'pre-wrap';
+      noteDiv.style.padding = '10px 12px';
+      noteDiv.style.border = '1px solid #cbd5e1';
+      noteDiv.style.borderRadius = '8px';
+      noteDiv.style.background = '#f8fafc';
+      noteDiv.textContent = generalNotes.trim() || 'Atleta monitorado de acordo com o protocolo institucional do FormClub. Nenhuma intercorrência relevante registrada no período avaliado.';
+      textareaInClone.parentNode.replaceChild(noteDiv, textareaInClone);
+    }
+
+    // 4. Remover elementos marcados com .no-print-in-pdf (botões [X], textos auxiliares, etc)
+    const elementsToRemove = clone.querySelectorAll('.no-print-in-pdf');
+    elementsToRemove.forEach(el => el.remove());
+
+    // 5. Criar iframe isolado e limpo para impressão
+    const existingIframe = document.getElementById('print-a4-iframe');
+    if (existingIframe) {
+      existingIframe.remove();
+    }
+
+    const iframe = document.createElement('iframe');
+    iframe.id = 'print-a4-iframe';
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = 'none';
+    document.body.appendChild(iframe);
+
+    const pri = iframe.contentWindow;
+    pri.document.open();
+
+    // Copiar estilos da página atual
+    let stylesHtml = '';
+    document.querySelectorAll('style, link[rel="stylesheet"]').forEach(node => {
+      stylesHtml += node.outerHTML;
+    });
+
+    pri.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <title>FORMCLUB - Human Performance Center</title>
+          ${stylesHtml}
+          <style>
+            @page {
+              size: A4 portrait;
+              margin: 10mm;
+            }
+            html, body {
+              margin: 0 !important;
+              padding: 0 !important;
+              background: #ffffff !important;
+              color: #0f172a !important;
+              font-family: Inter, system-ui, -apple-system, sans-serif !important;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+              height: auto !important;
+              overflow: visible !important;
+            }
+            #a4-report-sheet {
+              width: 100% !important;
+              max-width: 100% !important;
+              margin: 0 !important;
+              padding: 0 !important;
+              box-shadow: none !important;
+              border: none !important;
+              border-radius: 0 !important;
+              background: #ffffff !important;
+              overflow: visible !important;
+            }
+            .report-section-card {
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
+              margin-bottom: 16px !important;
+              border: 1px solid #e2e8f0 !important;
+              border-radius: 10px !important;
+              padding: 16px !important;
+              background: #ffffff !important;
+            }
+            .report-footer-signature {
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
+              margin-top: 24px !important;
+            }
+            .no-print-in-pdf {
+              display: none !important;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="print-wrapper">
+            ${clone.outerHTML}
+          </div>
+        </body>
+      </html>
+    `);
+
+    pri.document.close();
+
+    // Aguardar renderização e carregamento de imagens/fontes
+    setTimeout(() => {
+      try {
+        pri.focus();
+        pri.print();
+      } catch (err) {
+        console.error('Erro na impressão isolada:', err);
+        window.print();
+      } finally {
+        setTimeout(() => {
+          if (iframe && iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
+          }
+        }, 2000);
+      }
+    }, 400);
   };
 
   const charts = athlete.charts || {};
   const age = athlete.age || (athlete.birth_date ? new Date().getFullYear() - new Date(athlete.birth_date).getFullYear() : '--');
-  const cid = athlete.codigoAtleta || athlete.id;
   const isFemale = athlete.gender === 'F' || athlete.descricaoGenero === 'Feminino';
 
   return (
@@ -57,7 +205,7 @@ export function ReportPrintModal({
           </button>
 
           <button
-            onClick={handlePrint}
+            onClick={handlePrintExactA4}
             className="px-4 py-2 bg-[#E5A910] hover:bg-[#E5A910]/90 text-[#0A0A0C] font-black rounded-xl text-xs flex items-center gap-1.5 transition shadow-lg shadow-[#E5A910]/20"
           >
             <Printer className="h-4 w-4" /> Imprimir / Salvar em PDF
@@ -74,31 +222,74 @@ export function ReportPrintModal({
 
       {/* Folha do Relatório A4 Oficial (Fundo Branco #FFFFFF para Impressão e PDF) */}
       <div 
-        id="report-print-container"
-        className="w-full max-w-4xl bg-white text-slate-900 p-8 sm:p-10 rounded-2xl shadow-2xl border border-gray-300 print:shadow-none print:border-none print:m-0 print:p-0 print:max-w-none space-y-6"
+        id="a4-report-sheet"
+        className="w-full max-w-4xl bg-white text-slate-900 p-8 sm:p-10 rounded-2xl shadow-2xl border border-gray-300 space-y-6"
       >
-        {/* Cabeçalho Institucional com Logo Preto e Branco */}
-        <div className="flex items-center justify-between border-b-2 border-slate-900 pb-4">
-          <div className="flex items-center gap-4">
+        {/* Cabeçalho Institucional com Dimensões Estritas e Travadas */}
+        <div 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between', 
+            gap: '16px', 
+            borderBottom: '2px solid #0f172a', 
+            paddingBottom: '16px', 
+            marginBottom: '20px', 
+            width: '100%' 
+          }}
+        >
+          {/* Bloco Esquerdo: Logo + Títulos */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '14px', 
+              minWidth: 0, 
+              flex: '1 1 auto' 
+            }}
+          >
             <img 
               src="./formclub-logo-black.png" 
               alt="FORMCLUB" 
-              className="h-16 w-auto object-contain"
+              style={{ 
+                width: '120px', 
+                maxWidth: '120px', 
+                height: '44px', 
+                maxHeight: '44px', 
+                objectFit: 'contain', 
+                flexShrink: 0, 
+                display: 'block' 
+              }}
             />
-            <div>
-              <h1 className="text-xl font-black text-slate-950 tracking-tight leading-none">FORMCLUB</h1>
-              <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mt-0.5">Human Performance Center</p>
-              <p className="text-[11px] text-slate-500 font-medium">Prontuário Individual de Cargas e Monitoramento Fisiológico</p>
+            <div style={{ minWidth: 0 }}>
+              <h1 style={{ margin: 0, fontSize: '18px', fontWeight: 900, color: '#020617', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                FORMCLUB HUMAN PERFORMANCE CENTER
+              </h1>
+              <p style={{ margin: '2px 0 0 0', fontSize: '11px', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Prontuário Individual de Cargas e Monitoramento Fisiológico
+              </p>
             </div>
           </div>
-          <div className="text-right text-xs text-slate-600 space-y-0.5">
-            <p className="font-mono text-slate-800">Emissão: <strong>{new Date().toLocaleDateString('pt-BR')}</strong></p>
-            <p className="text-[11px] text-slate-500 font-medium">Relatório Oficial de Desempenho</p>
+
+          {/* Bloco Direito: Emissão e Identificação */}
+          <div 
+            style={{ 
+              textAlign: 'right', 
+              flexShrink: 0, 
+              whiteSpace: 'nowrap' 
+            }}
+          >
+            <p style={{ margin: 0, fontSize: '11px', color: '#1e293b', fontFamily: 'monospace' }}>
+              Emissão: <strong>{new Date().toLocaleDateString('pt-BR')}</strong>
+            </p>
+            <p style={{ margin: '2px 0 0 0', fontSize: '10px', color: '#64748b', fontWeight: 600 }}>
+              Relatório Oficial de Desempenho
+            </p>
           </div>
         </div>
 
         {/* Ficha Resumo do Atleta (Grid Limpo Preto e Branco) */}
-        <div className="bg-slate-50 border border-slate-300 rounded-xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div className="report-section-card bg-slate-50 border border-slate-300 rounded-xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
           <div>
             <span className="text-[10px] text-slate-500 font-bold uppercase block">Nome do Atleta</span>
             <span className="text-sm font-black text-slate-950">{athlete.name}</span>
@@ -136,12 +327,12 @@ export function ReportPrintModal({
         </div>
 
         {/* Campo de Parecer Fisiológico / Observações Gerais no Local Natural do Laudo */}
-        <div className="bg-slate-50 border border-slate-300 rounded-xl p-4 space-y-2">
+        <div className="report-section-card bg-slate-50 border border-slate-300 rounded-xl p-4 space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-xs font-black text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
-              <Edit3 className="h-3.5 w-3.5 text-slate-600 print:hidden" /> Parecer Fisiológico / Observações Gerais do Treinador:
+              <Edit3 className="h-3.5 w-3.5 text-slate-600 no-print-in-pdf" /> Parecer Fisiológico / Observações Gerais do Treinador:
             </label>
-            <span className="text-[10px] text-slate-400 font-medium print:hidden">
+            <span className="text-[10px] text-slate-400 font-medium no-print-in-pdf">
               (Digite suas observações aqui. O texto sairá impresso no laudo)
             </span>
           </div>
@@ -151,23 +342,18 @@ export function ReportPrintModal({
             value={generalNotes}
             onChange={(e) => setGeneralNotes(e.target.value)}
             placeholder="Ex: Atleta apresentou excelente adesão às sessões de força e regeneração. Monitorar carga crônica nas próximas semanas para evitar picos abruptos."
-            className="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 print:hidden resize-none leading-relaxed"
+            className="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 resize-none leading-relaxed"
           />
-
-          {/* Versão que aparece somente na folha impressa */}
-          <div className="hidden print:block text-xs text-slate-800 italic leading-relaxed min-h-[30px] pt-1">
-            {generalNotes || 'Atleta monitorado de acordo com o protocolo institucional do FormClub. Nenhuma intercorrência relevante registrada no período avaliado.'}
-          </div>
         </div>
 
-        {/* Gráficos em Fundo Branco (Multi-Página Organizada com page-break) */}
-        <div className="space-y-6">
+        {/* Gráficos em Fundo Branco com Classes de Proteção de Quebra de Página */}
+        <div className="space-y-4">
           {/* Seção 1: Carga Diária */}
           {!removedSections.includes('carga_diaria') && (
-            <div className="relative print-avoid-break">
+            <div className="report-section-card relative">
               <button
                 onClick={() => toggleSection('carga_diaria')}
-                className="absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold print:hidden z-10"
+                className="no-print-in-pdf absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold z-10 transition"
               >
                 [X] Remover Seção
               </button>
@@ -182,10 +368,10 @@ export function ReportPrintModal({
 
           {/* Seção 2: Duração Total x PSE */}
           {!removedSections.includes('duracao_pse') && (
-            <div className="relative print-avoid-break">
+            <div className="report-section-card relative">
               <button
                 onClick={() => toggleSection('duracao_pse')}
-                className="absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold print:hidden z-10"
+                className="no-print-in-pdf absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold z-10 transition"
               >
                 [X] Remover Seção
               </button>
@@ -198,15 +384,12 @@ export function ReportPrintModal({
             </div>
           )}
 
-          {/* Força Quebra de Página entre blocos maiores para não espremer */}
-          <div className="print-page-break" />
-
           {/* Seção 3: Carga da Semana */}
           {!removedSections.includes('carga_semana') && (
-            <div className="relative print-avoid-break">
+            <div className="report-section-card relative">
               <button
                 onClick={() => toggleSection('carga_semana')}
-                className="absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold print:hidden z-10"
+                className="no-print-in-pdf absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold z-10 transition"
               >
                 [X] Remover Seção
               </button>
@@ -221,10 +404,10 @@ export function ReportPrintModal({
 
           {/* Seção 4: Bem-Estar */}
           {!removedSections.includes('bem_estar') && (
-            <div className="relative print-avoid-break">
+            <div className="report-section-card relative">
               <button
                 onClick={() => toggleSection('bem_estar')}
-                className="absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold print:hidden z-10"
+                className="no-print-in-pdf absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold z-10 transition"
               >
                 [X] Remover Seção
               </button>
@@ -239,10 +422,10 @@ export function ReportPrintModal({
 
           {/* Seção 5: Status Neuromuscular CMJ */}
           {!removedSections.includes('cmj') && (
-            <div className="relative print-avoid-break">
+            <div className="report-section-card relative">
               <button
                 onClick={() => toggleSection('cmj')}
-                className="absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold print:hidden z-10"
+                className="no-print-in-pdf absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold z-10 transition"
               >
                 [X] Remover Seção
               </button>
@@ -257,10 +440,10 @@ export function ReportPrintModal({
 
           {/* Seção 6: Sono */}
           {!removedSections.includes('sono') && (
-            <div className="relative print-avoid-break">
+            <div className="report-section-card relative">
               <button
                 onClick={() => toggleSection('sono')}
-                className="absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold print:hidden z-10"
+                className="no-print-in-pdf absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold z-10 transition"
               >
                 [X] Remover Seção
               </button>
@@ -275,10 +458,10 @@ export function ReportPrintModal({
 
           {/* Seção 7: Dores */}
           {!removedSections.includes('dores') && (
-            <div className="relative print-avoid-break">
+            <div className="report-section-card relative">
               <button
                 onClick={() => toggleSection('dores')}
-                className="absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold print:hidden z-10"
+                className="no-print-in-pdf absolute top-2 right-2 text-[10px] text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 px-2 py-0.5 rounded font-bold z-10 transition"
               >
                 [X] Remover Seção
               </button>
@@ -293,7 +476,7 @@ export function ReportPrintModal({
         </div>
 
         {/* Rodapé com Assinatura Formal */}
-        <div className="pt-8 border-t-2 border-slate-900 flex justify-between items-end text-xs text-slate-600 print-avoid-break">
+        <div className="report-footer-signature pt-8 border-t-2 border-slate-900 flex justify-between items-end text-xs text-slate-600">
           <div>
             <p className="font-bold text-slate-900 uppercase">FORMCLUB - HUMAN PERFORMANCE CENTER</p>
             <p className="text-[11px] text-slate-500">Monitoramento Fisiológico &bull; Periodização Científica de Treinamento</p>
