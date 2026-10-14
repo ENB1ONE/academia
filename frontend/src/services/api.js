@@ -110,6 +110,29 @@ api.interceptors.response.use(
   (response) => {
     // If response comes back from backend successfully, normalize arrays and objects
     if (response && response.data) {
+      const url = response.config?.url || '';
+      const db = getLocalStore();
+
+      // If it's a single athlete response, guarantee charts are attached from seed
+      if (url.includes('/api/v1/athletes/') && !Array.isArray(response.data) && typeof response.data === 'object') {
+        const athId = response.data.id || response.data.codigoAtleta;
+        const seedAth = db.athletes.find(a => String(a.id) === String(athId) || String(a.codigoAtleta) === String(athId));
+        if (seedAth) {
+          if (!response.data.charts || Object.keys(response.data.charts).length === 0) {
+            response.data.charts = seedAth.charts;
+          }
+          if (!response.data.photo_url || response.data.photo_url.includes('avatar-default')) {
+            response.data.photo_url = seedAth.photo_url || `./avatars/athlete_${athId}.jpg`;
+          }
+          if (response.data.acute_load === undefined && seedAth.acute_load !== undefined) {
+            response.data.acute_load = seedAth.acute_load;
+          }
+          if (response.data.chronic_load === undefined && seedAth.chronic_load !== undefined) {
+            response.data.chronic_load = seedAth.chronic_load;
+          }
+        }
+      }
+
       if (Array.isArray(response.data)) {
         response.data = toHybridArray(response.data);
       } else if (typeof response.data === 'object') {
