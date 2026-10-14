@@ -142,25 +142,36 @@ const AthletesPage = () => {
           <p className="text-gray-400 p-4">Carregando...</p>
         ) : filteredAthletes.length > 0 ? (
           (Array.isArray(filteredAthletes) ? filteredAthletes : []).map((athlete) => {
-            const savedAvatar = athlete.photo_url || localStorage.getItem(`athleteAvatar_${athlete.id}`) || (athlete.user_id ? localStorage.getItem(`userAvatar_${athlete.user_id}`) : null);
+            const rawAvatar = athlete.photo_url || athlete.avatar || localStorage.getItem(`athleteAvatar_${athlete.id}`);
+            const cid = athlete.codigoAtleta || athlete.id;
+            const hasCustomPhoto = rawAvatar && !rawAvatar.includes('default');
+            const avatarSrc = hasCustomPhoto 
+              ? (rawAvatar.startsWith('http') || rawAvatar.startsWith('./') || rawAvatar.startsWith('/') ? rawAvatar : `./avatars/athlete_${cid}.jpg`)
+              : `./avatars/athlete_${cid}.jpg`;
+
             return (
-              <Card key={athlete.id} padding="p-0" className="overflow-hidden flex flex-col cursor-pointer hover:border-primary transition-colors" onClick={(e) => {
+              <Card key={athlete.id} padding="p-0" className="overflow-hidden flex flex-col cursor-pointer hover:border-[#E5A910]/60 transition-all bg-[#141418] border-white/[0.08] shadow-lg" onClick={(e) => {
                 if (e.target.closest('button')) return;
                 navigate(`/athletes/${athlete.id}`);
               }}>
-                <div className="p-6">
+                <div className="p-5">
                   <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-4">
-                      {savedAvatar ? (
-                        <img src={savedAvatar} alt={athlete.name} className="h-12 w-12 rounded-full object-cover border border-primary/30" />
-                      ) : (
-                        <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg border border-primary/30">
-                          {athlete.name.charAt(0).toUpperCase()}
-                        </div>
-                      )}
+                    <div className="flex items-center gap-3.5">
+                      <img 
+                        src={avatarSrc} 
+                        alt={athlete.name} 
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://blobprdeastus201.blob.core.windows.net/foto-atleta/avatar-default.svg';
+                        }}
+                        className="h-14 w-14 rounded-full object-cover border-2 border-[#E5A910]/40 shadow-sm shrink-0 bg-black/40" 
+                      />
                       <div>
-                        <h3 className="font-semibold text-text">{athlete.name}</h3>
-                        <p className="text-sm text-gray-400">{athlete.sport || 'Sem modalidade'} {athlete.position ? `- ${athlete.position}` : ''}</p>
+                        <h3 className="font-bold text-white text-base leading-snug">{athlete.name}</h3>
+                        <p className="text-xs text-[#E5A910] font-medium">{athlete.group_name || athlete.nomeGrupo || 'ALFA ACADEMY'}</p>
+                        <p className="text-[11px] text-gray-400 mt-0.5">
+                          {athlete.age ? `${athlete.age} anos` : 'Idade N/D'} &bull; {athlete.gender === 'F' || athlete.descricaoGenero === 'Feminino' ? 'Feminino' : 'Masculino'}
+                        </p>
                       </div>
                     </div>
                   </div>

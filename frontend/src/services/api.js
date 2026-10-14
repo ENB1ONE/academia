@@ -298,8 +298,21 @@ api.interceptors.response.use(
     if (url.includes('/api/v1/totem/lookup-by-birthdate')) {
       try {
         const body = JSON.parse(config.data || '{}');
-        const reqDate = body.birthdate;
-        const matched = db.athletes.find((a) => a.birth_date === reqDate);
+        const reqDate = (body.birthdate || '').trim();
+        
+        let targetIso = reqDate;
+        if (reqDate.includes('/')) {
+          const [d, m, y] = reqDate.split('/');
+          if (d && m && y) {
+            targetIso = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+          }
+        }
+
+        const matched = (db.athletes || []).find((a) => {
+          const aDate = (a.birth_date || a.dataNascimento || '').split('T')[0];
+          return aDate === targetIso || aDate === reqDate;
+        });
+
         if (matched) {
           return Promise.resolve({ status: 200, data: toHybridObject({ athlete: matched }) });
         }
