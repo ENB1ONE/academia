@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Calendar, ArrowRight, Instagram, MapPin } from 'lucide-react';
+import { Menu, X, Calendar, ArrowRight, Instagram } from 'lucide-react';
 import BookingModal from '@/components/ui/BookingModal';
 import { OFFICIAL_INSTAGRAM } from '@/lib/utils';
 
@@ -20,13 +20,36 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: 'O Conceito', href: '/#conceito' },
-    { label: 'Modalidades', href: '/#modalidades' },
-    { label: 'Estrutura & Amenities', href: '/#estrutura' },
-    { label: 'Wellhub Silver+', href: '/#wellhub' },
-    { label: 'Localização', href: '/#localizacao' },
-    { label: 'FAQ', href: '/#faq' },
+    { label: 'O Conceito', targetId: 'conceito' },
+    { label: 'Modalidades', targetId: 'modalidades' },
+    { label: 'Estrutura & Amenities', targetId: 'estrutura' },
+    { label: 'Wellhub Silver+', targetId: 'wellhub' },
+    { label: 'Localização', targetId: 'localizacao' },
+    { label: 'FAQ', targetId: 'faq' },
   ];
+
+  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+
+    // If on homepage, smooth scroll directly to element
+    const element = document.getElementById(targetId);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+      // Update hash without jumping
+      window.history.pushState(null, '', `#${targetId}`);
+    } else {
+      // If on another page, navigate to home with hash
+      window.location.href = `/formclub.com.br/#${targetId}`;
+    }
+  };
 
   return (
     <>
@@ -56,14 +79,15 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-4 xl:gap-7 shrink-0">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.label}
-                href={link.href}
-                className="whitespace-nowrap text-xs font-semibold uppercase tracking-wider text-zinc-300 hover:text-gold transition-colors py-1 relative group"
+                href={`#${link.targetId}`}
+                onClick={(e) => handleScrollTo(e, link.targetId)}
+                className="whitespace-nowrap text-xs font-semibold uppercase tracking-wider text-zinc-300 hover:text-gold transition-colors py-1 relative group cursor-pointer"
               >
                 {link.label}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full" />
-              </Link>
+              </a>
             ))}
           </nav>
 
@@ -120,15 +144,15 @@ export default function Navbar() {
               </div>
 
               {navLinks.map((link) => (
-                <Link
+                <a
                   key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-base font-semibold text-zinc-100 hover:text-gold py-2 border-b border-white/5 flex items-center justify-between transition-colors"
+                  href={`#${link.targetId}`}
+                  onClick={(e) => handleScrollTo(e, link.targetId)}
+                  className="text-base font-semibold text-zinc-100 hover:text-gold py-2 border-b border-white/5 flex items-center justify-between transition-colors cursor-pointer"
                 >
                   <span>{link.label}</span>
                   <ArrowRight className="w-4 h-4 text-zinc-500" />
-                </Link>
+                </a>
               ))}
 
               <div className="pt-4 flex flex-col gap-3">
