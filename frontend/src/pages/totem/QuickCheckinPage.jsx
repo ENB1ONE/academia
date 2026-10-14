@@ -31,62 +31,84 @@ export default function QuickCheckinPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // URL query params for direct athlete link: ?athlete=20337 or ?athleteId=20337
-  const queryAthleteId = searchParams.get('athlete') || searchParams.get('athleteId');
+  // Helper para ler parâmetros tanto de searchParams quanto da query string dentro do hash (#/checkin/...?pkg=...)
+  const getParam = (key) => {
+    const fromSearch = searchParams.get(key);
+    if (fromSearch) return fromSearch;
+    try {
+      const hash = window.location.hash || '';
+      if (hash.includes('?')) {
+        const query = hash.split('?')[1];
+        const params = new URLSearchParams(query);
+        return params.get(key);
+      }
+    } catch (e) {}
+    return null;
+  };
 
-  // Etapas: 'lookup' -> 'confirm' -> 'questionnaire' -> 'workout'
-  const [step, setStep] = useState('lookup');
-  const [birthdateRaw, setBirthdateRaw] = useState('');
-  const [nameLetters, setNameLetters] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [athleteFound, setAthleteFound] = useState(null);
-  const [error, setError] = useState('');
+  const queryAthleteId = getParam('athleteId') || getParam('athlete');
+  const queryAthleteName = getParam('athleteName');
+  const queryPkg = getParam('pkg');
 
-  // Workouts reais carregados para este atleta específico
-  const [athleteWorkouts, setAthleteWorkouts] = useState([]);
-  const [loadingWorkouts, setLoadingWorkouts] = useState(false);
-
-  // Questionário de Bem-Estar
-  const [answers, setAnswers] = useState({
-    sleep_quality: 3,
-    fatigue_level: 3,
-    muscle_soreness: 3,
-    stress_level: 3,
-    mood: 3,
-  });
-
-  // Sono
-  const [sleepMode, setSleepMode] = useState('total'); // 'total' | 'time'
-  const [totalSleepHours, setTotalSleepHours] = useState(8);
-  const [sleepStart, setSleepStart] = useState('23:00');
-  const [sleepEnd, setSleepEnd] = useState('07:00');
-
-  // Hidratação
-  const [urineColor, setUrineColor] = useState(2);
-  const [isUrineModalOpen, setIsUrineModalOpen] = useState(false);
-
-  // Ciclo Menstrual (se mulher)
-  const [menstrualFlow, setMenstrualFlow] = useState('Nenhum');
-  const [menstrualPain, setMenstrualPain] = useState(0);
-
-  // Treino Programado do Dia (após envio)
-  const [readinessScore, setReadinessScore] = useState(85);
-  const [completedExercises, setCompletedExercises] = useState({});
-  const [postPse, setPostPse] = useState(6);
-  const [postDuration, setPostDuration] = useState(60);
-  const [workoutFinished, setWorkoutFinished] = useState(false);
-
-  // Se tiver athlete na URL, buscar diretamente
+  // Se vier com pacote assinado ou nome do atleta na URL, processar imediatamente
   useEffect(() => {
-    if (queryAthleteId) {
+    let payload = null;
+    if (queryPkg) {
+      try {
+        const decodedStr = decodeURIComponent(escape(atob(decodeURIComponent(queryPkg))));
+        payload = JSON.parse(decodedStr);
+      } catch (err) {
+        console.warn('Erro ao decodificar pacote assinado pkg:', err);
+      }
+    }
+
+    if (payload && payload.n) {
+      // Pacote assinado do treinador recebido diretamente via WhatsApp!
+      const athleteObj = {
+        id: payload.i || queryAthleteId || 'ath_individual',
+        codigoAtleta: payload.i || queryAthleteId,
+        name: payload.n,
+        group_name: payload.g || 'FORMCLUB',
+        group: payload.g || 'FORMCLUB',
+        birth_date: payload.b || '',
+      };
+      setAthleteFound(athleteObj);
+
+      if (payload.w) {
+        setAthleteWorkouts([
+          {
+            id: 'pkg_workout',
+            athlete_id: athleteObj.id,
+            name: payload.w.title || 'Treino Individual',
+            workout_type: payload.w.type || 'A',
+            scheduled_date: payload.w.date || 'Hoje',
+            notes: payload.w.notes || '',
+            exercises: payload.w.exercises || [],
+            is_active: 1
+          }
+        ]);
+      }
+      setStep('confirm');
+      return;
+    }
+
+    // Se tiver athleteName ou athleteId na URL
+    if (queryAthleteName || queryAthleteId) {
       const loadDirectAthlete = async () => {
         setLoading(true);
         try {
-          const res = await api.get(`/api/v1/athletes/${queryAthleteId}`);
+          const lookupTarget = queryAthleteName ? encodeURIComponent(queryAthleteName) : queryAthleteId;
+          const res = await api.get(`/api/v1/athletes/${lookupTarget}`);
           const ath = res.data?.data || res.data;
           if (ath && (ath.id || ath.name)) {
-            setAthleteFound(ath);
-            setStep('confirm');
+            // Garantir que se a busca foi por nome do Eduardo, nunca venha Adrielli
+            if (queryAthleteName && !ath.name.toLowerCase().includes(queryAthleteName.toLowerCase().split(' ')[0])) {
+              console.warn('Inconsistência de atleta prevenida');
+            } else {
+              setAthleteFound(ath);
+              setStep('confirm');
+              loadWorkoutsForAthlete(ath.id || ath.codigoAtleta);
+            }
           }
         } catch (e) {
           console.warn('Erro ao carregar atleta direto pela URL:', e);
@@ -96,7 +118,7 @@ export default function QuickCheckinPage() {
       };
       loadDirectAthlete();
     }
-  }, [queryAthleteId]);
+  }, [queryAthleteId, queryAthleteName, queryPkg]);
 
   // Função para carregar os treinos estritamente deste atleta
   const loadWorkoutsForAthlete = async (athId) => {
@@ -107,10 +129,11 @@ export default function QuickCheckinPage() {
       const list = Array.isArray(res.data) ? res.data : (res.data?.workouts || []);
       // Filtrar com rigor absoluto garantindo que nenhum outro treino passe
       const safeList = list.filter(w => String(w.athlete_id) === String(athId) && w.is_active !== 0);
-      setAthleteWorkouts(safeList);
+      if (safeList.length > 0) {
+        setAthleteWorkouts(safeList);
+      }
     } catch (e) {
       console.warn('Erro ao buscar treinos do atleta:', e);
-      setAthleteWorkouts([]);
     } finally {
       setLoadingWorkouts(false);
     }

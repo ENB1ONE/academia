@@ -211,9 +211,19 @@ const PreWorkoutPage = () => {
               onChange={(e) => setWorkoutTypeId(e.target.value)}
               className="w-full bg-background border border-gray-700 rounded-lg p-2.5 text-text text-sm focus:ring-primary focus:border-primary"
             >
-              {(Array.isArray(workoutTypes) ? workoutTypes : []).map(t => (
-                <option key={t?.id} value={t?.id}>{t?.name}</option>
-              ))}
+              {(Array.isArray(workoutTypes) ? workoutTypes : []).map((t, idx) => {
+                const typeName = typeof t === 'string' ? t : (t?.name || t?.title || t?.description || t?.label || `Tipo ${idx + 1}`);
+                const typeId = typeof t === 'string' ? t : (t?.id || typeName);
+                return (
+                  <option 
+                    key={typeId || idx} 
+                    value={typeId}
+                    style={{ backgroundColor: '#111827', color: '#FFFFFF' }}
+                  >
+                    {typeName}
+                  </option>
+                );
+              })}
             </select>
           </div>
 

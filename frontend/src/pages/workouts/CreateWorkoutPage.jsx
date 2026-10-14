@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Save, Share2, Copy, ExternalLink, Check, MessageSquare } from 'lucide-react';
+import { Plus, Trash2, Save, Share2, Copy, ExternalLink, Check, MessageSquare, Dumbbell, Calendar, Clock, Printer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Card from '../../components/ui/Card';
@@ -7,19 +7,25 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import useAthleteStore from '../../store/athleteStore';
 import useWorkoutStore from '../../store/workoutStore';
+import AthleteSearchSelect from '../../components/AthleteSearchSelect';
+import api from '../../services/api';
 
 const CreateWorkoutPage = () => {
   const navigate = useNavigate();
   const { athletes, fetchAthletes } = useAthleteStore();
-  const { createWorkout, isLoading } = useWorkoutStore();
+  const { createWorkout, isLoading, deleteWorkout } = useWorkoutStore();
 
   const [formData, setFormData] = useState({
     athlete_id: '',
     name: '',
-    scheduled_date: '',
-    workout_type: 'A',
+    scheduled_date: new Date().toISOString().split('T')[0],
+    workout_type: 'FORÇA MMII',
     notes: ''
   });
+
+  const [workoutTypes, setWorkoutTypes] = useState([]);
+  const [athleteExistingWorkouts, setAthleteExistingWorkouts] = useState([]);
+  const [loadingExisting, setLoadingExisting] = useState(false);
 
   const [exercises, setExercises] = useState([
     { exercise_name: '', sets: '', reps: '', load_kg: '', rest_seconds: '', notes: '' }
@@ -31,7 +37,25 @@ const CreateWorkoutPage = () => {
 
   useEffect(() => {
     fetchAthletes();
+    api.get('/api/v1/workout-types/').then((res) => {
+      const list = Array.isArray(res?.data) ? res.data : (res?.data?.workout_types || []);
+      setWorkoutTypes(list);
+    }).catch(console.error);
   }, [fetchAthletes]);
+
+  // Carregar treinos existentes quando o atleta selecionado muda
+  useEffect(() => {
+    if (formData.athlete_id) {
+      setLoadingExisting(true);
+      api.get(`/api/v1/workouts/?athlete_id=${formData.athlete_id}`).then((res) => {
+        const list = Array.isArray(res?.data) ? res.data : (res?.data?.workouts || []);
+        const filtered = list.filter(w => String(w.athlete_id) === String(formData.athlete_id) && w.is_active !== 0);
+        setAthleteExistingWorkouts(filtered);
+      }).catch(console.error).finally(() => setLoadingExisting(false));
+    } else {
+      setAthleteExistingWorkouts([]);
+    }
+  }, [formData.athlete_id]);
 
   const addExercise = () => {
     setExercises([...exercises, { exercise_name: '', sets: '', reps: '', load_kg: '', rest_seconds: '', notes: '' }]);
@@ -47,6 +71,40 @@ const CreateWorkoutPage = () => {
     setExercises(newExercises);
   };
 
+  // Helper para gerar o link assinado com pkg Base64 UTF-8
+  const buildShareUrl = (athlete, workoutData) => {
+    const payload = {
+      i: athlete.id,
+      n: athlete.name,
+      g: athlete.group_name || athlete.group || athlete.nomeGrupo || 'FORMCLUB',
+      b: athlete.birth_date || '',
+      w: {
+        title: workoutData.name,
+        type: workoutData.workout_type,
+        date: workoutData.scheduled_date,
+        notes: workoutData.notes || '',
+        exercises: (workoutData.exercises || []).map((ex, idx) => ({
+          order_index: idx + 1,
+          name: ex.exercise_name || ex.name,
+          sets: ex.sets,
+          reps: ex.reps,
+          load_kg: ex.load_kg,
+          rest_seconds: ex.rest_seconds,
+          notes: ex.notes || ''
+        }))
+      }
+    };
+
+    let pkg = '';
+    try {
+      pkg = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(payload)))));
+    } catch (e) {
+      console.warn('Erro ao codificar pkg:', e);
+    }
+
+    return `https://app.formclub.com.br/#/checkin/formclub-hub?athleteId=${encodeURIComponent(athlete.id)}&athleteName=${encodeURIComponent(athlete.name)}${pkg ? `&pkg=${pkg}` : ''}`;
+  };
+
   const handleSave = async () => {
     if (!formData.athlete_id) {
       toast.error('Selecione um atleta');
@@ -57,87 +115,124 @@ const CreateWorkoutPage = () => {
       return;
     }
 
+    const selectedAthlete = athletes.find(a => String(a.id) === String(formData.athlete_id)) || {
+      id: formData.athlete_id,
+      name: 'Atleta'
+    };
+
+    const formattedExercises = exercises.map((ex, idx) => ({
+      exercise_name: ex.exercise_name || 'Exercício ' + (idx + 1),
+      sets: parseInt(ex.sets, 10) || 0,
+      reps: String(ex.reps || '10'),
+      load_kg: parseFloat(ex.load_kg) || 0,
+      rest_seconds: parseInt(ex.rest_seconds, 10) || 0,
+      order: idx + 1,
+      order_index: idx + 1,
+      notes: ex.notes || ''
+    }));
+
     const payload = {
-      athlete_id: parseInt(formData.athlete_id, 10),
+      athlete_id: formData.athlete_id,
+      athlete_name: selectedAthlete.name,
       name: formData.name,
       workout_type: formData.workout_type,
       scheduled_date: formData.scheduled_date || new Date().toISOString().split('T')[0],
       notes: formData.notes,
-      exercises: exercises.map((ex, idx) => ({
-        exercise_name: ex.exercise_name || 'Exercício ' + (idx + 1),
-        sets: parseInt(ex.sets) || 0,
-        reps: String(ex.reps || '10'),
-        load_kg: parseFloat(ex.load_kg) || 0,
-        rest_seconds: parseInt(ex.rest_seconds) || 0,
-        order: idx + 1,
-        notes: ex.notes || ''
-      }))
+      exercises: formattedExercises
     };
 
     try {
       const saved = await createWorkout(payload);
       toast.success('Treino salvo com sucesso!');
       
-      const athleteName = athletes.find(a => String(a.id) === String(formData.athlete_id))?.name || 'Atleta';
-      const shareUrl = `https://app.formclub.com.br/#/checkin/formclub-hub?athleteId=${formData.athlete_id}`;
+      const shareUrl = buildShareUrl(selectedAthlete, payload);
       
       setSavedWorkoutInfo({
         name: formData.name,
-        athleteName,
+        athleteName: selectedAthlete.name,
         shareUrl,
       });
       setIsSavedModalOpen(true);
+
+      // Atualizar lista local de treinos existentes
+      setAthleteExistingWorkouts(prev => [payload, ...prev]);
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Erro ao salvar treino');
     }
   };
 
+  const handleDeleteExisting = async (workoutId) => {
+    if (window.confirm('Deseja excluir esta ficha de treino?')) {
+      try {
+        await deleteWorkout(workoutId);
+        setAthleteExistingWorkouts(prev => prev.filter(w => w.id !== workoutId));
+        toast.success('Ficha removida!');
+      } catch (e) {
+        toast.error('Erro ao excluir ficha');
+      }
+    }
+  };
+
+  const selectedAthleteObj = athletes.find(a => String(a.id) === String(formData.athlete_id));
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-text">Novo Treino</h1>
-        <p className="text-gray-400 mt-1">Crie e prescreva treinos para os atletas</p>
+        <h1 className="text-2xl font-bold text-text">Prescrição de Fichas de Treino</h1>
+        <p className="text-gray-400 mt-1">Crie, gerencie e envie treinos individuais por atleta com ordem garantida</p>
       </div>
 
       <Card>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta</label>
-            <select 
-              className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
+            <label className="block text-sm font-medium text-gray-300 mb-1.5">Atleta *</label>
+            <AthleteSearchSelect
+              athletes={athletes}
               value={formData.athlete_id}
-              onChange={(e) => setFormData({...formData, athlete_id: e.target.value})}
-            >
-              <option value="">Selecionar Atleta...</option>
-              {(Array.isArray(athletes) ? athletes : []).map(a => (
-                <option key={a?.id} value={a?.id}>{a?.name}</option>
-              ))}
-            </select>
+              onChange={(id, ath) => {
+                setFormData({
+                  ...formData,
+                  athlete_id: id,
+                  name: formData.name || (ath ? `Treino A - ${ath.name.split(' ')[0]}` : '')
+                });
+              }}
+              placeholder="Digite o nome para buscar ou selecione..."
+            />
           </div>
           <Input 
-            label="Nome do Treino" 
-            placeholder="Ex: Treino A - Força" 
+            label="Nome do Treino *" 
+            placeholder="Ex: Treino A - Força MMII" 
             value={formData.name}
             onChange={(e) => setFormData({...formData, name: e.target.value})}
           />
           <Input 
-            label="Data (Opcional)" 
+            label="Data Programada *" 
             type="date" 
             value={formData.scheduled_date}
             onChange={(e) => setFormData({...formData, scheduled_date: e.target.value})}
           />
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1.5">Tipo</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1.5">Tipo de Treino / Modalidade *</label>
             <select 
               className="block w-full rounded-lg bg-background border border-gray-700 text-text focus:ring-primary focus:border-primary sm:text-sm p-2.5"
               value={formData.workout_type}
               onChange={(e) => setFormData({...formData, workout_type: e.target.value})}
             >
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
-              <option value="Outro">Outro</option>
+              {(Array.isArray(workoutTypes) && workoutTypes.length > 0 ? workoutTypes : [
+                'FORÇA MMII', 'FORÇA MMSS', 'PERFORMANCE', 'VELOCIDADE', 'ACELERAÇÃO', 'RECOVERY E PREVENTIVOS', 'CORE'
+              ]).map((t, idx) => {
+                const typeName = typeof t === 'string' ? t : (t?.name || t?.title || t?.description || t?.label || `Tipo ${idx + 1}`);
+                const typeId = typeof t === 'string' ? t : (t?.id || typeName);
+                return (
+                  <option 
+                    key={typeId || idx} 
+                    value={typeName}
+                    style={{ backgroundColor: '#111827', color: '#FFFFFF' }}
+                  >
+                    {typeName}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
@@ -181,6 +276,87 @@ const CreateWorkoutPage = () => {
           <Save className="h-4 w-4" /> Salvar Treino
         </Button>
       </div>
+
+      {/* LISTA DE FICHAS JÁ PRESCRITAS PARA O ATLETA SELECIONADO */}
+      {selectedAthleteObj && (
+        <div className="mt-8 pt-6 border-t border-white/10 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Dumbbell className="h-5 w-5 text-[#E5A910]" />
+                Fichas Ativas de {selectedAthleteObj.name}
+              </h3>
+              <p className="text-xs text-gray-400">Treinos já salvos disponíveis para envio individual</p>
+            </div>
+            <span className="text-xs text-[#E5A910] font-mono font-bold">
+              {athleteExistingWorkouts.length} ficha(s)
+            </span>
+          </div>
+
+          {loadingExisting ? (
+            <p className="text-xs text-gray-500 py-4">Carregando treinos do atleta...</p>
+          ) : athleteExistingWorkouts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {athleteExistingWorkouts.map((w, idx) => {
+                const shareLink = buildShareUrl(selectedAthleteObj, w);
+                return (
+                  <div key={w.id || idx} className="bg-[#141418] border border-white/10 rounded-2xl p-4 space-y-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <span className="text-[10px] font-bold text-[#E5A910] uppercase tracking-wider block">
+                          {w.workout_type || 'A'}
+                        </span>
+                        <h4 className="text-sm font-bold text-white">{w.name || w.title}</h4>
+                        <span className="text-[11px] text-gray-400 font-mono">{w.scheduled_date || 'Ativo'}</span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-gray-400 font-bold">
+                        {w.exercises?.length || 0} exercícios
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-2 border-t border-white/5">
+                      <a
+                        href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                          `Olá ${selectedAthleteObj.name}, acesse seu check-in de prontidão e seu treino no FORMCLUB:\n${shareLink}`
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+                      >
+                        <MessageSquare className="h-3.5 w-3.5" /> WhatsApp
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(shareLink);
+                          toast.success('Link individual copiado!');
+                        }}
+                        className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+                      >
+                        <Copy className="h-3.5 w-3.5 text-[#E5A910]" /> Copiar Link
+                      </button>
+                      {w.id && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteExisting(w.id)}
+                          className="p-1.5 hover:bg-red-500/20 text-gray-400 hover:text-red-400 rounded-xl transition ml-auto"
+                          title="Excluir ficha"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="p-6 bg-[#0A0A0C] border border-white/5 rounded-2xl text-center text-xs text-gray-500">
+              Nenhuma ficha cadastrada ainda para este atleta. Preencha os campos acima e clique em "Salvar Treino".
+            </div>
+          )}
+        </div>
+      )}
 
       {/* MODAL DE COMPARTILHAMENTO WHATSAPP & CHECKIN INDIVIDUAL */}
       {isSavedModalOpen && savedWorkoutInfo && (

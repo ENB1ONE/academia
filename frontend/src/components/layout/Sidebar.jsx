@@ -11,14 +11,18 @@ import Logo from '../ui/Logo';
 const Sidebar = () => {
   const { user, athleteProfile, logout } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState(user?.name || 'Usuário');
+  const [name, setName] = useState(user?.name || 'Administrador • Marcos Freitas');
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'admin' || !user?.role || user?.role === 'Visitante';
   const isTreinador = user?.role === 'treinador' || isAdmin;
   const isAtleta = user?.role === 'atleta';
 
   useEffect(() => {
-    if (user?.name) setName(user.name);
+    if (user?.name) {
+      setName(user.name);
+    } else {
+      setName('Administrador • Marcos Freitas');
+    }
   }, [user]);
 
   // Seções organizadas exatamente com a hierarquia do eLoad
@@ -162,11 +166,13 @@ const Sidebar = () => {
         <div className="p-3.5 border-t border-white/[0.08] shrink-0 bg-[#0E0E12]">
           <div className="flex items-center gap-2.5 mb-2.5 px-1">
             <div className="h-8 w-8 rounded-full bg-[#E5A910]/20 text-[#E5A910] flex items-center justify-center font-black text-xs border border-[#E5A910]/30 shrink-0">
-              {name.charAt(0).toUpperCase() || 'U'}
+              {name.charAt(0).toUpperCase() || 'A'}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-white truncate">{name}</p>
-              <p className="text-[10px] text-gray-400 truncate capitalize">{user?.role || 'Visitante'}</p>
+              <p className="text-[10px] text-[#E5A910] truncate uppercase font-bold tracking-wider">
+                {user?.role && user.role !== 'Visitante' ? user.role : 'Treinador / Admin'}
+              </p>
             </div>
           </div>
           <button 

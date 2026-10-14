@@ -194,11 +194,19 @@ export default function CollectiveLogPage() {
               onChange={(e) => setWorkoutType(e.target.value)}
               className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
             >
-              {workoutTypes.map((t) => (
-                <option key={t.id} value={t.name}>
-                  {t.name}
-                </option>
-              ))}
+              {(Array.isArray(workoutTypes) ? workoutTypes : []).map((t, idx) => {
+                const typeName = typeof t === 'string' ? t : (t?.name || t?.title || t?.description || t?.label || `Tipo ${idx + 1}`);
+                const typeId = typeof t === 'string' ? t : (t?.id || typeName);
+                return (
+                  <option 
+                    key={typeId || idx} 
+                    value={typeName}
+                    style={{ backgroundColor: '#111827', color: '#FFFFFF' }}
+                  >
+                    {typeName}
+                  </option>
+                );
+              })}
             </select>
           </div>
 

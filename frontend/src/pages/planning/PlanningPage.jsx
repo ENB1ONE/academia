@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Users, User, Plus, Trash2, CheckCircle2, TrendingUp, AlertCircle, RefreshCw } from 'lucide-react';
 import api from '../../services/api';
+import AthleteSearchSelect from '../../components/AthleteSearchSelect';
 
 export default function PlanningPage() {
   const [tab, setTab] = useState('individual'); // 'individual' | 'collective'
@@ -183,17 +184,12 @@ export default function PlanningPage() {
             {tab === 'individual' ? (
               <div className="md:col-span-4 space-y-1">
                 <label className="text-xs text-gray-400 font-medium">Selecione o Atleta *</label>
-                <select
+                <AthleteSearchSelect
+                  athletes={athletes}
                   value={selectedAthleteId}
-                  onChange={(e) => setSelectedAthleteId(e.target.value)}
-                  className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
-                >
-                  {(Array.isArray(athletes) ? athletes : []).map((a) => (
-                    <option key={a?.id} value={a?.id}>
-                      {a?.name || a?.user?.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(id) => setSelectedAthleteId(id)}
+                  placeholder="Buscar atleta por nome..."
+                />
               </div>
             ) : (
               <div className="md:col-span-4 space-y-1">
@@ -204,7 +200,7 @@ export default function PlanningPage() {
                   className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
                 >
                   {(Array.isArray(groups) ? groups : []).map((g) => (
-                    <option key={g?.id} value={g?.id}>
+                    <option key={g?.id} value={g?.id} style={{ backgroundColor: '#111827', color: '#FFFFFF' }}>
                       {g?.name} ({g?.athlete_count || 0} atletas)
                     </option>
                   ))}
@@ -230,11 +226,19 @@ export default function PlanningPage() {
                 onChange={(e) => setSelectedType(e.target.value)}
                 className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
               >
-                {(Array.isArray(workoutTypes) ? workoutTypes : []).map((t) => (
-                  <option key={t?.id} value={t?.name}>
-                    {t?.name}
-                  </option>
-                ))}
+                {(Array.isArray(workoutTypes) ? workoutTypes : []).map((t, idx) => {
+                  const typeName = typeof t === 'string' ? t : (t?.name || t?.title || t?.description || t?.label || `Tipo ${idx + 1}`);
+                  const typeId = typeof t === 'string' ? t : (t?.id || typeName);
+                  return (
+                    <option 
+                      key={typeId || idx} 
+                      value={typeName}
+                      style={{ backgroundColor: '#111827', color: '#FFFFFF' }}
+                    >
+                      {typeName}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>

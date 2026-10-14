@@ -62,6 +62,48 @@
   ],
   "athletes": [
     {
+      "id": "ath_eduardo_augusto_de_brito_campos",
+      "codigoAtleta": "ath_eduardo_augusto_de_brito_campos",
+      "name": "EDUARDO AUGUSTO DE BRITO CAMPOS",
+      "email": "brito.eduardo@icloud.com",
+      "group_name": "ALFA ACADEMY",
+      "group": "ALFA ACADEMY",
+      "nomeGrupo": "ALFA ACADEMY",
+      "gender": "M",
+      "descricaoGenero": "Masculino",
+      "age": 17,
+      "birth_date": "2009-03-15",
+      "dataNascimento": "15/03/2009",
+      "sport": "Futebol / Performance",
+      "current_acwr_status": "ÓTIMO",
+      "past_acwr_status": "ÓTIMO",
+      "acwr_value": 1.12,
+      "acute_load": 1150,
+      "chronic_load": 1025,
+      "charts": {}
+    },
+    {
+      "id": "ath_marcos_freitas",
+      "codigoAtleta": "ath_marcos_freitas",
+      "name": "MARCOS FREITAS",
+      "email": "dfreitasfaria@gmail.com",
+      "group_name": "ALFA ACADEMY",
+      "group": "ALFA ACADEMY",
+      "nomeGrupo": "ALFA ACADEMY",
+      "gender": "M",
+      "descricaoGenero": "Masculino",
+      "age": 32,
+      "birth_date": "1994-06-20",
+      "dataNascimento": "20/06/1994",
+      "sport": "Treinador / Performance",
+      "current_acwr_status": "ÓTIMO",
+      "past_acwr_status": "ÓTIMO",
+      "acwr_value": 1.05,
+      "acute_load": 950,
+      "chronic_load": 900,
+      "charts": {}
+    },
+    {
       "id": 30445,
       "name": "ADRIELLI",
       "email": "adrielli@atleta.formclub.com.br",
@@ -204210,208 +204252,276 @@
   ],
   "workout_types": [
     {
-      "id": 5980,
-      "name": null,
-      "color": "#8b5cf6",
-      "description": "PERFORMANCE"
+      "id": 1,
+      "name": "ACELERAÇÃO",
+      "title": "ACELERAÇÃO",
+      "label": "ACELERAÇÃO",
+      "description": "ACELERAÇÃO",
+      "color": "#10b981"
     },
     {
-      "id": 5982,
-      "name": null,
-      "color": "#3b82f6",
-      "description": "VELOCIDADE"
+      "id": 2,
+      "name": "C.O.D",
+      "title": "C.O.D",
+      "label": "C.O.D",
+      "description": "C.O.D",
+      "color": "#b45309"
     },
     {
-      "id": 5983,
-      "name": null,
-      "color": "#10b981",
-      "description": "ACELERAÇÃO"
+      "id": 3,
+      "name": "CAMPO",
+      "title": "CAMPO",
+      "label": "CAMPO",
+      "description": "CAMPO",
+      "color": "#84cc16"
     },
     {
-      "id": 5984,
-      "name": null,
-      "color": "#f59e0b",
-      "description": "RECOVERY E PREVENTIVOS"
+      "id": 4,
+      "name": "CORE",
+      "title": "CORE",
+      "label": "CORE",
+      "description": "CORE",
+      "color": "#ef4444"
     },
     {
-      "id": 5985,
-      "name": null,
-      "color": "#ef4444",
-      "description": "CORE"
+      "id": 5,
+      "name": "DESACELERAÇÃO",
+      "title": "DESACELERAÇÃO",
+      "label": "DESACELERAÇÃO",
+      "description": "DESACELERAÇÃO",
+      "color": "#6366f1"
     },
     {
-      "id": 5986,
-      "name": null,
-      "color": "#06b6d4",
-      "description": "FORÇA MMII"
+      "id": 6,
+      "name": "EMPURRA MMII",
+      "title": "EMPURRA MMII",
+      "label": "EMPURRA MMII",
+      "description": "EMPURRA MMII",
+      "color": "#d946ef"
     },
     {
-      "id": 5987,
-      "name": null,
-      "color": "#ec4899",
-      "description": "FORÇA MMSS"
+      "id": 7,
+      "name": "EMPURRA MMSS",
+      "title": "EMPURRA MMSS",
+      "label": "EMPURRA MMSS",
+      "description": "EMPURRA MMSS",
+      "color": "#64748b"
     },
     {
-      "id": 5988,
-      "name": null,
-      "color": "#6366f1",
-      "description": "DESACELERAÇÃO"
+      "id": 8,
+      "name": "ESTABILIDADE",
+      "title": "ESTABILIDADE",
+      "label": "ESTABILIDADE",
+      "description": "ESTABILIDADE",
+      "color": "#0891b2"
     },
     {
-      "id": 5989,
-      "name": null,
-      "color": "#14b8a6",
-      "description": "FÍSICO TÉCNICO"
+      "id": 9,
+      "name": "ESTABILIDADE UNIPODAL",
+      "title": "ESTABILIDADE UNIPODAL",
+      "label": "ESTABILIDADE UNIPODAL",
+      "description": "ESTABILIDADE UNIPODAL",
+      "color": "#dc2626"
     },
     {
-      "id": 5990,
-      "name": null,
-      "color": "#f97316",
-      "description": "NEURAL"
+      "id": 10,
+      "name": "FORTALECIMENTO ESPECÍFICO",
+      "title": "FORTALECIMENTO ESPECÍFICO",
+      "label": "FORTALECIMENTO ESPECÍFICO",
+      "description": "FORTALECIMENTO ESPECÍFICO",
+      "color": "#14b8a6"
     },
     {
-      "id": 5996,
-      "name": null,
-      "color": "#84cc16",
-      "description": "CAMPO"
+      "id": 11,
+      "name": "FORÇA EMPURRA",
+      "title": "FORÇA EMPURRA",
+      "label": "FORÇA EMPURRA",
+      "description": "FORÇA EMPURRA",
+      "color": "#6d28d9"
     },
     {
-      "id": 6002,
-      "name": null,
-      "color": "#a855f7",
-      "description": "POTENCIA MMII"
+      "id": 12,
+      "name": "FORÇA MMII",
+      "title": "FORÇA MMII",
+      "label": "FORÇA MMII",
+      "description": "FORÇA MMII",
+      "color": "#06b6d4"
     },
     {
-      "id": 6003,
-      "name": null,
-      "color": "#0ea5e9",
-      "description": "PUXA MMII"
+      "id": 13,
+      "name": "FORÇA MMSS",
+      "title": "FORÇA MMSS",
+      "label": "FORÇA MMSS",
+      "description": "FORÇA MMSS",
+      "color": "#ec4899"
     },
     {
-      "id": 6004,
-      "name": null,
-      "color": "#eab308",
-      "description": "POTENCIA MMSS"
+      "id": 14,
+      "name": "FORÇA PUXA",
+      "title": "FORÇA PUXA",
+      "label": "FORÇA PUXA",
+      "description": "FORÇA PUXA",
+      "color": "#1d4ed8"
     },
     {
-      "id": 6005,
-      "name": null,
-      "color": "#d946ef",
-      "description": "EMPURRA MMII"
+      "id": 15,
+      "name": "FORÇA UNIPODAL",
+      "title": "FORÇA UNIPODAL",
+      "label": "FORÇA UNIPODAL",
+      "description": "FORÇA UNIPODAL",
+      "color": "#22c55e"
     },
     {
-      "id": 6006,
-      "name": null,
-      "color": "#64748b",
-      "description": "EMPURRA MMSS"
+      "id": 16,
+      "name": "FÍSICO TÉCNICO",
+      "title": "FÍSICO TÉCNICO",
+      "label": "FÍSICO TÉCNICO",
+      "description": "FÍSICO TÉCNICO",
+      "color": "#047857"
     },
     {
-      "id": 6007,
-      "name": null,
-      "color": "#22c55e",
-      "description": "FORÇA UNIPODAL"
+      "id": 17,
+      "name": "HIPERTROFIA MMII",
+      "title": "HIPERTROFIA MMII",
+      "label": "HIPERTROFIA MMII",
+      "description": "HIPERTROFIA MMII",
+      "color": "#db2777"
     },
     {
-      "id": 6016,
-      "name": null,
-      "color": "#38bdf8",
-      "description": "R.F MMII"
+      "id": 18,
+      "name": "HIPERTROFIA MMSS",
+      "title": "HIPERTROFIA MMSS",
+      "label": "HIPERTROFIA MMSS",
+      "description": "HIPERTROFIA MMSS",
+      "color": "#4338ca"
     },
     {
-      "id": 6017,
-      "name": null,
-      "color": "#fb7185",
-      "description": "R.F MMSS"
+      "id": 19,
+      "name": "MMII + CORE",
+      "title": "MMII + CORE",
+      "label": "MMII + CORE",
+      "description": "MMII + CORE",
+      "color": "#4f46e5"
     },
     {
-      "id": 6018,
-      "name": null,
-      "color": "#f43f5e",
-      "description": "MMSS + CORE"
+      "id": 20,
+      "name": "MMSS + CORE",
+      "title": "MMSS + CORE",
+      "label": "MMSS + CORE",
+      "description": "MMSS + CORE",
+      "color": "#f43f5e"
     },
     {
-      "id": 6019,
-      "name": null,
-      "color": "#4f46e5",
-      "description": "MMII + CORE"
+      "id": 21,
+      "name": "NEURAL",
+      "title": "NEURAL",
+      "label": "NEURAL",
+      "description": "NEURAL",
+      "color": "#f97316"
     },
     {
-      "id": 6020,
-      "name": null,
-      "color": "#7c3aed",
-      "description": "TRIPLEX EMPURRA"
+      "id": 22,
+      "name": "PERFORMANCE",
+      "title": "PERFORMANCE",
+      "label": "PERFORMANCE",
+      "description": "PERFORMANCE",
+      "color": "#8b5cf6"
     },
     {
-      "id": 6021,
-      "name": null,
-      "color": "#2563eb",
-      "description": "TRIPLEX PUXA"
+      "id": 23,
+      "name": "POTENCIA MMII",
+      "title": "POTENCIA MMII",
+      "label": "POTENCIA MMII",
+      "description": "POTENCIA MMII",
+      "color": "#a855f7"
     },
     {
-      "id": 6022,
-      "name": null,
-      "color": "#059669",
-      "description": "TRIPLEX MMII"
+      "id": 24,
+      "name": "POTENCIA MMSS",
+      "title": "POTENCIA MMSS",
+      "label": "POTENCIA MMSS",
+      "description": "POTENCIA MMSS",
+      "color": "#eab308"
     },
     {
-      "id": 6023,
-      "name": null,
-      "color": "#d97706",
-      "description": "PUXA MMSS"
+      "id": 25,
+      "name": "PUXA MMII",
+      "title": "PUXA MMII",
+      "label": "PUXA MMII",
+      "description": "PUXA MMII",
+      "color": "#0ea5e9"
     },
     {
-      "id": 7001,
-      "name": null,
-      "color": "#dc2626",
-      "description": "ESTABILIDADE  UNIPODAL"
+      "id": 26,
+      "name": "PUXA MMSS",
+      "title": "PUXA MMSS",
+      "label": "PUXA MMSS",
+      "description": "PUXA MMSS",
+      "color": "#d97706"
     },
     {
-      "id": 7002,
-      "name": null,
-      "color": "#0891b2",
-      "description": "ESTABILIDADE"
+      "id": 27,
+      "name": "R.F MMII",
+      "title": "R.F MMII",
+      "label": "R.F MMII",
+      "description": "R.F MMII",
+      "color": "#38bdf8"
     },
     {
-      "id": 7523,
-      "name": null,
-      "color": "#db2777",
-      "description": "HIPERTROFIA MMII"
+      "id": 28,
+      "name": "R.F MMSS",
+      "title": "R.F MMSS",
+      "label": "R.F MMSS",
+      "description": "R.F MMSS",
+      "color": "#fb7185"
     },
     {
-      "id": 7524,
-      "name": null,
-      "color": "#4338ca",
-      "description": "HIPERTROFIA MMSS"
+      "id": 29,
+      "name": "RECOVERY E PREVENTIVOS",
+      "title": "RECOVERY E PREVENTIVOS",
+      "label": "RECOVERY E PREVENTIVOS",
+      "description": "RECOVERY E PREVENTIVOS",
+      "color": "#f59e0b"
     },
     {
-      "id": 7531,
-      "name": null,
-      "color": "#6d28d9",
-      "description": "FORÇA EMPURRA"
+      "id": 30,
+      "name": "TRIPLEX EMPURRA",
+      "title": "TRIPLEX EMPURRA",
+      "label": "TRIPLEX EMPURRA",
+      "description": "TRIPLEX EMPURRA",
+      "color": "#7c3aed"
     },
     {
-      "id": 7532,
-      "name": null,
-      "color": "#1d4ed8",
-      "description": "FORÇA PUXA"
+      "id": 31,
+      "name": "TRIPLEX GERAL",
+      "title": "TRIPLEX GERAL",
+      "label": "TRIPLEX GERAL",
+      "description": "TRIPLEX GERAL",
+      "color": "#b91c1c"
     },
     {
-      "id": 7962,
-      "name": null,
-      "color": "#047857",
-      "description": "FORTALECIMENTO ESPECÍFICO"
+      "id": 32,
+      "name": "TRIPLEX MMII",
+      "title": "TRIPLEX MMII",
+      "label": "TRIPLEX MMII",
+      "description": "TRIPLEX MMII",
+      "color": "#059669"
     },
     {
-      "id": 8047,
-      "name": null,
-      "color": "#b45309",
-      "description": "C.O.D"
+      "id": 33,
+      "name": "TRIPLEX PUXA",
+      "title": "TRIPLEX PUXA",
+      "label": "TRIPLEX PUXA",
+      "description": "TRIPLEX PUXA",
+      "color": "#2563eb"
     },
     {
-      "id": 10044,
-      "name": null,
-      "color": "#b91c1c",
-      "description": "TRIPLEX GERAL"
+      "id": 34,
+      "name": "VELOCIDADE",
+      "title": "VELOCIDADE",
+      "label": "VELOCIDADE",
+      "description": "VELOCIDADE",
+      "color": "#3b82f6"
     }
   ],
   "assessment_types": [

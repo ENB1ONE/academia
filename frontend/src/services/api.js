@@ -56,20 +56,104 @@ export function toHybridObject(obj, extra = {}) {
   return base;
 }
 
+export const makeAthleteId = (name) => 'ath_' + String(name).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+
 function getLocalStore() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(eloadSeedData));
-      return eloadSeedData;
+    let store = eloadSeedData;
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.athletes && parsed.athletes.length >= 50) {
+          store = parsed;
+        }
+      } catch (e) {}
     }
-    const parsed = JSON.parse(raw);
-    // ensure all essential keys exist
-    if (!parsed.athletes || parsed.athletes.length < 50) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(eloadSeedData));
-      return eloadSeedData;
+
+    // ROTINA DE MIGRAÇÃO OBRIGATÓRIA (V8):
+    // 1. Garantir que Eduardo Augusto e Marcos Freitas existam com IDs determinísticos
+    if (!store.athletes) store.athletes = [];
+    
+    // Corrigir colisão onde Eduardo Augusto pudesse estar com id = 3
+    store.athletes = store.athletes.map(a => {
+      const n = (a.name || '').toUpperCase();
+      if (n.includes('EDUARDO AUGUSTO DE BRITO')) {
+        return {
+          ...a,
+          id: 'ath_eduardo_augusto_de_brito_campos',
+          codigoAtleta: 'ath_eduardo_augusto_de_brito_campos',
+          name: 'EDUARDO AUGUSTO DE BRITO CAMPOS'
+        };
+      }
+      if (n === 'MARCOS FREITAS') {
+        return {
+          ...a,
+          id: 'ath_marcos_freitas',
+          codigoAtleta: 'ath_marcos_freitas',
+          name: 'MARCOS FREITAS'
+        };
+      }
+      return a;
+    });
+
+    const hasEduardo = store.athletes.some(a => (a.name || '').toUpperCase().includes('EDUARDO AUGUSTO DE BRITO'));
+    if (!hasEduardo) {
+      store.athletes.unshift({
+        id: 'ath_eduardo_augusto_de_brito_campos',
+        codigoAtleta: 'ath_eduardo_augusto_de_brito_campos',
+        name: 'EDUARDO AUGUSTO DE BRITO CAMPOS',
+        email: 'brito.eduardo@icloud.com',
+        group_name: 'ALFA ACADEMY',
+        group: 'ALFA ACADEMY',
+        nomeGrupo: 'ALFA ACADEMY',
+        gender: 'M',
+        descricaoGenero: 'Masculino',
+        age: 17,
+        birth_date: '2009-03-15',
+        dataNascimento: '15/03/2009',
+        sport: 'Futebol / Performance',
+        current_acwr_status: 'ÓTIMO',
+        past_acwr_status: 'ÓTIMO',
+        acwr_value: 1.12,
+        acute_load: 1150,
+        chronic_load: 1025,
+        charts: {}
+      });
     }
-    return parsed;
+
+    const hasMarcos = store.athletes.some(a => (a.name || '').toUpperCase() === 'MARCOS FREITAS');
+    if (!hasMarcos) {
+      store.athletes.splice(1, 0, {
+        id: 'ath_marcos_freitas',
+        codigoAtleta: 'ath_marcos_freitas',
+        name: 'MARCOS FREITAS',
+        email: 'dfreitasfaria@gmail.com',
+        group_name: 'ALFA ACADEMY',
+        group: 'ALFA ACADEMY',
+        nomeGrupo: 'ALFA ACADEMY',
+        gender: 'M',
+        descricaoGenero: 'Masculino',
+        age: 32,
+        birth_date: '1994-06-20',
+        dataNascimento: '20/06/1994',
+        sport: 'Treinador / Performance',
+        current_acwr_status: 'ÓTIMO',
+        past_acwr_status: 'ÓTIMO',
+        acwr_value: 1.05,
+        acute_load: 950,
+        chronic_load: 900,
+        charts: {}
+      });
+    }
+
+    // 2. Garantir que workout_types sempre venha com os 34 tipos completos
+    if (!store.workout_types || store.workout_types.length < 30) {
+      store.workout_types = eloadSeedData.workout_types;
+    }
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    return store;
   } catch (e) {
     return eloadSeedData;
   }
@@ -157,10 +241,36 @@ api.interceptors.response.use(
 
     // 1. /api/v1/athletes/
     if (url.includes('/api/v1/athletes/')) {
+      if (method === 'post') {
+        const body = JSON.parse(config.data || '{}');
+        const athId = body.id || makeAthleteId(body.name || 'novo_atleta');
+        const newAthlete = {
+          ...body,
+          id: athId,
+          codigoAtleta: athId,
+          name: (body.name || '').toUpperCase(),
+          charts: {},
+          current_acwr_status: 'ÓTIMO',
+          past_acwr_status: 'ÓTIMO',
+          acwr_value: 1.0,
+          acute_load: 1000,
+          chronic_load: 1000,
+        };
+        if (!db.athletes) db.athletes = [];
+        db.athletes.unshift(newAthlete);
+        saveLocalStore(db);
+        return Promise.resolve({ status: 200, data: toHybridObject(newAthlete) });
+      }
+
       const parts = url.split('/api/v1/athletes/')[1]?.split('?')[0]?.replace('/', '');
       if (parts && parts !== '') {
-        const id = parseInt(parts, 10);
-        const athlete = db.athletes.find((a) => a.id === id) || db.athletes[0];
+        const searchStr = decodeURIComponent(parts).trim().toLowerCase();
+        const athlete = db.athletes.find((a) => 
+          String(a.id).toLowerCase() === searchStr || 
+          String(a.codigoAtleta).toLowerCase() === searchStr ||
+          (a.name && a.name.toLowerCase() === searchStr) ||
+          (searchStr.length > 3 && a.name && a.name.toLowerCase().includes(searchStr))
+        ) || db.athletes.find(a => String(a.id) === String(parts)) || db.athletes[0];
         return Promise.resolve({ status: 200, data: toHybridObject(athlete) });
       }
       return Promise.resolve({ status: 200, data: toHybridArray(db.athletes || []) });
@@ -185,19 +295,38 @@ api.interceptors.response.use(
 
     // 3. /api/v1/workout-types/
     if (url.includes('/api/v1/workout-types/')) {
+      const normalizeWorkoutType = (t, i) => {
+        if (!t) return { id: String(i + 1), name: `Tipo ${i + 1}`, title: `Tipo ${i + 1}`, label: `Tipo ${i + 1}`, color: '#3b82f6' };
+        if (typeof t === 'string') {
+          return { id: t, name: t, title: t, label: t, description: t, color: '#3b82f6' };
+        }
+        const val = t.name || t.description || t.title || t.label || `Tipo ${i + 1}`;
+        return {
+          id: t.id || val || String(i + 1),
+          name: val,
+          title: val,
+          label: val,
+          description: t.description || val,
+          color: t.color || '#3b82f6',
+        };
+      };
+
       if (method === 'post') {
         const body = JSON.parse(config.data || '{}');
-        const newType = {
-          id: db.workout_types.length + 1,
+        const newType = normalizeWorkoutType({
+          id: (db.workout_types || []).length + 1,
           name: body.name,
           color: body.color || '#3b82f6',
-          description: body.description || '',
-        };
+          description: body.description || body.name || '',
+        }, (db.workout_types || []).length);
+        if (!db.workout_types) db.workout_types = [];
         db.workout_types.push(newType);
         saveLocalStore(db);
         return Promise.resolve({ status: 200, data: toHybridObject(newType) });
       }
-      return Promise.resolve({ status: 200, data: toHybridArray(db.workout_types || []) });
+
+      const typesList = (db.workout_types || []).map((t, idx) => normalizeWorkoutType(t, idx));
+      return Promise.resolve({ status: 200, data: toHybridArray(typesList) });
     }
 
     // 4. /api/v1/planning/

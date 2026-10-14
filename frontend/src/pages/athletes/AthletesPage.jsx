@@ -7,6 +7,7 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import defaultAvatar from '../../assets/avatar-default.png';
+import { makeAthleteId } from '../../services/api';
 
 const AthletesPage = () => {
   const navigate = useNavigate();
@@ -89,7 +90,12 @@ const AthletesPage = () => {
           localStorage.setItem(`athleteAvatar_${editingAthlete.id}`, avatar);
         }
       } else {
-        savedAthlete = await createAthlete(formData);
+        const customId = makeAthleteId(formData.name);
+        savedAthlete = await createAthlete({
+          ...formData,
+          id: customId,
+          codigoAtleta: customId,
+        });
         toast.success('Atleta cadastrado com sucesso!');
         if (avatar && savedAthlete && savedAthlete.id) {
           localStorage.setItem(`athleteAvatar_${savedAthlete.id}`, avatar);
