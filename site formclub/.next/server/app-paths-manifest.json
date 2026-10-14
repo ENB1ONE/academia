@@ -6,7 +6,7 @@
   "/agendar/page": "app/agendar/page.js",
   "/page": "app/page.js",
   "/estrutura/page": "app/estrutura/page.js",
-  "/modalidades/page": "app/modalidades/page.js",
   "/wellhub/page": "app/wellhub/page.js",
+  "/modalidades/page": "app/modalidades/page.js",
   "/privacidade/page": "app/privacidade/page.js"
 }
