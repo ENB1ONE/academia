@@ -24,7 +24,7 @@ export default function Footer() {
             <Link href="/" className="inline-block focus:outline-none">
               <div className="relative h-12 w-52 mb-2">
                 <img
-                  src="/formclub.com.br/images/formclub-logo.png"
+                  src="/images/formclub-logo.png"
                   alt="FORMCLUB - Human Performance Center"
                   className="w-full h-full object-contain filter brightness-110"
                 />

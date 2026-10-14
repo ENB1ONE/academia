@@ -47,7 +47,7 @@ export default function Navbar() {
       window.history.pushState(null, '', `#${targetId}`);
     } else {
       // If on another page, navigate to home with hash
-      window.location.href = `/formclub.com.br/#${targetId}`;
+      window.location.href = `/#${targetId}`;
     }
   };
 
@@ -69,7 +69,7 @@ export default function Navbar() {
           >
             <div className="relative h-9 w-40 sm:h-10 sm:w-48 lg:h-11 lg:w-52">
               <img
-                src="/formclub.com.br/images/formclub-logo.png"
+                src="/images/formclub-logo.png"
                 alt="FORMCLUB - Human Performance Center"
                 className="w-full h-full object-contain filter brightness-110 drop-shadow-md"
               />
