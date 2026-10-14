@@ -8,6 +8,7 @@ import {
 import Logo from '../../components/ui/Logo';
 import UrineHydrationModal, { URINE_COLORS } from '../../components/monitoring/UrineHydrationModal';
 import api from '../../services/api';
+import defaultAvatar from '../../assets/avatar-default.png';
 
 const PILLARS = [
   { id: 'sleep_quality', title: '1. Qualidade da noite de sono', desc: 'Como foi sua recuperação nesta noite?' },
@@ -235,7 +236,10 @@ export default function QuickCheckinPage() {
 
   const firstName = athleteFound?.name?.split(' ')[0] || 'Atleta';
   const cid = athleteFound?.codigoAtleta || athleteFound?.id;
-  const athleteAvatar = athleteFound?.photo_url || athleteFound?.avatar || `./avatars/athlete_${cid}.jpg`;
+  const rawAvatar = athleteFound?.photo_url || athleteFound?.avatar;
+  const athleteAvatar = (rawAvatar && !rawAvatar.includes('default') && !rawAvatar.includes('avatar-default'))
+    ? rawAvatar
+    : `./avatars/athlete_${cid}.jpg`;
 
   return (
     <div className="min-h-screen bg-[#0A0A0C] text-white flex flex-col justify-center items-center p-4">
@@ -299,9 +303,9 @@ export default function QuickCheckinPage() {
               alt={athleteFound.name}
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = 'https://blobprdeastus201.blob.core.windows.net/foto-atleta/avatar-default.svg';
+                e.target.src = defaultAvatar;
               }}
-              className="w-24 h-24 rounded-full object-cover border-2 border-[#E5A910] mx-auto shadow-xl bg-black/40"
+              className="w-24 h-24 rounded-full object-cover border-2 border-[#E5A910] mx-auto shadow-xl bg-black/60 p-1"
             />
 
             <div className="space-y-1.5">

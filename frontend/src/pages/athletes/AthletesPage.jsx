@@ -6,6 +6,7 @@ import useAthleteStore from '../../store/athleteStore';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
+import defaultAvatar from '../../assets/avatar-default.png';
 
 const AthletesPage = () => {
   const navigate = useNavigate();
@@ -144,7 +145,7 @@ const AthletesPage = () => {
           (Array.isArray(filteredAthletes) ? filteredAthletes : []).map((athlete) => {
             const rawAvatar = athlete.photo_url || athlete.avatar || localStorage.getItem(`athleteAvatar_${athlete.id}`);
             const cid = athlete.codigoAtleta || athlete.id;
-            const hasCustomPhoto = rawAvatar && !rawAvatar.includes('default');
+            const hasCustomPhoto = rawAvatar && !rawAvatar.includes('default') && !rawAvatar.includes('avatar-default');
             const avatarSrc = hasCustomPhoto 
               ? (rawAvatar.startsWith('http') || rawAvatar.startsWith('./') || rawAvatar.startsWith('/') ? rawAvatar : `./avatars/athlete_${cid}.jpg`)
               : `./avatars/athlete_${cid}.jpg`;
@@ -162,9 +163,9 @@ const AthletesPage = () => {
                         alt={athlete.name} 
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'https://blobprdeastus201.blob.core.windows.net/foto-atleta/avatar-default.svg';
+                          e.target.src = defaultAvatar;
                         }}
-                        className="h-14 w-14 rounded-full object-cover border-2 border-[#E5A910]/40 shadow-sm shrink-0 bg-black/40" 
+                        className="h-14 w-14 rounded-full object-cover border-2 border-[#E5A910]/40 shadow-sm shrink-0 bg-black/60 p-0.5" 
                       />
                       <div>
                         <h3 className="font-bold text-white text-base leading-snug">{athlete.name}</h3>

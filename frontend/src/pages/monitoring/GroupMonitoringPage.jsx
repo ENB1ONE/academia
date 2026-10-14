@@ -6,6 +6,7 @@ import {
 import toast from 'react-hot-toast';
 import EloadChartRenderer from '../../components/charts/EloadChartRenderer';
 import api from '../../services/api';
+import defaultAvatar from '../../assets/avatar-default.png';
 
 export default function GroupMonitoringPage() {
   const [groups, setGroups] = useState([]);
@@ -312,7 +313,10 @@ export default function GroupMonitoringPage() {
                 <tbody className="divide-y divide-white/[0.06]">
                   {groupAthletes.slice(0, 15).map((ath) => {
                     const cid = ath.codigoAtleta || ath.id;
-                    const avatar = ath.photo_url || ath.avatar || `./avatars/athlete_${cid}.jpg`;
+                    const rawAvatar = ath.photo_url || ath.avatar;
+                    const avatar = (rawAvatar && !rawAvatar.includes('default') && !rawAvatar.includes('avatar-default')) 
+                      ? rawAvatar 
+                      : `./avatars/athlete_${cid}.jpg`;
                     return (
                       <tr key={ath.id} className="hover:bg-white/[0.02] transition">
                         <td className="px-4 py-3">
@@ -322,9 +326,9 @@ export default function GroupMonitoringPage() {
                               alt={ath.name}
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = 'https://blobprdeastus201.blob.core.windows.net/foto-atleta/avatar-default.svg';
+                                e.target.src = defaultAvatar;
                               }}
-                              className="h-8 w-8 rounded-full object-cover border border-[#E5A910]/30 shrink-0 bg-black"
+                              className="h-8 w-8 rounded-full object-cover border border-[#E5A910]/30 shrink-0 bg-black/60 p-0.5"
                             />
                             <span className="font-bold text-white">{ath.name}</span>
                           </div>

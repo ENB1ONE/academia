@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+import defaultAvatar from '../../assets/avatar-default.png';
 
 export default function NeuromuscularPage() {
   const [athletes, setAthletes] = useState([]);
@@ -213,7 +214,10 @@ export default function NeuromuscularPage() {
                 const status = isArthur ? 'SUPERCOMPENSAÇÃO' : (ath.cmj_summary?.status || 'REFERÊNCIA');
                 const evaluatedToday = isArthur ? false : Boolean(ath.cmj_summary?.evaluated_today);
                 const cid = ath.codigoAtleta || ath.id;
-                const avatar = ath.photo_url || ath.avatar || `./avatars/athlete_${cid}.jpg`;
+                const rawAvatar = ath.photo_url || ath.avatar;
+                const avatar = (rawAvatar && !rawAvatar.includes('default') && !rawAvatar.includes('avatar-default')) 
+                  ? rawAvatar 
+                  : `./avatars/athlete_${cid}.jpg`;
 
                 return (
                   <tr key={ath.id} className="hover:bg-white/[0.02] transition">
@@ -224,9 +228,9 @@ export default function NeuromuscularPage() {
                           alt={ath.name}
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = 'https://blobprdeastus201.blob.core.windows.net/foto-atleta/avatar-default.svg';
+                            e.target.src = defaultAvatar;
                           }}
-                          className="h-8 w-8 rounded-full object-cover border border-[#E5A910]/30 shrink-0 bg-black"
+                          className="h-8 w-8 rounded-full object-cover border border-[#E5A910]/30 shrink-0 bg-black/60 p-0.5"
                         />
                         <div>
                           <span className="font-bold text-white block">{ath.name}</span>

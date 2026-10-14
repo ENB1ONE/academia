@@ -11,6 +11,7 @@ import EloadChartRenderer from '../../components/charts/EloadChartRenderer';
 import ReportPrintModal from '../../components/reports/ReportPrintModal';
 import api from '../../services/api';
 import eloadSeedData from '../../data/eloadSeedData.json';
+import defaultAvatar from '../../assets/avatar-default.png';
 
 export default function AthleteDetailPage() {
   const { id } = useParams();
@@ -123,7 +124,10 @@ export default function AthleteDetailPage() {
     : (seedMatch?.charts || {});
 
   const cid = athlete.codigoAtleta || athlete.id;
-  const avatarSrc = athlete.photo_url || athlete.avatar || seedMatch?.photo_url || `./avatars/athlete_${cid}.jpg`;
+  const rawAvatar = athlete.photo_url || athlete.avatar || seedMatch?.photo_url;
+  const avatarSrc = (rawAvatar && !rawAvatar.includes('default') && !rawAvatar.includes('avatar-default')) 
+    ? rawAvatar 
+    : `./avatars/athlete_${cid}.jpg`;
   const isArthur = String(athlete.id) === '20337' || athlete.name?.toUpperCase().includes('ARTHUR RIBEIRO');
 
   // Valores fisiológicos garantidos
@@ -271,9 +275,9 @@ export default function AthleteDetailPage() {
           alt={athlete.name}
           onError={(e) => {
             e.target.onerror = null;
-            e.target.src = 'https://blobprdeastus201.blob.core.windows.net/foto-atleta/avatar-default.svg';
+            e.target.src = defaultAvatar;
           }}
-          className="h-24 w-24 rounded-full object-cover border-2 border-[#E5A910] shadow-md shrink-0 bg-black/40"
+          className="h-24 w-24 rounded-full object-cover border-2 border-[#E5A910] shadow-md shrink-0 bg-black/60 p-1"
         />
 
         <div className="flex-1 text-center md:text-left space-y-1">
@@ -973,9 +977,9 @@ export default function AthleteDetailPage() {
                         alt={ath.name}
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'https://blobprdeastus201.blob.core.windows.net/foto-atleta/avatar-default.svg';
+                          e.target.src = defaultAvatar;
                         }}
-                        className="h-9 w-9 rounded-full object-cover border border-[#E5A910]/30 shrink-0 bg-black/40"
+                        className="h-9 w-9 rounded-full object-cover border border-[#E5A910]/30 shrink-0 bg-black/60 p-0.5"
                       />
                       <div>
                         <p className="font-bold text-xs text-white leading-tight">{ath.name}</p>
