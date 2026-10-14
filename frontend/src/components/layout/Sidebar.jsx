@@ -62,6 +62,7 @@ const Sidebar = () => {
       show: true,
       items: [
         { to: '/athletes', icon: Users, label: 'Monitoramento Individual', show: isTreinador },
+        { to: '/monitoring/group', icon: Users, label: 'Monitoramento de Grupo', show: isTreinador },
         { to: '/monitoring/wellness', icon: Heart, label: 'Questionário de Bem-Estar', show: true },
         { to: '/monitoring/pain', icon: Activity, label: 'Mapa Anatômico de Dor', show: true },
         { to: '/monitoring/menstrual', icon: Flower2, label: 'Ciclo Menstrual', show: isTreinador || (user?.role === 'atleta' && athleteProfile?.gender === 'Feminino') },

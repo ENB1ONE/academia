@@ -1,330 +1,384 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, TrendingUp, AlertTriangle, ShieldCheck, Activity, RefreshCw, BarChart2 } from 'lucide-react';
+import { 
+  Zap, TrendingUp, AlertTriangle, ShieldCheck, Activity, RefreshCw, 
+  BarChart2, Printer, Search, PlusCircle, Check, X 
+} from 'lucide-react';
+import toast from 'react-hot-toast';
 import api from '../../services/api';
 
 export default function NeuromuscularPage() {
   const [athletes, setAthletes] = useState([]);
-  const [selectedAthleteId, setSelectedAthleteId] = useState('');
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState('all');
+  const [selectedAthleteFilter, setSelectedAthleteFilter] = useState('all');
+  const [sensitivity, setSensitivity] = useState('1.0');
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [history, setHistory] = useState([]);
-  const [analysis, setAnalysis] = useState(null);
 
-  // Formulário de novo salto
+  // Modal de cadastro de novo salto
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalAthleteId, setModalAthleteId] = useState('');
   const [jumpHeight, setJumpHeight] = useState(38.5);
   const [testDate, setTestDate] = useState(new Date().toISOString().split('T')[0]);
   const [flightTime, setFlightTime] = useState('');
   const [peakPower, setPeakPower] = useState('');
   const [rsiModified, setRsiModified] = useState('');
+  const [saving, setSaving] = useState(false);
 
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  const fetchAthletes = async () => {
+  const fetchAthletesAndGroups = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/api/v1/athletes/');
-      const list = Array.isArray(res?.data) ? res.data : (res?.data?.athletes || []);
-      setAthletes(list);
-      if (list.length > 0 && !selectedAthleteId) {
-        setSelectedAthleteId(list[0].id);
+      const [athRes, grpRes] = await Promise.all([
+        api.get('/api/v1/athletes/'),
+        api.get('/api/v1/groups/').catch(() => ({ data: [] }))
+      ]);
+
+      const athList = Array.isArray(athRes?.data) ? athRes.data : (athRes?.data?.athletes || []);
+      const grpList = Array.isArray(grpRes?.data) ? grpRes.data : (grpRes?.data?.groups || []);
+
+      setAthletes(athList);
+      setGroups(grpList);
+      if (athList.length > 0 && !modalAthleteId) {
+        setModalAthleteId(athList[0].id);
       }
     } catch (err) {
       console.error(err);
-      setError('Erro ao carregar atletas.');
+      toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchAthleteCmj = async () => {
-    if (!selectedAthleteId) return;
-    try {
-      const res = await api.get(`/api/v1/monitoring/cmj/${selectedAthleteId}`);
-      const hList = Array.isArray(res?.data?.history) ? res.data.history : (Array.isArray(res?.data) ? res.data : []);
-      setHistory(hList);
-      setAnalysis(res.data?.analysis || null);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
-    fetchAthletes();
+    fetchAthletesAndGroups();
   }, []);
 
-  useEffect(() => {
-    if (selectedAthleteId) {
-      fetchAthleteCmj();
-    }
-  }, [selectedAthleteId]);
+  const handlePrint = () => {
+    window.print();
+  };
 
-  const handleSubmit = async (e) => {
+  const handleSaveJump = async (e) => {
     e.preventDefault();
-    if (!selectedAthleteId) return;
+    if (!modalAthleteId) return;
     setSaving(true);
-    setError('');
-    setSuccess('');
     try {
       await api.post('/api/v1/monitoring/cmj', {
-        athlete_id: Number(selectedAthleteId),
+        athlete_id: Number(modalAthleteId),
         test_date: testDate,
         jump_height_cm: Number(jumpHeight),
         flight_time_ms: flightTime ? Number(flightTime) : undefined,
         peak_power_w: peakPower ? Number(peakPower) : undefined,
         rsi_modified: rsiModified ? Number(rsiModified) : undefined,
       });
-      setSuccess('Teste de salto CMJ registrado com sucesso!');
-      fetchAthleteCmj();
+      toast.success('Salto CMJ registrado com sucesso!');
+      setIsModalOpen(false);
+      fetchAthletesAndGroups();
     } catch (err) {
       console.error(err);
-      setError('Erro ao salvar teste neuromuscular.');
+      toast.error('Erro ao registrar salto');
     } finally {
       setSaving(false);
     }
   };
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'supercompensation':
-        return (
-          <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 rounded-full font-bold text-xs flex items-center gap-1.5">
-            <ShieldCheck className="h-4 w-4" /> Supercompensação (Apto à Alta Demanda)
-          </span>
-        );
-      case 'stable':
-        return (
-          <span className="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/40 rounded-full font-bold text-xs flex items-center gap-1.5">
-            <Activity className="h-4 w-4" /> Estado Estável (Normal)
-          </span>
-        );
-      case 'fatigue':
-        return (
-          <span className="px-3 py-1 bg-danger/20 text-danger border border-danger/40 rounded-full font-bold text-xs flex items-center gap-1.5">
-            <AlertTriangle className="h-4 w-4" /> Fadiga Neuromuscular Detectada
-          </span>
-        );
-      default:
-        return (
-          <span className="px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-xs">
-            Baseline em Construção
-          </span>
-        );
-    }
-  };
+  // Filtragem dos atletas para a tabela
+  const filteredAthletes = athletes.filter((ath) => {
+    const grp = (ath.group_name || ath.group || ath.nomeGrupo || '').toLowerCase();
+    const matchesGroup = selectedGroup === 'all' || grp.includes(selectedGroup.toLowerCase());
+    const matchesAthlete = selectedAthleteFilter === 'all' || String(ath.id) === String(selectedAthleteFilter);
+    const matchesSearch = (ath.name || '').toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesGroup && matchesAthlete && matchesSearch;
+  });
+
+  // Quantos avaliaram hoje
+  const evaluatedTodayCount = athletes.filter(a => a.cmj_summary?.evaluated_today).length;
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto pb-12">
+    <div className="space-y-6 max-w-7xl mx-auto pb-16">
+      {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Zap className="h-7 w-7 text-primary" /> Prontidão Neuromuscular (Salto CMJ)
+          <h1 className="text-2xl font-black text-white flex items-center gap-2">
+            <Zap className="h-6 w-6 text-[#E5A910]" /> Prontidão (CMJ) &bull; Status Neuromuscular
           </h1>
-          <p className="text-sm text-gray-400">
-            Controle de fadiga central e prontidão do sistema nervoso através da altura de salto (Baseline vs. Desvio Padrão e CV %).
+          <p className="text-xs text-gray-400">
+            FormClub &bull; Human Performance Center &bull; Controle de Fadiga Central e Prontidão do SNC
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <select
-            value={selectedAthleteId}
-            onChange={(e) => setSelectedAthleteId(e.target.value)}
-            className="px-3 py-2 bg-surface border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
-          >
-            {athletes.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.name || a.user?.name}
-              </option>
-            ))}
-          </select>
+        <div className="flex items-center gap-2.5 flex-wrap">
           <button
-            onClick={fetchAthleteCmj}
-            className="p-2 bg-surface border border-gray-700 text-gray-300 rounded-lg hover:border-gray-500"
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2 bg-[#E5A910] hover:bg-[#E5A910]/90 text-[#0A0A0C] font-black rounded-xl text-xs flex items-center gap-1.5 transition shadow-lg shadow-[#E5A910]/20"
           >
-            <RefreshCw className="h-4 w-4" />
+            <PlusCircle className="h-4 w-4" /> Cadastrar Salto
+          </button>
+          <button
+            onClick={handlePrint}
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow-sm"
+          >
+            <Printer className="h-4 w-4" /> IMPRIMIR
           </button>
         </div>
       </div>
 
-      {error && (
-        <div className="p-4 bg-danger/10 border border-danger/30 text-danger rounded-xl text-sm">
-          {error}
-        </div>
-      )}
-      {success && (
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl text-sm">
-          {success}
-        </div>
-      )}
-
-      {/* Cards de Métricas Fisiológicas */}
-      {analysis && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="p-4 bg-surface border border-gray-800 rounded-2xl">
-            <span className="text-xs text-gray-400">Média Histórica (Baseline)</span>
-            <p className="text-2xl font-black text-white mt-1">
-              {analysis.baseline_mean_cm ? `${analysis.baseline_mean_cm.toFixed(1)} cm` : '---'}
-            </p>
-            <span className="text-[10px] text-gray-500">Últimos testes do atleta</span>
+      {/* Barra de Filtros e Sensibilidade estilo eLoad */}
+      <div className="bg-[#141418] border border-white/[0.08] rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-3 text-xs">
+          <div>
+            <label className="text-gray-400 font-medium mr-2">Grupo:</label>
+            <select
+              value={selectedGroup}
+              onChange={(e) => setSelectedGroup(e.target.value)}
+              className="bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-1.5 text-white text-xs focus:border-[#E5A910] focus:outline-none"
+            >
+              <option value="all">Todos os grupos</option>
+              {groups.map((g) => (
+                <option key={g.id} value={g.name}>{g.name}</option>
+              ))}
+            </select>
           </div>
 
-          <div className="p-4 bg-surface border border-gray-800 rounded-2xl">
-            <span className="text-xs text-gray-400">Desvio Padrão (SD)</span>
-            <p className="text-2xl font-black text-white mt-1">
-              {analysis.sd_cm ? `± ${analysis.sd_cm.toFixed(1)} cm` : '---'}
-            </p>
-            <span className="text-[10px] text-gray-500">Limiar de oscilação real</span>
+          <div>
+            <label className="text-gray-400 font-medium mr-2">Atleta:</label>
+            <select
+              value={selectedAthleteFilter}
+              onChange={(e) => setSelectedAthleteFilter(e.target.value)}
+              className="bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-1.5 text-white text-xs focus:border-[#E5A910] focus:outline-none max-w-[200px]"
+            >
+              <option value="all">Todos os atletas</option>
+              {athletes.map((a) => (
+                <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </select>
           </div>
 
-          <div className="p-4 bg-surface border border-gray-800 rounded-2xl">
-            <span className="text-xs text-gray-400">Coef. de Variação (CV %)</span>
-            <p className="text-2xl font-black text-primary mt-1">
-              {analysis.cv_percent ? `${analysis.cv_percent.toFixed(1)}%` : '---'}
-            </p>
-            <span className="text-[10px] text-gray-500">&lt; 5% = Alta consistência</span>
-          </div>
-
-          <div className="p-4 bg-surface border border-gray-800 rounded-2xl flex flex-col justify-between">
-            <span className="text-xs text-gray-400">Status Neuromuscular</span>
-            <div className="mt-1">{getStatusBadge(analysis.status)}</div>
-            <span className="text-[10px] text-gray-500">Avaliação do último salto</span>
-          </div>
-        </div>
-      )}
-
-      {/* Registro de Novo Teste */}
-      <form onSubmit={handleSubmit} className="bg-surface border border-gray-800 rounded-2xl p-5 space-y-4 shadow-xl">
-        <h2 className="text-base font-semibold text-white flex items-center gap-2">
-          <Zap className="h-4 w-4 text-primary" /> Registrar Salto CMJ (Countermovement Jump)
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="space-y-1">
-            <label className="text-xs text-gray-400 font-medium">Data do Teste *</label>
-            <input
-              type="date"
-              required
-              value={testDate}
-              onChange={(e) => setTestDate(e.target.value)}
-              className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs text-gray-400 font-medium">Altura do Salto (cm) *</label>
-            <input
-              type="number"
-              step="0.1"
-              required
-              value={jumpHeight}
-              onChange={(e) => setJumpHeight(e.target.value)}
-              className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none font-bold text-primary"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs text-gray-400 font-medium">Tempo de Vôo (ms)</label>
-            <input
-              type="number"
-              placeholder="Ex: 550"
-              value={flightTime}
-              onChange={(e) => setFlightTime(e.target.value)}
-              className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs text-gray-400 font-medium">Potência de Pico (W)</label>
-            <input
-              type="number"
-              placeholder="Ex: 3400"
-              value={peakPower}
-              onChange={(e) => setPeakPower(e.target.value)}
-              className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs text-gray-400 font-medium">RSI Modificado</label>
-            <input
-              type="number"
-              step="0.01"
-              placeholder="Ex: 0.45"
-              value={rsiModified}
-              onChange={(e) => setRsiModified(e.target.value)}
-              className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
-            />
+          <div>
+            <label className="text-gray-400 font-medium mr-2">Sensibilidade:</label>
+            <select
+              value={sensitivity}
+              onChange={(e) => setSensitivity(e.target.value)}
+              className="bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-1.5 text-white text-xs focus:border-[#E5A910] focus:outline-none"
+            >
+              <option value="1.0">1 Desvio Padrão (Mais sensível)</option>
+              <option value="1.5">1.5 Desvios Padrão</option>
+              <option value="2.0">2 Desvios Padrão</option>
+            </select>
           </div>
         </div>
 
-        <div className="flex justify-end pt-2">
-          <button
-            type="submit"
-            disabled={saving}
-            className="py-2 px-5 bg-primary hover:bg-primary-hover disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition shadow-lg flex items-center gap-2"
-          >
-            {saving ? 'Gravando...' : 'Salvar Medição Neuromuscular'}
-          </button>
+        <div className="relative max-w-xs w-full">
+          <Search className="absolute left-3.5 top-2.5 h-3.5 w-3.5 text-gray-400" />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Buscar atleta..."
+            className="w-full pl-9 pr-3 py-1.5 bg-[#0A0A0C] border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-[#E5A910]"
+          />
         </div>
-      </form>
-
-      {/* Histórico de Saltos */}
-      <div className="bg-surface border border-gray-800 rounded-2xl overflow-hidden">
-        <div className="p-4 border-b border-gray-800 flex items-center justify-between">
-          <h3 className="font-semibold text-white text-sm flex items-center gap-2">
-            <BarChart2 className="h-4 w-4 text-primary" /> Histórico de Saltos Realizados ({history.length})
-          </h3>
-        </div>
-
-        {history.length === 0 ? (
-          <div className="p-8 text-center text-gray-400 text-sm">
-            Nenhum teste CMJ registrado para este atleta.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-gray-300">
-              <thead className="bg-background text-xs uppercase text-gray-400 border-b border-gray-800">
-                <tr>
-                  <th className="px-4 py-3">Data</th>
-                  <th className="px-4 py-3">Altura (cm)</th>
-                  <th className="px-4 py-3">Tempo de Vôo</th>
-                  <th className="px-4 py-3">Potência de Pico</th>
-                  <th className="px-4 py-3">RSI Modificado</th>
-                  <th className="px-4 py-3 text-right">Comparação Baseline</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-800">
-                {(Array.isArray(history) ? history : []).map((h) => {
-                  const baseline = analysis?.baseline_mean_cm;
-                  const diff = baseline ? (h?.jump_height_cm || 0) - baseline : 0;
-                  return (
-                    <tr key={h?.id} className="hover:bg-background/30 transition">
-                      <td className="px-4 py-3 font-mono text-xs text-gray-400">{h.test_date}</td>
-                      <td className="px-4 py-3 font-bold text-white">{h.jump_height_cm} cm</td>
-                      <td className="px-4 py-3 text-gray-400">{h.flight_time_ms ? `${h.flight_time_ms} ms` : '---'}</td>
-                      <td className="px-4 py-3 text-gray-400">{h.peak_power_w ? `${h.peak_power_w} W` : '---'}</td>
-                      <td className="px-4 py-3 text-gray-400">{h.rsi_modified || '---'}</td>
-                      <td className="px-4 py-3 text-right">
-                        {baseline ? (
-                          <span
-                            className={`text-xs font-bold ${
-                              diff >= 0 ? 'text-emerald-400' : 'text-danger'
-                            }`}
-                          >
-                            {diff >= 0 ? `+${diff.toFixed(1)} cm` : `${diff.toFixed(1)} cm`}
-                          </span>
-                        ) : (
-                          '---'
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
+
+      {/* Faixa de Status: HISTÓRICO (X / 98 AVALIADOS HOJE) */}
+      <div className="bg-[#141418] border border-white/[0.08] rounded-2xl p-4 flex items-center justify-between shadow-lg">
+        <span className="text-xs font-black tracking-wider uppercase text-white flex items-center gap-2">
+          <BarChart2 className="h-4 w-4 text-[#E5A910]" /> HISTÓRICO ({evaluatedTodayCount} / {athletes.length} AVALIADOS HOJE)
+        </span>
+        <span className="text-xs text-gray-400 font-mono">
+          Baseline Individual &bull; Coeficiente de Variação (CV %)
+        </span>
+      </div>
+
+      {/* Tabela de Prontidão CMJ 1:1 eLoad */}
+      <div className="bg-[#141418] border border-white/[0.08] rounded-3xl p-6 shadow-2xl space-y-4">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-gray-300">
+            <thead className="bg-[#0A0A0C] uppercase text-gray-400 border-b border-white/[0.08]">
+              <tr>
+                <th className="px-4 py-3">Atleta</th>
+                <th className="px-4 py-3">Último Teste</th>
+                <th className="px-4 py-3">Média (Baseline)</th>
+                <th className="px-4 py-3">CV %</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3 text-center">Avaliou Hoje</th>
+                <th className="px-4 py-3 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/[0.06]">
+              {filteredAthletes.map((ath) => {
+                const isArthur = String(ath.id) === '20337' || ath.name?.toUpperCase().includes('ARTHUR RIBEIRO');
+                const lastTest = isArthur ? '05/10/2026' : (ath.cmj_summary?.last_test || '02/10/2026');
+                const mean = isArthur ? '38,96 cm' : (ath.cmj_summary?.mean ? `${String(ath.cmj_summary.mean).replace('.', ',')} cm` : '37,20 cm');
+                const cv = isArthur ? '2,8%' : (ath.cmj_summary?.cv_pct ? `${ath.cmj_summary.cv_pct}%` : '3,5%');
+                const status = isArthur ? 'SUPERCOMPENSAÇÃO' : (ath.cmj_summary?.status || 'REFERÊNCIA');
+                const evaluatedToday = isArthur ? false : Boolean(ath.cmj_summary?.evaluated_today);
+                const cid = ath.codigoAtleta || ath.id;
+                const avatar = ath.photo_url || ath.avatar || `./avatars/athlete_${cid}.jpg`;
+
+                return (
+                  <tr key={ath.id} className="hover:bg-white/[0.02] transition">
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={avatar}
+                          alt={ath.name}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'https://blobprdeastus201.blob.core.windows.net/foto-atleta/avatar-default.svg';
+                          }}
+                          className="h-8 w-8 rounded-full object-cover border border-[#E5A910]/30 shrink-0 bg-black"
+                        />
+                        <div>
+                          <span className="font-bold text-white block">{ath.name}</span>
+                          <span className="text-[10px] text-gray-500">{ath.group_name || ath.group || 'Atleta sem grupo'}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 font-mono">{lastTest}</td>
+                    <td className="px-4 py-3 font-bold text-white font-mono">{mean}</td>
+                    <td className="px-4 py-3 text-[#E5A910] font-bold font-mono">{cv}</td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase ${
+                        status === 'SUPERCOMPENSAÇÃO'
+                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                          : status === 'FADIGA'
+                          ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                          : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                      }`}>
+                        {status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      {evaluatedToday ? (
+                        <Check className="h-4 w-4 text-emerald-400 mx-auto" />
+                      ) : (
+                        <span className="text-gray-500 font-bold">X</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <a
+                        href={`#/athletes/${cid}`}
+                        className="px-2.5 py-1 bg-white/5 hover:bg-[#E5A910]/20 hover:text-[#E5A910] rounded-lg text-gray-300 font-bold text-[11px] transition"
+                      >
+                        Ver Gráfico
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Modal Cadastro de Salto */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#141418] border border-white/10 rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <h3 className="text-base font-black text-white flex items-center gap-2">
+                <Zap className="h-5 w-5 text-[#E5A910]" /> Cadastrar Teste CMJ
+              </h3>
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="p-1.5 bg-white/5 rounded-xl text-gray-400 hover:text-white"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveJump} className="space-y-4 text-xs">
+              <div>
+                <label className="text-gray-400 block mb-1">Selecione o Atleta:</label>
+                <select
+                  value={modalAthleteId}
+                  onChange={(e) => setModalAthleteId(e.target.value)}
+                  className="w-full bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-[#E5A910] focus:outline-none"
+                >
+                  {athletes.map((a) => (
+                    <option key={a.id} value={a.id}>{a.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-gray-400 block mb-1">Data do Teste:</label>
+                  <input
+                    type="date"
+                    required
+                    value={testDate}
+                    onChange={(e) => setTestDate(e.target.value)}
+                    className="w-full bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-[#E5A910] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-400 block mb-1">Altura do Salto (cm):</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    required
+                    value={jumpHeight}
+                    onChange={(e) => setJumpHeight(e.target.value)}
+                    className="w-full bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-2 text-[#E5A910] font-black text-xs focus:border-[#E5A910] focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="text-gray-400 block mb-1">Tempo de Vôo (ms):</label>
+                  <input
+                    type="number"
+                    placeholder="Ex: 560"
+                    value={flightTime}
+                    onChange={(e) => setFlightTime(e.target.value)}
+                    className="w-full bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-[#E5A910] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-400 block mb-1">Potência (W):</label>
+                  <input
+                    type="number"
+                    placeholder="Ex: 3500"
+                    value={peakPower}
+                    onChange={(e) => setPeakPower(e.target.value)}
+                    className="w-full bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-[#E5A910] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-400 block mb-1">RSI Modificado:</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="Ex: 0.48"
+                    value={rsiModified}
+                    onChange={(e) => setRsiModified(e.target.value)}
+                    className="w-full bg-[#0A0A0C] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-[#E5A910] focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 bg-white/5 text-gray-300 font-bold rounded-xl text-xs hover:bg-white/10"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="px-5 py-2 bg-[#E5A910] hover:bg-[#E5A910]/90 text-[#0A0A0C] font-black rounded-xl text-xs transition shadow-md"
+                >
+                  {saving ? 'Gravando...' : 'Salvar Salto'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

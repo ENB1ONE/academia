@@ -34,6 +34,7 @@ import AssessmentTypesPage from './pages/assessments/AssessmentTypesPage';
 import RecordAssessmentPage from './pages/assessments/RecordAssessmentPage';
 import GoalsPage from './pages/goals/GoalsPage';
 import MonitoringInvitePage from './pages/monitoring/MonitoringInvitePage';
+import GroupMonitoringPage from './pages/monitoring/GroupMonitoringPage';
 
 // Public Kiosk & Checkin Routes
 import QuickCheckinPage from './pages/totem/QuickCheckinPage';
@@ -91,6 +92,7 @@ function App() {
           <Route path="/monitoring/menstrual" element={<MenstrualCyclePage />} />
           <Route path="/monitoring/physical-tests" element={<PhysicalTestsPage />} />
           <Route path="/monitoring/neuromuscular" element={<NeuromuscularPage />} />
+          <Route path="/monitoring/group" element={<GroupMonitoringPage />} />
           <Route path="/monitoring/invite" element={<MonitoringInvitePage />} />
           
           {/* Groups & Planning */}

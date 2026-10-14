@@ -3,7 +3,7 @@ import useAuthStore from '../store/authStore';
 import eloadSeedData from '../data/eloadSeedData.json';
 
 // Initialize local repository from seed data
-const STORAGE_KEY = 'formclub_eload_db_v1';
+const STORAGE_KEY = 'formclub_eload_db_v2';
 
 export function toHybridArray(arr, extra = {}) {
   const base = Array.isArray(arr) ? [...arr] : [];
