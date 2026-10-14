@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import CookieConsent from './components/layout/CookieConsent';
 import PwaInstallPrompt from './components/layout/PwaInstallPrompt';
+import ErrorBoundary from './components/ErrorBoundary';
 import useAuthStore from './store/authStore';
 
 // Layouts
@@ -68,7 +69,9 @@ function App() {
         {/* Protected Authenticated Routes */}
         <Route element={
           <ProtectedRoute>
-            <DashboardLayout />
+            <ErrorBoundary>
+              <DashboardLayout />
+            </ErrorBoundary>
           </ProtectedRoute>
         }>
           <Route path="/dashboard" element={<DashboardPage />} />

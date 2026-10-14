@@ -23,9 +23,10 @@ export default function GoalsPage() {
     try {
       setLoading(true);
       const res = await api.get('/api/v1/athletes/');
-      setAthletes(res.data || []);
-      if (res.data?.length > 0 && !selectedAthleteId) {
-        setSelectedAthleteId(res.data[0].id);
+      const list = Array.isArray(res?.data) ? res.data : (res?.data?.athletes || []);
+      setAthletes(list);
+      if (list.length > 0 && !selectedAthleteId) {
+        setSelectedAthleteId(list[0].id);
       }
     } catch (err) {
       console.error(err);
@@ -39,7 +40,8 @@ export default function GoalsPage() {
     if (!selectedAthleteId) return;
     try {
       const res = await api.get(`/api/v1/goals/athlete/${selectedAthleteId}`);
-      setGoals(res.data || []);
+      const gList = Array.isArray(res?.data) ? res.data : (res?.data?.goals || []);
+      setGoals(gList);
     } catch (err) {
       console.error(err);
     }
@@ -232,12 +234,12 @@ export default function GoalsPage() {
 
       {/* Lista de Metas */}
       <div className="space-y-4">
-        {goals.length === 0 ? (
+        {(!Array.isArray(goals) || goals.length === 0) ? (
           <div className="bg-surface border border-gray-800 rounded-2xl p-8 text-center text-gray-400 text-sm">
             Nenhuma meta cadastrada para este atleta ainda.
           </div>
         ) : (
-          goals.map((g) => {
+          (Array.isArray(goals) ? goals : []).map((g) => {
             const pct = Math.min(100, Math.max(0, Math.round(((g.current_value || 0) / (g.target_value || 1)) * 100)));
             const isCompleted = pct >= 100;
 

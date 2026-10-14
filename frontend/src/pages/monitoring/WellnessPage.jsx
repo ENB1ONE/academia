@@ -143,7 +143,7 @@ const WellnessPage = () => {
               onChange={(e) => setAthleteId(e.target.value)}
             >
               <option value="">Selecione o Atleta...</option>
-              {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+              {(Array.isArray(athletes) ? athletes : []).map(a => <option key={a?.id} value={a?.id}>{a?.name}</option>)}
             </select>
           </div>
         )}

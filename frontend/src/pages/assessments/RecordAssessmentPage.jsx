@@ -24,14 +24,17 @@ export default function RecordAssessmentPage() {
         api.get('/api/v1/athletes/'),
         api.get('/api/v1/assessments/types'),
       ]);
-      setAthletes(athRes.data || []);
-      setTypes(typesRes.data || []);
+      const aList = Array.isArray(athRes?.data) ? athRes.data : (athRes?.data?.athletes || []);
+      const tList = Array.isArray(typesRes?.data) ? typesRes.data : (typesRes?.data?.types || []);
 
-      if (athRes.data?.length > 0 && !selectedAthleteId) {
-        setSelectedAthleteId(athRes.data[0].id);
+      setAthletes(aList);
+      setTypes(tList);
+
+      if (aList.length > 0 && !selectedAthleteId) {
+        setSelectedAthleteId(aList[0].id);
       }
-      if (typesRes.data?.length > 0 && !selectedTypeId) {
-        setSelectedTypeId(typesRes.data[0].id);
+      if (tList.length > 0 && !selectedTypeId) {
+        setSelectedTypeId(tList[0].id);
       }
     } catch (err) {
       console.error(err);
@@ -45,7 +48,8 @@ export default function RecordAssessmentPage() {
     if (!selectedAthleteId) return;
     try {
       const res = await api.get(`/api/v1/assessments/athlete/${selectedAthleteId}`);
-      setHistory(res.data || []);
+      const hList = Array.isArray(res?.data) ? res.data : (res?.data?.assessments || []);
+      setHistory(hList);
     } catch (err) {
       console.error(err);
     }
@@ -212,13 +216,13 @@ export default function RecordAssessmentPage() {
           </h2>
         </div>
 
-        {history.length === 0 ? (
+        {(!Array.isArray(history) || history.length === 0) ? (
           <div className="p-8 text-center text-gray-400 text-sm">
             Nenhuma avaliação registrada para este atleta.
           </div>
         ) : (
           <div className="divide-y divide-gray-800">
-            {history.map((h) => (
+            {(Array.isArray(history) ? history : []).map((h) => (
               <div key={h.id} className="p-4 flex items-center justify-between hover:bg-background/40 transition">
                 <div>
                   <div className="flex items-center gap-2">

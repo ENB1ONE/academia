@@ -17,7 +17,8 @@ export default function WorkoutTypesSettingsPage() {
     try {
       setLoading(true);
       const res = await api.get('/api/v1/workout-types/');
-      setTypes(res.data || []);
+      const list = Array.isArray(res?.data) ? res.data : (res?.data?.workout_types || []);
+      setTypes(list);
     } catch (err) {
       console.error(err);
       setError('Erro ao carregar tipos de treino.');
@@ -173,13 +174,13 @@ export default function WorkoutTypesSettingsPage() {
 
         {loading ? (
           <div className="p-8 text-center text-gray-400">Carregando modalidades...</div>
-        ) : types.length === 0 ? (
+        ) : (!Array.isArray(types) || types.length === 0) ? (
           <div className="p-8 text-center text-gray-400">
             Nenhuma modalidade personalizada cadastrada ainda.
           </div>
         ) : (
           <div className="divide-y divide-gray-800">
-            {types.map((t) => (
+            {(Array.isArray(types) ? types : []).map((t) => (
               <div key={t.id} className="p-4 flex items-center justify-between hover:bg-background/40 transition">
                 <div className="flex items-center gap-3">
                   <div

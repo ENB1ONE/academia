@@ -47,9 +47,10 @@ const PreWorkoutPage = () => {
 
     // Carregar tipos de treino
     api.get('/api/v1/workout-types/').then(res => {
-      setWorkoutTypes(res.data || []);
-      if (res.data?.length > 0) {
-        setWorkoutTypeId(res.data[0].id.toString());
+      const list = Array.isArray(res?.data) ? res.data : (res?.data?.workout_types || []);
+      setWorkoutTypes(list);
+      if (list.length > 0) {
+        setWorkoutTypeId(list[0].id.toString());
       }
     }).catch(console.error);
   }, [fetchAthletes, isAtleta, athleteProfile]);
@@ -210,8 +211,8 @@ const PreWorkoutPage = () => {
               onChange={(e) => setWorkoutTypeId(e.target.value)}
               className="w-full bg-background border border-gray-700 rounded-lg p-2.5 text-text text-sm focus:ring-primary focus:border-primary"
             >
-              {workoutTypes.map(t => (
-                <option key={t.id} value={t.id}>{t.name}</option>
+              {(Array.isArray(workoutTypes) ? workoutTypes : []).map(t => (
+                <option key={t?.id} value={t?.id}>{t?.name}</option>
               ))}
             </select>
           </div>

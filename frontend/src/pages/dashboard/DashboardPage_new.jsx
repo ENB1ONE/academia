@@ -22,7 +22,7 @@ const DashboardPage = () => {
     { title: 'Total Atletas', value: isLoading ? '...' : athletes.length, icon: Users, color: 'text-primary' },
     { title: 'Treinos Hoje', value: '0', icon: Calendar, color: 'text-secondary' },
     { title: 'Alertas PSE', value: '0', icon: AlertTriangle, color: 'text-danger' },
-    { title: 'Média Bem-Estar', value: '-', icon: Heart, color: 'text-success' },
+    { title: 'Mï¿½dia Bem-Estar', value: '-', icon: Heart, color: 'text-success' },
   ];
 
   // Empty until we fetch real PSE/Wellness alerts
@@ -32,8 +32,8 @@ const DashboardPage = () => {
     <div className=\"space-y-8\">
       <div className=\"flex flex-col md:flex-row md:items-center justify-between gap-4\">
         <div>
-          <h1 className=\"text-3xl font-bold text-text\">Olá, {user?.name?.split(' ')[0] || 'Treinador'}</h1>
-          <p className=\"text-gray-400 mt-1\">Aqui está o resumo das suas equipes hoje.</p>
+          <h1 className=\"text-3xl font-bold text-text\">Olï¿½, {user?.name?.split(' ')[0] || 'Treinador'}</h1>
+          <p className=\"text-gray-400 mt-1\">Aqui estï¿½ o resumo das suas equipes hoje.</p>
         </div>
         <div className=\"flex flex-wrap gap-2\">
           <Button onClick={() => navigate('/workouts/new')} variant=\"secondary\" className=\"gap-2\">
@@ -65,7 +65,7 @@ const DashboardPage = () => {
       </div>
 
       <div>
-        <h2 className=\"text-xl font-bold text-text mb-4\">Atenção Recente</h2>
+        <h2 className=\"text-xl font-bold text-text mb-4\">Atenï¿½ï¿½o Recente</h2>
         {recentAlerts.length > 0 ? (
           <div className=\"grid grid-cols-1 md:grid-cols-2 gap-4\">
             {recentAlerts.map(athlete => (
@@ -77,8 +77,8 @@ const DashboardPage = () => {
         ) : (
           <Card padding=\"p-8\" className=\"text-center text-gray-400 flex flex-col items-center justify-center\">
             <Heart className=\"h-8 w-8 text-gray-600 mb-2\" />
-            <p>Nenhum alerta crítico no momento.</p>
-            <p className=\"text-sm\">Os atletas que reportarem PSE alto ou Bem-estar baixo aparecerão aqui.</p>
+            <p>Nenhum alerta crï¿½tico no momento.</p>
+            <p className=\"text-sm\">Os atletas que reportarem PSE alto ou Bem-estar baixo aparecerï¿½o aqui.</p>
           </Card>
         )}
       </div>

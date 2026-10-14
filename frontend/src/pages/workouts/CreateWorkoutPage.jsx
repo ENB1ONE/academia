@@ -96,8 +96,8 @@ const CreateWorkoutPage = () => {
               onChange={(e) => setFormData({...formData, athlete_id: e.target.value})}
             >
               <option value="">Selecionar Atleta...</option>
-              {athletes.map(a => (
-                <option key={a.id} value={a.id}>{a.name}</option>
+              {(Array.isArray(athletes) ? athletes : []).map(a => (
+                <option key={a?.id} value={a?.id}>{a?.name}</option>
               ))}
             </select>
           </div>

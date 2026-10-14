@@ -29,15 +29,19 @@ export default function CollectiveLogPage() {
         api.get('/api/v1/athletes/'),
         api.get('/api/v1/workout-types/'),
       ]);
-      setGroups(grpRes.data || []);
-      setAthletes(athRes.data || []);
-      setWorkoutTypes(typesRes.data || []);
+      const gList = Array.isArray(grpRes?.data) ? grpRes.data : (grpRes?.data?.groups || []);
+      const aList = Array.isArray(athRes?.data) ? athRes.data : (athRes?.data?.athletes || []);
+      const tList = Array.isArray(typesRes?.data) ? typesRes.data : (typesRes?.data?.workout_types || []);
 
-      if (grpRes.data?.length > 0 && !selectedGroupId) {
-        setSelectedGroupId(grpRes.data[0].id);
+      setGroups(gList);
+      setAthletes(aList);
+      setWorkoutTypes(tList);
+
+      if (gList.length > 0 && !selectedGroupId) {
+        setSelectedGroupId(gList[0].id);
       }
-      if (typesRes.data?.length > 0 && !workoutType) {
-        setWorkoutType(typesRes.data[0].name);
+      if (tList.length > 0 && !workoutType) {
+        setWorkoutType(tList[0].name);
       }
     } catch (err) {
       console.error(err);
@@ -54,7 +58,8 @@ export default function CollectiveLogPage() {
   // Atualiza linhas quando o grupo ou duração padrão muda
   useEffect(() => {
     if (!selectedGroupId) return;
-    const groupAthletes = athletes.filter((a) => a.group_id === Number(selectedGroupId));
+    const safeAthletes = Array.isArray(athletes) ? athletes : [];
+    const groupAthletes = safeAthletes.filter((a) => a?.group_id === Number(selectedGroupId));
     const newRows = {};
     groupAthletes.forEach((a) => {
       newRows[a.id] = {
@@ -246,9 +251,9 @@ export default function CollectiveLogPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {currentGroupAthletes.map((ath) => {
-                  const row = logRows[ath.id] || { present: true, duration: defaultDuration, pse: 6 };
-                  const load = (Number(row.duration) || 0) * (Number(row.pse) || 0);
+                {(Array.isArray(currentGroupAthletes) ? currentGroupAthletes : []).map((ath) => {
+                  const row = logRows[ath?.id] || { present: true, duration: defaultDuration, pse: 6 };
+                  const load = (Number(row?.duration) || 0) * (Number(row?.pse) || 0);
 
                   return (
                     <tr

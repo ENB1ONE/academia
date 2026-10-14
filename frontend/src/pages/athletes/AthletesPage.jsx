@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Search, Users, Edit2, Trash2, Camera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -29,9 +29,10 @@ const AthletesPage = () => {
     fetchAthletes();
   }, [fetchAthletes]);
 
-  const filteredAthletes = athletes.filter(athlete => 
-    athlete.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    athlete.sport?.toLowerCase().includes(searchTerm.toLowerCase())
+  const safeAthletes = Array.isArray(athletes) ? athletes : [];
+  const filteredAthletes = safeAthletes.filter(athlete => 
+    (athlete?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (athlete?.sport || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleOpenModal = (athlete = null) => {
@@ -137,10 +138,10 @@ const AthletesPage = () => {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {isLoading && athletes.length === 0 ? (
+        {isLoading && safeAthletes.length === 0 ? (
           <p className="text-gray-400 p-4">Carregando...</p>
         ) : filteredAthletes.length > 0 ? (
-          filteredAthletes.map((athlete) => {
+          (Array.isArray(filteredAthletes) ? filteredAthletes : []).map((athlete) => {
             const savedAvatar = athlete.photo_url || localStorage.getItem(`athleteAvatar_${athlete.id}`) || (athlete.user_id ? localStorage.getItem(`userAvatar_${athlete.user_id}`) : null);
             return (
               <Card key={athlete.id} padding="p-0" className="overflow-hidden flex flex-col cursor-pointer hover:border-primary transition-colors" onClick={(e) => {

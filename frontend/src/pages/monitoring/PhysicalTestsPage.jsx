@@ -82,7 +82,7 @@ const PhysicalTestsPage = () => {
                 required
               >
                 <option value="">Selecione o atleta...</option>
-                {athletes.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+                {(Array.isArray(athletes) ? athletes : []).map(a => <option key={a?.id} value={a?.id}>{a?.name}</option>)}
               </select>
             </div>
           )}
@@ -95,7 +95,7 @@ const PhysicalTestsPage = () => {
               required
             >
               <option value="">Selecione o teste...</option>
-              {tests.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+              {(Array.isArray(tests) ? tests : []).map(t => <option key={t?.id} value={t?.id}>{t?.name}</option>)}
             </select>
           </div>
 

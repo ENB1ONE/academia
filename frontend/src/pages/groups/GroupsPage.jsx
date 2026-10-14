@@ -25,8 +25,10 @@ export default function GroupsPage() {
         api.get('/api/v1/groups/'),
         api.get('/api/v1/athletes/'),
       ]);
-      setGroups(grpRes.data || []);
-      setAthletes(athRes.data || []);
+      const gList = Array.isArray(grpRes?.data) ? grpRes.data : (grpRes?.data?.groups || []);
+      const aList = Array.isArray(athRes?.data) ? athRes.data : (athRes?.data?.athletes || []);
+      setGroups(gList);
+      setAthletes(aList);
     } catch (err) {
       console.error(err);
       setError('Erro ao carregar turmas e atletas.');
@@ -189,8 +191,9 @@ export default function GroupsPage() {
             Nenhuma turma cadastrada. Crie uma turma acima para começar a organizar seus atletas.
           </div>
         ) : (
-          groups.map((grp) => {
-            const groupAthletes = athletes.filter((a) => a.group_id === grp.id);
+          (Array.isArray(groups) ? groups : []).map((grp) => {
+            const safeAthletes = Array.isArray(athletes) ? athletes : [];
+            const groupAthletes = safeAthletes.filter((a) => a?.group_id === grp?.id);
             return (
               <div
                 key={grp.id}
@@ -282,12 +285,12 @@ export default function GroupsPage() {
             </div>
 
             <div className="p-5 overflow-y-auto space-y-2 flex-1">
-              {athletes.length === 0 ? (
+              {(!Array.isArray(athletes) || athletes.length === 0) ? (
                 <p className="text-sm text-gray-400 text-center py-6">Nenhum atleta cadastrado na sua conta.</p>
               ) : (
-                athletes.map((ath) => {
-                  const isMember = ath.group_id === selectedGroupForAthletes.id;
-                  const currentGroup = groups.find((g) => g.id === ath.group_id);
+                (Array.isArray(athletes) ? athletes : []).map((ath) => {
+                  const isMember = ath?.group_id === selectedGroupForAthletes?.id;
+                  const currentGroup = (Array.isArray(groups) ? groups : []).find((g) => g?.id === ath?.group_id);
                   return (
                     <div
                       key={ath.id}

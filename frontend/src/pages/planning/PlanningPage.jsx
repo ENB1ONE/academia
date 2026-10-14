@@ -34,18 +34,22 @@ export default function PlanningPage() {
         api.get('/api/v1/groups/'),
         api.get('/api/v1/workout-types/'),
       ]);
-      setAthletes(athRes.data || []);
-      setGroups(grpRes.data || []);
-      setWorkoutTypes(typesRes.data || []);
+      const aList = Array.isArray(athRes?.data) ? athRes.data : (athRes?.data?.athletes || []);
+      const gList = Array.isArray(grpRes?.data) ? grpRes.data : (grpRes?.data?.groups || []);
+      const tList = Array.isArray(typesRes?.data) ? typesRes.data : (typesRes?.data?.workout_types || []);
 
-      if (athRes.data?.length > 0 && !selectedAthleteId) {
-        setSelectedAthleteId(athRes.data[0].id);
+      setAthletes(aList);
+      setGroups(gList);
+      setWorkoutTypes(tList);
+
+      if (aList.length > 0 && !selectedAthleteId) {
+        setSelectedAthleteId(aList[0].id);
       }
-      if (grpRes.data?.length > 0 && !selectedGroupId) {
-        setSelectedGroupId(grpRes.data[0].id);
+      if (gList.length > 0 && !selectedGroupId) {
+        setSelectedGroupId(gList[0].id);
       }
-      if (typesRes.data?.length > 0 && !selectedType) {
-        setSelectedType(typesRes.data[0].name);
+      if (tList.length > 0 && !selectedType) {
+        setSelectedType(tList[0].name);
       }
     } catch (err) {
       console.error(err);
@@ -184,9 +188,9 @@ export default function PlanningPage() {
                   onChange={(e) => setSelectedAthleteId(e.target.value)}
                   className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
                 >
-                  {athletes.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.name || a.user?.name}
+                  {(Array.isArray(athletes) ? athletes : []).map((a) => (
+                    <option key={a?.id} value={a?.id}>
+                      {a?.name || a?.user?.name}
                     </option>
                   ))}
                 </select>
@@ -199,9 +203,9 @@ export default function PlanningPage() {
                   onChange={(e) => setSelectedGroupId(e.target.value)}
                   className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
                 >
-                  {groups.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.name} ({g.athlete_count || 0} atletas)
+                  {(Array.isArray(groups) ? groups : []).map((g) => (
+                    <option key={g?.id} value={g?.id}>
+                      {g?.name} ({g?.athlete_count || 0} atletas)
                     </option>
                   ))}
                 </select>
@@ -226,9 +230,9 @@ export default function PlanningPage() {
                 onChange={(e) => setSelectedType(e.target.value)}
                 className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
               >
-                {workoutTypes.map((t) => (
-                  <option key={t.id} value={t.name}>
-                    {t.name}
+                {(Array.isArray(workoutTypes) ? workoutTypes : []).map((t) => (
+                  <option key={t?.id} value={t?.name}>
+                    {t?.name}
                   </option>
                 ))}
               </select>
@@ -317,14 +321,14 @@ export default function PlanningPage() {
             </button>
           </div>
 
-          {plansHistory.length === 0 ? (
+          {(!Array.isArray(plansHistory) || plansHistory.length === 0) ? (
             <div className="p-6 text-center text-gray-400 text-sm">
               Nenhum planejamento registrado para este atleta ainda.
             </div>
           ) : (
             <div className="divide-y divide-gray-800">
-              {plansHistory.map((p) => (
-                <div key={p.id} className="p-4 flex items-center justify-between hover:bg-background/30 transition">
+              {(Array.isArray(plansHistory) ? plansHistory : []).map((p) => (
+                <div key={p?.id} className="p-4 flex items-center justify-between hover:bg-background/30 transition">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-mono text-gray-400">{p.date}</span>

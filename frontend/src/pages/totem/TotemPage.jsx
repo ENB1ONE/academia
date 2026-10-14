@@ -32,8 +32,10 @@ export default function TotemPage() {
         api.get('/api/v1/athletes/'),
         api.get('/api/v1/groups/'),
       ]);
-      setAthletes(athRes.data || []);
-      setGroups(grpRes.data || []);
+      const aList = Array.isArray(athRes?.data) ? athRes.data : (athRes?.data?.athletes || []);
+      const gList = Array.isArray(grpRes?.data) ? grpRes.data : (grpRes?.data?.groups || []);
+      setAthletes(aList);
+      setGroups(gList);
     } catch (err) {
       console.error(err);
     } finally {
@@ -105,9 +107,10 @@ export default function TotemPage() {
     }
   };
 
-  const filteredAthletes = athletes.filter((a) => {
-    const nameMatch = (a.name || a.user?.name || '').toLowerCase().includes(search.toLowerCase());
-    const groupMatch = selectedGroup === 'all' || a.group_id === Number(selectedGroup);
+  const safeAthletes = Array.isArray(athletes) ? athletes : [];
+  const filteredAthletes = safeAthletes.filter((a) => {
+    const nameMatch = (a?.name || a?.user?.name || '').toLowerCase().includes(search.toLowerCase());
+    const groupMatch = selectedGroup === 'all' || a?.group_id === Number(selectedGroup);
     return nameMatch && groupMatch;
   });
 
@@ -131,9 +134,9 @@ export default function TotemPage() {
             className="px-4 py-2.5 bg-surface border border-gray-700 rounded-xl text-sm font-medium focus:border-primary focus:outline-none"
           >
             <option value="all">Todas as Turmas</option>
-            {groups.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
+            {(Array.isArray(groups) ? groups : []).map((g) => (
+              <option key={g?.id} value={g?.id}>
+                {g?.name}
               </option>
             ))}
           </select>
@@ -167,7 +170,7 @@ export default function TotemPage() {
           <div className="h-64 flex items-center justify-center text-gray-400">Nenhum atleta encontrado.</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filteredAthletes.map((ath) => (
+            {(Array.isArray(filteredAthletes) ? filteredAthletes : []).map((ath) => (
               <div
                 key={ath.id}
                 className="bg-surface border border-gray-800 rounded-2xl p-4 flex flex-col justify-between hover:border-primary/50 transition shadow-lg"

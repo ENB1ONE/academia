@@ -24,9 +24,10 @@ export default function NeuromuscularPage() {
     try {
       setLoading(true);
       const res = await api.get('/api/v1/athletes/');
-      setAthletes(res.data || []);
-      if (res.data?.length > 0 && !selectedAthleteId) {
-        setSelectedAthleteId(res.data[0].id);
+      const list = Array.isArray(res?.data) ? res.data : (res?.data?.athletes || []);
+      setAthletes(list);
+      if (list.length > 0 && !selectedAthleteId) {
+        setSelectedAthleteId(list[0].id);
       }
     } catch (err) {
       console.error(err);
@@ -40,7 +41,8 @@ export default function NeuromuscularPage() {
     if (!selectedAthleteId) return;
     try {
       const res = await api.get(`/api/v1/monitoring/cmj/${selectedAthleteId}`);
-      setHistory(res.data?.history || []);
+      const hList = Array.isArray(res?.data?.history) ? res.data.history : (Array.isArray(res?.data) ? res.data : []);
+      setHistory(hList);
       setAnalysis(res.data?.analysis || null);
     } catch (err) {
       console.error(err);
@@ -292,11 +294,11 @@ export default function NeuromuscularPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {history.map((h) => {
+                {(Array.isArray(history) ? history : []).map((h) => {
                   const baseline = analysis?.baseline_mean_cm;
-                  const diff = baseline ? h.jump_height_cm - baseline : 0;
+                  const diff = baseline ? (h?.jump_height_cm || 0) - baseline : 0;
                   return (
-                    <tr key={h.id} className="hover:bg-background/30 transition">
+                    <tr key={h?.id} className="hover:bg-background/30 transition">
                       <td className="px-4 py-3 font-mono text-xs text-gray-400">{h.test_date}</td>
                       <td className="px-4 py-3 font-bold text-white">{h.jump_height_cm} cm</td>
                       <td className="px-4 py-3 text-gray-400">{h.flight_time_ms ? `${h.flight_time_ms} ms` : '---'}</td>

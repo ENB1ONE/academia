@@ -47,11 +47,38 @@ export default function DashboardPage() {
     try {
       setLoading(true);
       const res = await api.get('/api/v1/reports/dashboard/metrics');
-      if (res.data) {
-        setData(res.data);
+      const payload = res?.data?.data ?? res?.data;
+      if (payload && typeof payload === 'object') {
+        setData((prev) => {
+          const rawGroups = payload?.group_stats ?? payload?.groups;
+          const rawActivity = payload?.recent_activity ?? payload?.activity_feed;
+          const rawLowReadiness = payload?.low_readiness_athletes;
+
+          return {
+            ...prev,
+            ...payload,
+            summary: {
+              ...(prev?.summary || {}),
+              ...(payload?.summary || {}),
+            },
+            gabbett_matrix: {
+              ...(prev?.gabbett_matrix || {}),
+              ...(payload?.gabbett_matrix || {}),
+            },
+            low_readiness_athletes: Array.isArray(rawLowReadiness) && rawLowReadiness.length > 0
+              ? rawLowReadiness
+              : (prev?.low_readiness_athletes || []),
+            group_stats: Array.isArray(rawGroups) && rawGroups.length > 0
+              ? rawGroups
+              : (prev?.group_stats || []),
+            recent_activity: Array.isArray(rawActivity) && rawActivity.length > 0
+              ? rawActivity
+              : (prev?.recent_activity || []),
+          };
+        });
       }
     } catch (err) {
-      console.error(err);
+      console.error('[DashboardPage] loadMetrics safe catch:', err);
     } finally {
       setLoading(false);
     }
@@ -241,14 +268,14 @@ export default function DashboardPage() {
           </div>
 
           <div className="divide-y divide-white/[0.06]">
-            {data.group_stats.map((g) => (
-              <div key={g.id} className="py-3 flex items-center justify-between">
+            {(Array.isArray(data.group_stats) ? data.group_stats : []).map((g) => (
+              <div key={g?.id || g?.name} className="py-3 flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-white text-sm">{g.name}</h4>
+                  <h4 className="font-bold text-white text-sm">{g?.name}</h4>
                   <p className="text-xs text-gray-400">Turma ativa FORMCLUB</p>
                 </div>
                 <span className="px-2.5 py-1 bg-[#E5A910]/15 text-[#E5A910] border border-[#E5A910]/30 rounded-full text-xs font-bold">
-                  {g.athlete_count} atletas
+                  {g?.athlete_count ?? 0} atletas
                 </span>
               </div>
             ))}
@@ -265,16 +292,16 @@ export default function DashboardPage() {
           </div>
 
           <div className="divide-y divide-white/[0.06]">
-            {data.recent_activity.map((act, idx) => (
+            {(Array.isArray(data.recent_activity) ? data.recent_activity : []).map((act, idx) => (
               <div key={idx} className="py-2.5 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2.5">
                   <div className="w-2 h-2 rounded-full bg-[#E5A910]" />
                   <div>
-                    <span className="font-bold text-white">{act.athlete_name}:</span>
-                    <span className="text-gray-400 ml-1.5">{act.description}</span>
+                    <span className="font-bold text-white">{act?.athlete_name}:</span>
+                    <span className="text-gray-400 ml-1.5">{act?.description}</span>
                   </div>
                 </div>
-                <span className="text-gray-500 font-mono text-[11px] shrink-0">{act.time_ago}</span>
+                <span className="text-gray-500 font-mono text-[11px] shrink-0">{act?.time_ago}</span>
               </div>
             ))}
           </div>

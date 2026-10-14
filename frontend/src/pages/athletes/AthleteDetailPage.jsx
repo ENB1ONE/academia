@@ -57,15 +57,15 @@ export default function AthleteDetailPage() {
           api.get(`/api/v1/goals/athlete/${id}`).catch(() => ({ data: [] })),
         ]);
 
-        setAthlete(athRes.data);
-        setPseHistory(pseRes.data || []);
-        setWellnessHistory(wellRes.data || []);
-        setWorkouts(workRes.data || []);
-        setPainHistory(painRes.data || []);
-        setLoadAnalysis(loadRes.data || null);
-        setCmjData(cmjRes.data || null);
-        setAssessments(assRes.data || []);
-        setGoals(goalRes.data || []);
+        setAthlete(athRes?.data?.data ?? athRes?.data);
+        setPseHistory(Array.isArray(pseRes?.data) ? pseRes.data : (pseRes?.data?.records || []));
+        setWellnessHistory(Array.isArray(wellRes?.data) ? wellRes.data : (wellRes?.data?.records || []));
+        setWorkouts(Array.isArray(workRes?.data) ? workRes.data : (workRes?.data?.workouts || []));
+        setPainHistory(Array.isArray(painRes?.data) ? painRes.data : (painRes?.data?.records || []));
+        setLoadAnalysis(loadRes?.data?.data ?? loadRes?.data ?? null);
+        setCmjData(cmjRes?.data?.data ?? cmjRes?.data ?? null);
+        setAssessments(Array.isArray(assRes?.data) ? assRes.data : (assRes?.data?.assessments || []));
+        setGoals(Array.isArray(goalRes?.data) ? goalRes.data : (goalRes?.data?.goals || []));
       } catch (error) {
         console.error(error);
         toast.error('Erro ao carregar dados completos do atleta');
@@ -257,7 +257,11 @@ export default function AthleteDetailPage() {
         {/* ABA 2: FICHAS DE TREINO (A/B/C/D) */}
         {activeTab === 'workouts' && (
           <div className="space-y-4">
-            {workouts.length > 0 ? (
+            {(!Array.isArray(workouts) || workouts.length === 0) ? (
+              <div className="bg-surface border border-gray-800 rounded-2xl p-12 text-center text-gray-400 text-xs">
+                Nenhum treino prescrito para este atleta. Acesse "Novo Treino" para criar a ficha.
+              </div>
+            ) : (
               workouts.map((workout) => (
                 <div key={workout.id} className="bg-surface border border-gray-800 rounded-2xl p-5 space-y-3">
                   <div className="flex justify-between items-center">
@@ -280,10 +284,6 @@ export default function AthleteDetailPage() {
                   )}
                 </div>
               ))
-            ) : (
-              <div className="bg-surface border border-gray-800 rounded-2xl p-12 text-center text-gray-400 text-xs">
-                Nenhum treino prescrito para este atleta. Acesse "Novo Treino" para criar a ficha.
-              </div>
             )}
           </div>
         )}
@@ -347,7 +347,7 @@ export default function AthleteDetailPage() {
             {/* Testes Customizados */}
             <div className="bg-surface border border-gray-800 rounded-3xl p-6 shadow-xl space-y-4">
               <h3 className="text-base font-bold text-white">Histórico de Testes e Avaliações</h3>
-              {assessments.length > 0 ? (
+              {(Array.isArray(assessments) && assessments.length > 0) ? (
                 <div className="divide-y divide-gray-800">
                   {assessments.map((a) => (
                     <div key={a.id} className="py-3 flex items-center justify-between text-xs">
@@ -372,7 +372,7 @@ export default function AthleteDetailPage() {
         {/* ABA 5: METAS & OKRS */}
         {activeTab === 'goals' && (
           <div className="space-y-4">
-            {goals.length > 0 ? (
+            {(Array.isArray(goals) && goals.length > 0) ? (
               goals.map((g) => {
                 const pct = Math.min(100, Math.max(0, Math.round(((g.current_value || 0) / (g.target_value || 1)) * 100)));
                 return (

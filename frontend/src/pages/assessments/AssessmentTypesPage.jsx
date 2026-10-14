@@ -31,7 +31,8 @@ export default function AssessmentTypesPage() {
     try {
       setLoading(true);
       const res = await api.get('/api/v1/assessments/types');
-      setTypes(res.data || []);
+      const list = Array.isArray(res?.data) ? res.data : (res?.data?.types || []);
+      setTypes(list);
     } catch (err) {
       console.error(err);
       setError('Erro ao carregar tipos de avaliação.');
@@ -195,13 +196,13 @@ export default function AssessmentTypesPage() {
 
         {loading ? (
           <div className="p-8 text-center text-gray-400">Carregando testes...</div>
-        ) : types.length === 0 ? (
+        ) : (!Array.isArray(types) || types.length === 0) ? (
           <div className="p-8 text-center text-gray-400">
             Nenhum teste customizado criado ainda. Crie seu primeiro protocolo acima!
           </div>
         ) : (
           <div className="divide-y divide-gray-800">
-            {types.map((t) => (
+            {(Array.isArray(types) ? types : []).map((t) => (
               <div key={t.id} className="p-4 flex items-center justify-between hover:bg-background/40 transition">
                 <div>
                   <div className="flex items-center gap-2">
