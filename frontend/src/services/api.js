@@ -208,6 +208,65 @@ api.interceptors.response.use(
       return Promise.resolve({ status: 200, data: toHybridArray([]) });
     }
 
+    // 4.1 /api/v1/workouts/ - Strict Athlete Isolation & Persistence
+    if (url.includes('/api/v1/workouts')) {
+      if (!db.workouts) {
+        db.workouts = [];
+      }
+      if (method === 'post') {
+        const body = JSON.parse(config.data || '{}');
+        const newWorkout = {
+          id: Date.now(),
+          athlete_id: body.athlete_id,
+          athlete_name: body.athlete_name || '',
+          name: body.name || body.title || 'Treino Prescrito',
+          workout_type: body.workout_type || 'A',
+          scheduled_date: body.scheduled_date || new Date().toISOString().split('T')[0],
+          notes: body.notes || '',
+          is_active: 1,
+          exercises: (body.exercises || []).map((ex, i) => ({
+            id: i + 1,
+            name: ex.name || ex.exercise_name || `Exercício ${i + 1}`,
+            exercise_name: ex.exercise_name || ex.name || `Exercício ${i + 1}`,
+            sets: Number(ex.sets) || 0,
+            reps: String(ex.reps || '10'),
+            load_kg: parseFloat(ex.load_kg) || 0,
+            rest_seconds: Number(ex.rest_seconds) || 0,
+            order: Number(ex.order || ex.order_index || (i + 1)),
+            order_index: Number(ex.order_index || ex.order || (i + 1)),
+            notes: ex.notes || ''
+          })).sort((a, b) => a.order_index - b.order_index)
+        };
+        db.workouts.push(newWorkout);
+        saveLocalStore(db);
+        return Promise.resolve({ status: 200, data: toHybridObject(newWorkout) });
+      }
+
+      // GET: Parse athlete_id if present
+      let filterAthleteId = null;
+      if (url.includes('athlete_id=')) {
+        filterAthleteId = url.split('athlete_id=')[1]?.split('&')[0];
+      } else if (url.includes('/athlete/')) {
+        filterAthleteId = url.split('/athlete/')[1]?.split('?')[0]?.replace('/', '');
+      }
+
+      if (filterAthleteId) {
+        // STRICT FILTER: Only return workouts matching this exact athlete_id
+        const athleteWorkouts = (db.workouts || [])
+          .filter(w => String(w.athlete_id) === String(filterAthleteId) && w.is_active !== 0)
+          .map(w => ({
+            ...w,
+            exercises: (w.exercises || []).slice().sort((a, b) => 
+              (Number(a.order_index || a.order) || 0) - (Number(b.order_index || b.order) || 0)
+            )
+          }));
+        return Promise.resolve({ status: 200, data: toHybridArray(athleteWorkouts) });
+      }
+
+      // Generic listing: only return if explicitly called without athlete filter
+      return Promise.resolve({ status: 200, data: toHybridArray(db.workouts || []) });
+    }
+
     // 5. /api/v1/assessments/types
     if (url.includes('/api/v1/assessments/types')) {
       if (method === 'post') {

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   Calendar, UserCheck, ShieldAlert, ArrowRight, Smartphone, 
-  CheckCircle2, Clock, Droplets, Dumbbell, AlertTriangle, ChevronRight, Check
+  CheckCircle2, Clock, Droplets, Dumbbell, AlertTriangle, ChevronRight, Check,
+  Lock, Sparkles, MessageCircle
 } from 'lucide-react';
 import Logo from '../../components/ui/Logo';
 import UrineHydrationModal, { URINE_COLORS } from '../../components/monitoring/UrineHydrationModal';
@@ -26,14 +27,23 @@ const SCALE_LEVELS = [
 
 export default function QuickCheckinPage() {
   const { token } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // URL query params for direct athlete link: ?athlete=20337 or ?athleteId=20337
+  const queryAthleteId = searchParams.get('athlete') || searchParams.get('athleteId');
 
   // Etapas: 'lookup' -> 'confirm' -> 'questionnaire' -> 'workout'
   const [step, setStep] = useState('lookup');
   const [birthdateRaw, setBirthdateRaw] = useState('');
+  const [nameLetters, setNameLetters] = useState('');
   const [loading, setLoading] = useState(false);
   const [athleteFound, setAthleteFound] = useState(null);
   const [error, setError] = useState('');
+
+  // Workouts reais carregados para este atleta específico
+  const [athleteWorkouts, setAthleteWorkouts] = useState([]);
+  const [loadingWorkouts, setLoadingWorkouts] = useState(false);
 
   // Questionário de Bem-Estar
   const [answers, setAnswers] = useState({
@@ -64,6 +74,46 @@ export default function QuickCheckinPage() {
   const [postPse, setPostPse] = useState(6);
   const [postDuration, setPostDuration] = useState(60);
   const [workoutFinished, setWorkoutFinished] = useState(false);
+
+  // Se tiver athlete na URL, buscar diretamente
+  useEffect(() => {
+    if (queryAthleteId) {
+      const loadDirectAthlete = async () => {
+        setLoading(true);
+        try {
+          const res = await api.get(`/api/v1/athletes/${queryAthleteId}`);
+          const ath = res.data?.data || res.data;
+          if (ath && (ath.id || ath.name)) {
+            setAthleteFound(ath);
+            setStep('confirm');
+          }
+        } catch (e) {
+          console.warn('Erro ao carregar atleta direto pela URL:', e);
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadDirectAthlete();
+    }
+  }, [queryAthleteId]);
+
+  // Função para carregar os treinos estritamente deste atleta
+  const loadWorkoutsForAthlete = async (athId) => {
+    if (!athId) return;
+    setLoadingWorkouts(true);
+    try {
+      const res = await api.get(`/api/v1/workouts/?athlete_id=${athId}`);
+      const list = Array.isArray(res.data) ? res.data : (res.data?.workouts || []);
+      // Filtrar com rigor absoluto garantindo que nenhum outro treino passe
+      const safeList = list.filter(w => String(w.athlete_id) === String(athId) && w.is_active !== 0);
+      setAthleteWorkouts(safeList);
+    } catch (e) {
+      console.warn('Erro ao buscar treinos do atleta:', e);
+      setAthleteWorkouts([]);
+    } finally {
+      setLoadingWorkouts(false);
+    }
+  };
 
   // Máscara DD/MM/AAAA estilo eLoad
   const handleDateInput = (e) => {
@@ -106,13 +156,26 @@ export default function QuickCheckinPage() {
     }
   };
 
-  const handleConfirmYes = () => {
+  const handleConfirmYes = async () => {
+    // Validação de segurança LGPD: se digitou letras, conferir se bate com o início do primeiro nome
+    if (nameLetters && athleteFound?.name) {
+      const cleanLetters = nameLetters.trim().toLowerCase();
+      const firstWord = athleteFound.name.trim().toLowerCase().split(' ')[0];
+      if (!firstWord.startsWith(cleanLetters)) {
+        setError(`As iniciais digitadas não correspondem ao primeiro nome (${firstWord.slice(0, 3).toUpperCase()}...). Verifique seus dados.`);
+        return;
+      }
+    }
     setStep('questionnaire');
+    // Carregar em background a ficha de treino do atleta
+    loadWorkoutsForAthlete(athleteFound.id || athleteFound.codigoAtleta);
   };
 
   const handleConfirmNo = () => {
     setAthleteFound(null);
     setBirthdateRaw('');
+    setNameLetters('');
+    setError('');
     setStep('lookup');
   };
 
@@ -120,8 +183,9 @@ export default function QuickCheckinPage() {
     setAnswers(prev => ({ ...prev, [pillarId]: value }));
   };
 
-  const handleToggleExercise = (idx) => {
-    setCompletedExercises(prev => ({ ...prev, [idx]: !prev[idx] }));
+  const handleToggleExercise = (workoutIdx, exIdx) => {
+    const key = `${workoutIdx}-${exIdx}`;
+    setCompletedExercises(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const handleSubmitQuestionnaire = async (e) => {
@@ -136,7 +200,7 @@ export default function QuickCheckinPage() {
     try {
       // Salva no backend / interceptor
       await api.post('/api/v1/monitoring/wellness', {
-        athlete_id: athleteFound.id,
+        athlete_id: athleteFound.id || athleteFound.codigoAtleta,
         readiness_pct: scorePct,
         answers,
         urine_color: urineColor,
@@ -147,6 +211,8 @@ export default function QuickCheckinPage() {
     } finally {
       setLoading(false);
       setStep('workout');
+      // Garantir atualização da lista de treinos
+      loadWorkoutsForAthlete(athleteFound.id || athleteFound.codigoAtleta);
     }
   };
 
@@ -154,7 +220,7 @@ export default function QuickCheckinPage() {
     setLoading(true);
     try {
       await api.post('/api/v1/monitoring/pse', {
-        athlete_id: athleteFound.id,
+        athlete_id: athleteFound.id || athleteFound.codigoAtleta,
         session_pse: postPse,
         duration_minutes: postDuration,
         calculated_load_ua: postPse * postDuration,
@@ -170,15 +236,6 @@ export default function QuickCheckinPage() {
   const firstName = athleteFound?.name?.split(' ')[0] || 'Atleta';
   const cid = athleteFound?.codigoAtleta || athleteFound?.id;
   const athleteAvatar = athleteFound?.photo_url || athleteFound?.avatar || `./avatars/athlete_${cid}.jpg`;
-
-  // Ficha de treino programada mock/real
-  const todayExercises = [
-    { name: 'AGACHAMENTO LIVRE COM BARRA', sets: 4, reps: '8 a 10', load: '80 kg', rest: '90s' },
-    { name: 'ESTABILIDADE UNIPODAL COM KETTLEBELL', sets: 3, reps: '12 cada lado', load: '16 kg', rest: '60s' },
-    { name: 'LEG PRESS 45° CADÊNCIA CONTROLADA', sets: 4, reps: '10 a 12', load: '180 kg', rest: '75s' },
-    { name: 'STIFF COM HALTERES', sets: 3, reps: '10', load: '24 kg cada', rest: '60s' },
-    { name: 'PANTURRILHA EM PÉ NO DEGRAU', sets: 4, reps: '15', load: 'PC + 20 kg', rest: '45s' },
-  ];
 
   return (
     <div className="min-h-screen bg-[#0A0A0C] text-white flex flex-col justify-center items-center p-4">
@@ -258,7 +315,29 @@ export default function QuickCheckinPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2">
+            {/* Confirmação de Privacidade LGPD (3 primeiras letras) */}
+            <div className="bg-[#0A0A0C] border border-white/10 p-3.5 rounded-2xl text-left space-y-2">
+              <label className="text-[11px] text-gray-300 font-bold flex items-center gap-1.5">
+                <Lock className="h-3.5 w-3.5 text-[#E5A910]" />
+                Confirmação de Segurança (3 primeiras letras do seu nome):
+              </label>
+              <input
+                type="text"
+                placeholder={`Ex: ${firstName.slice(0, 3).toUpperCase()}`}
+                maxLength={5}
+                value={nameLetters}
+                onChange={(e) => {
+                  setNameLetters(e.target.value.toUpperCase());
+                  setError('');
+                }}
+                className="w-full px-3 py-2 bg-[#141418] border border-white/10 rounded-xl text-white text-center font-mono font-bold tracking-widest uppercase focus:border-[#E5A910] focus:outline-none"
+              />
+              <p className="text-[10px] text-gray-500 text-center">
+                Proteção de dados e sigilo do prontuário individual
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-1">
               <button
                 type="button"
                 onClick={handleConfirmNo}
@@ -269,9 +348,10 @@ export default function QuickCheckinPage() {
               <button
                 type="button"
                 onClick={handleConfirmYes}
-                className="py-3 px-4 bg-[#E5A910] hover:bg-[#E5A910]/90 text-[#0A0A0C] rounded-2xl text-xs font-black transition shadow-lg"
+                disabled={nameLetters.length < 2}
+                className="py-3 px-4 bg-[#E5A910] hover:bg-[#E5A910]/90 disabled:opacity-40 text-[#0A0A0C] rounded-2xl text-xs font-black transition shadow-lg"
               >
-                Sim, sou eu!
+                Confirmar e Iniciar
               </button>
             </div>
           </div>
@@ -475,54 +555,103 @@ export default function QuickCheckinPage() {
               </p>
             </div>
 
-            {/* Cabeçalho da Ficha */}
-            <div className="bg-[#0A0A0C] border border-white/[0.08] p-5 rounded-2xl space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-[#E5A910]/15 text-[#E5A910] border border-[#E5A910]/30 rounded-full text-xs font-bold">
-                  TREINO PROGRAMADO PARA HOJE
-                </span>
-                <span className="text-xs text-gray-400 font-mono">Duração Alvo: 60 min &bull; PSE 6</span>
-              </div>
-              <h3 className="text-lg font-black text-white">FORÇA MMII &bull; ESTABILIDADE UNIPODAL</h3>
-              <p className="text-xs text-gray-400">
-                Prescrito por Marcos Vinicius &bull; Marque as séries conforme executar na academia:
-              </p>
-            </div>
+            {/* Seção da Ficha de Treino Prescrita */}
+            {athleteWorkouts && athleteWorkouts.length > 0 ? (
+              athleteWorkouts.map((workout, wIdx) => {
+                const orderedExercises = (workout.exercises || []).slice().sort((a, b) => 
+                  (Number(a.order_index || a.order) || 0) - (Number(b.order_index || b.order) || 0)
+                );
 
-            {/* Lista Interativa de Exercícios */}
-            <div className="space-y-3">
-              {todayExercises.map((ex, idx) => {
-                const isDone = completedExercises[idx];
                 return (
-                  <div
-                    key={idx}
-                    onClick={() => handleToggleExercise(idx)}
-                    className={`p-4 rounded-2xl border transition cursor-pointer flex items-center justify-between ${
-                      isDone 
-                        ? 'bg-emerald-500/10 border-emerald-500/30' 
-                        : 'bg-[#0A0A0C] border-white/[0.08] hover:border-white/20'
-                    }`}
-                  >
-                    <div className="space-y-1">
-                      <h4 className={`text-sm font-bold ${isDone ? 'line-through text-gray-400' : 'text-white'}`}>
-                        {ex.name}
-                      </h4>
+                  <div key={workout.id || wIdx} className="space-y-4">
+                    {/* Cabeçalho da Ficha */}
+                    <div className="bg-[#0A0A0C] border border-[#E5A910]/30 p-5 rounded-2xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="px-3 py-1 bg-[#E5A910]/15 text-[#E5A910] border border-[#E5A910]/30 rounded-full text-xs font-bold uppercase">
+                          TREINO PROGRAMADO: {workout.workout_type || 'A'}
+                        </span>
+                        <span className="text-xs text-gray-400 font-mono">
+                          {workout.scheduled_date || 'Hoje'} &bull; {orderedExercises.length} exercícios
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-black text-white uppercase">{workout.name || workout.title || 'Treino Individual Prescrito'}</h3>
+                      {workout.notes && (
+                        <p className="text-xs text-[#E5A910] italic">
+                          "{workout.notes}"
+                        </p>
+                      )}
                       <p className="text-xs text-gray-400">
-                        {ex.sets} séries &bull; {ex.reps} &bull; Carga: {ex.load} &bull; Descanso: {ex.rest}
+                        Prescrito exclusivamente para <strong className="text-white">{athleteFound.name}</strong> &bull; Marque as séries conforme executar no CT:
                       </p>
                     </div>
 
-                    <div className={`w-7 h-7 rounded-xl flex items-center justify-center border transition shrink-0 ${
-                      isDone 
-                        ? 'bg-emerald-500 border-emerald-400 text-[#0A0A0C]' 
-                        : 'border-white/20 bg-white/5'
-                    }`}>
-                      {isDone && <Check className="h-4 w-4 stroke-[3]" />}
+                    {/* Lista Interativa de Exercícios (Ordenada por order_index) */}
+                    <div className="space-y-3">
+                      {orderedExercises.map((ex, exIdx) => {
+                        const isDone = completedExercises[`${wIdx}-${exIdx}`];
+                        const orderNum = ex.order_index || ex.order || (exIdx + 1);
+
+                        return (
+                          <div
+                            key={ex.id || exIdx}
+                            onClick={() => handleToggleExercise(wIdx, exIdx)}
+                            className={`p-4 rounded-2xl border transition cursor-pointer flex items-center justify-between ${
+                              isDone 
+                                ? 'bg-emerald-500/10 border-emerald-500/30' 
+                                : 'bg-[#0A0A0C] border-white/[0.08] hover:border-white/20'
+                            }`}
+                          >
+                            <div className="space-y-1 flex items-start gap-3">
+                              <span className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 text-gray-400 font-mono text-xs flex items-center justify-center font-bold shrink-0 mt-0.5">
+                                {orderNum}º
+                              </span>
+                              <div>
+                                <h4 className={`text-sm font-bold ${isDone ? 'line-through text-gray-400' : 'text-white'}`}>
+                                  {ex.exercise_name || ex.name}
+                                </h4>
+                                <p className="text-xs text-gray-400">
+                                  {ex.sets ? `${ex.sets} séries` : ''} 
+                                  {ex.reps ? ` • ${ex.reps} reps` : ''} 
+                                  {ex.load_kg ? ` • Carga: ${ex.load_kg} kg` : ''} 
+                                  {ex.rest_seconds ? ` • Pausa: ${ex.rest_seconds}s` : ''}
+                                </p>
+                                {ex.notes && (
+                                  <p className="text-[11px] text-[#E5A910] mt-0.5 font-medium">Obs: {ex.notes}</p>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className={`w-7 h-7 rounded-xl flex items-center justify-center border transition shrink-0 ml-2 ${
+                              isDone 
+                                ? 'bg-emerald-500 border-emerald-400 text-[#0A0A0C]' 
+                                : 'border-white/20 bg-white/5'
+                            }`}>
+                              {isDone && <Check className="h-4 w-4 stroke-[3]" />}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 );
-              })}
-            </div>
+              })
+            ) : (
+              /* AVISO SEGURO EXIGIDO NA REGRA 1.1: Sem exercícios aleatórios ou fichas de terceiros */
+              <div className="bg-[#0A0A0C] border border-[#E5A910]/40 rounded-2xl p-6 text-center space-y-3 shadow-xl">
+                <div className="w-12 h-12 rounded-full bg-[#E5A910]/10 border border-[#E5A910]/30 flex items-center justify-center mx-auto text-[#E5A910]">
+                  <Dumbbell className="h-6 w-6" />
+                </div>
+                <h3 className="text-base font-black text-white">
+                  Check-in de prontidão enviado com sucesso!
+                </h3>
+                <p className="text-xs text-gray-300 leading-relaxed max-w-md mx-auto">
+                  Seu treinador já recebeu seus indicadores de hoje. Nenhum treino individual foi liberado no aplicativo para hoje — siga a orientação presencial do seu treinador no CT.
+                </p>
+                <div className="pt-2 text-[11px] text-gray-500 font-mono">
+                  Atleta: {athleteFound.name} &bull; Código #{cid}
+                </div>
+              </div>
+            )}
 
             {/* Seção de Finalização do Treino (PSE Borg + Duração) */}
             {!workoutFinished ? (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Save } from 'lucide-react';
+import { Plus, Trash2, Save, Share2, Copy, ExternalLink, Check, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Card from '../../components/ui/Card';
@@ -24,6 +24,10 @@ const CreateWorkoutPage = () => {
   const [exercises, setExercises] = useState([
     { exercise_name: '', sets: '', reps: '', load_kg: '', rest_seconds: '', notes: '' }
   ]);
+
+  const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
+  const [savedWorkoutInfo, setSavedWorkoutInfo] = useState(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     fetchAthletes();
@@ -71,9 +75,18 @@ const CreateWorkoutPage = () => {
     };
 
     try {
-      await createWorkout(payload);
+      const saved = await createWorkout(payload);
       toast.success('Treino salvo com sucesso!');
-      navigate('/dashboard'); // or redirect to somewhere useful
+      
+      const athleteName = athletes.find(a => String(a.id) === String(formData.athlete_id))?.name || 'Atleta';
+      const shareUrl = `https://app.formclub.com.br/#/checkin/formclub-hub?athleteId=${formData.athlete_id}`;
+      
+      setSavedWorkoutInfo({
+        name: formData.name,
+        athleteName,
+        shareUrl,
+      });
+      setIsSavedModalOpen(true);
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Erro ao salvar treino');
     }
@@ -168,6 +181,75 @@ const CreateWorkoutPage = () => {
           <Save className="h-4 w-4" /> Salvar Treino
         </Button>
       </div>
+
+      {/* MODAL DE COMPARTILHAMENTO WHATSAPP & CHECKIN INDIVIDUAL */}
+      {isSavedModalOpen && savedWorkoutInfo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-[#141418] border border-[#E5A910]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl animate-in fade-in zoom-in-95">
+            <div className="text-center space-y-2">
+              <div className="w-14 h-14 bg-[#E5A910]/15 border border-[#E5A910]/40 rounded-2xl flex items-center justify-center mx-auto text-[#E5A910]">
+                <Check className="h-8 w-8 stroke-[2.5]" />
+              </div>
+              <h3 className="text-xl font-black text-white">Treino Salvo com Sucesso!</h3>
+              <p className="text-xs text-gray-400">
+                O treino <strong className="text-white">"{savedWorkoutInfo.name}"</strong> foi programado exclusivamente para <strong className="text-[#E5A910]">{savedWorkoutInfo.athleteName}</strong>.
+              </p>
+            </div>
+
+            <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-4 space-y-2">
+              <span className="text-[11px] text-gray-400 font-bold block uppercase tracking-wider">
+                Link Individual de Check-in + Treino do Atleta:
+              </span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={savedWorkoutInfo.shareUrl}
+                  className="w-full bg-[#141418] border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-gray-300 select-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(savedWorkoutInfo.shareUrl);
+                    setCopied(true);
+                    toast.success('Link copiado!');
+                    setTimeout(() => setCopied(false), 2500);
+                  }}
+                  className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-1 shrink-0"
+                >
+                  {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4 text-[#E5A910]" />}
+                  {copied ? 'Copiado' : 'Copiar'}
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <a
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                  `Olá ${savedWorkoutInfo.athleteName}, seu treinador Marcos preparou seu treino no FORMCLUB!\n\nAcesse seu check-in e sua ficha individual pelo link:\n${savedWorkoutInfo.shareUrl}`
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Enviar Treino via WhatsApp para {savedWorkoutInfo.athleteName}
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSavedModalOpen(false);
+                  navigate('/dashboard');
+                }}
+                className="w-full py-3 bg-white/5 hover:bg-white/10 text-gray-300 font-bold rounded-2xl text-xs transition"
+              >
+                Fechar e Ir ao Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

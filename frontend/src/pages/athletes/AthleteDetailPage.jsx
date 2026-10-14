@@ -5,7 +5,7 @@ import {
   Download, Activity, Heart, Dumbbell, AlertTriangle, 
   Target, Zap, Flame, User, Calendar, ShieldCheck, Printer,
   RefreshCw, Search, ChevronRight, CheckCircle2, ChevronDown, Check,
-  Eye, Info, Clock, CheckSquare
+  Eye, Info, Clock, CheckSquare, Share2, Copy
 } from 'lucide-react';
 import EloadChartRenderer from '../../components/charts/EloadChartRenderer';
 import ReportPrintModal from '../../components/reports/ReportPrintModal';
@@ -697,14 +697,36 @@ export default function AthleteDetailPage() {
         {/* ABA 5: TREINOS PROGRAMADOS / FICHAS */}
         {activeTab === 'prescribed_workouts' && (
           <div className="space-y-4">
-            <div className="flex justify-between items-center bg-[#141418] border border-white/[0.08] p-5 rounded-2xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#141418] border border-white/[0.08] p-5 rounded-2xl">
               <div>
                 <h3 className="text-base font-bold text-white">Fichas de Treino Prescritas para {athlete.name}</h3>
-                <p className="text-xs text-gray-400">Treinos A, B, C, D e sessões periodizadas</p>
+                <p className="text-xs text-gray-400">Treinos A, B, C, D e sessões periodizadas com ordem estrita de exercícios</p>
               </div>
-              <a href="#/workouts/new" className="px-4 py-2 bg-[#E5A910] text-[#0A0A0C] font-black text-xs rounded-xl hover:bg-[#E5A910]/90 transition">
-                + Nova Ficha de Treino
-              </a>
+              <div className="flex items-center gap-2 flex-wrap">
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                    `Olá ${athlete.name}, acesse seu check-in de prontidão e sua ficha de treino no FORMCLUB pelo link:\nhttps://app.formclub.com.br/#/checkin/formclub-hub?athleteId=${athlete.id}`
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 transition shadow-sm"
+                >
+                  <Share2 className="h-3.5 w-3.5" /> Enviar WhatsApp
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`https://app.formclub.com.br/#/checkin/formclub-hub?athleteId=${athlete.id}`);
+                    toast.success('Link individual copiado!');
+                  }}
+                  className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+                >
+                  <Copy className="h-3.5 w-3.5 text-[#E5A910]" /> Copiar Link
+                </button>
+                <a href="#/workouts/new" className="px-4 py-2 bg-[#E5A910] text-[#0A0A0C] font-black text-xs rounded-xl hover:bg-[#E5A910]/90 transition">
+                  + Nova Ficha
+                </a>
+              </div>
             </div>
 
             {(!Array.isArray(workouts) || workouts.length === 0) ? (
