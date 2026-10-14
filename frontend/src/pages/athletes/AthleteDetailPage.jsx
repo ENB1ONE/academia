@@ -12,6 +12,7 @@ import ReportPrintModal from '../../components/reports/ReportPrintModal';
 import api from '../../services/api';
 import eloadSeedData from '../../data/eloadSeedData.json';
 import defaultAvatar from '../../assets/avatar-default.png';
+import { buildAthleteWhatsappLink } from '../../utils/shareWorkoutLink';
 
 export default function AthleteDetailPage() {
   const { id } = useParams();
@@ -709,7 +710,7 @@ export default function AthleteDetailPage() {
               <div className="flex items-center gap-2 flex-wrap">
                 <a
                   href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                    `Olá ${athlete.name}, acesse seu check-in de prontidão e sua ficha de treino no FORMCLUB pelo link:\nhttps://app.formclub.com.br/#/checkin/formclub-hub?athleteId=${athlete.id}`
+                    `Olá ${athlete.name}, acesse seu check-in de prontidão e sua ficha de treino no FORMCLUB pelo link:\n${buildAthleteWhatsappLink(athlete, workouts)}`
                   )}`}
                   target="_blank"
                   rel="noreferrer"
@@ -720,8 +721,9 @@ export default function AthleteDetailPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    navigator.clipboard.writeText(`https://app.formclub.com.br/#/checkin/formclub-hub?athleteId=${athlete.id}`);
-                    toast.success('Link individual copiado!');
+                    const shareUrl = buildAthleteWhatsappLink(athlete, workouts);
+                    navigator.clipboard.writeText(shareUrl);
+                    toast.success('Link individual com treinos copiado!');
                   }}
                   className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
                 >

@@ -147,7 +147,22 @@ function getLocalStore() {
       });
     }
 
-    // 2. Garantir que workout_types sempre venha com os 34 tipos completos
+    // 2. Garantir que treinos do Eduardo Augusto que estavam com athlete_id = 3 ou '3' migrem para ath_eduardo_augusto_de_brito_campos
+    if (!store.workouts) store.workouts = [];
+    store.workouts = store.workouts.map(w => {
+      const isEdu = String(w.athlete_name || '').toUpperCase().includes('EDUARDO AUGUSTO') ||
+                    (String(w.athlete_id) === '3' && !String(w.athlete_name || '').toUpperCase().includes('ADRIELLI'));
+      if (isEdu) {
+        return {
+          ...w,
+          athlete_id: 'ath_eduardo_augusto_de_brito_campos',
+          athlete_name: 'EDUARDO AUGUSTO DE BRITO CAMPOS'
+        };
+      }
+      return w;
+    });
+
+    // 3. Garantir que workout_types sempre venha com os 34 tipos completos
     if (!store.workout_types || store.workout_types.length < 30) {
       store.workout_types = eloadSeedData.workout_types;
     }
@@ -171,11 +186,11 @@ function saveLocalStore(data) {
 getLocalStore();
 
 const api = axios.create({
-  baseURL: 'https://hour-tough-telescope-jill.trycloudflare.com',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '',
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 3500, // Fast fallback if tunnel hangs
+  timeout: 3000,
 });
 
 api.interceptors.request.use(
@@ -380,9 +395,16 @@ api.interceptors.response.use(
       }
 
       if (filterAthleteId) {
-        // STRICT FILTER: Only return workouts matching this exact athlete_id
+        const decodedFilter = decodeURIComponent(filterAthleteId).trim();
+        // STRICT FILTER: Match by exact athlete_id or name alias
         const athleteWorkouts = (db.workouts || [])
-          .filter(w => String(w.athlete_id) === String(filterAthleteId) && w.is_active !== 0)
+          .filter(w => {
+            const sameId = String(w.athlete_id) === decodedFilter;
+            const isEduFallback = (decodedFilter === '3' || decodedFilter === 'ath_eduardo_augusto_de_brito_campos') &&
+              (String(w.athlete_id) === 'ath_eduardo_augusto_de_brito_campos' || String(w.athlete_id) === '3' || String(w.athlete_name || '').toUpperCase().includes('EDUARDO AUGUSTO'));
+            const isActive = w.is_active === undefined || w.is_active === null || w.is_active === true || w.is_active === 1 || w.is_active === '1';
+            return (sameId || isEduFallback) && isActive;
+          })
           .map(w => ({
             ...w,
             exercises: (w.exercises || []).slice().sort((a, b) => 

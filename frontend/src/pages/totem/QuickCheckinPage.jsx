@@ -31,6 +31,40 @@ export default function QuickCheckinPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  // Estados fundamentais declarados explicitamente no topo (Prevenção de ReferenceError)
+  const [athleteFound, setAthleteFound] = useState(null);
+  const [athleteWorkouts, setAthleteWorkouts] = useState([]);
+  const [step, setStep] = useState('lookup'); // 'lookup' | 'confirm' | 'questionnaire' | 'workout'
+  const [birthdateRaw, setBirthdateRaw] = useState('');
+  const [nameLetters, setNameLetters] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [loadingWorkouts, setLoadingWorkouts] = useState(false);
+  const [error, setError] = useState('');
+
+  // Estados do Questionário de Bem-Estar
+  const [answers, setAnswers] = useState({
+    sleep_quality: 3,
+    fatigue_level: 3,
+    muscle_soreness: 3,
+    stress_level: 3,
+    mood: 3,
+  });
+  const [sleepMode, setSleepMode] = useState('total');
+  const [totalSleepHours, setTotalSleepHours] = useState(8);
+  const [sleepStart, setSleepStart] = useState('22:30');
+  const [sleepEnd, setSleepEnd] = useState('06:30');
+  const [isUrineModalOpen, setIsUrineModalOpen] = useState(false);
+  const [urineColor, setUrineColor] = useState(3);
+  const [menstrualFlow, setMenstrualFlow] = useState('Nenhum');
+  const [menstrualPain, setMenstrualPain] = useState(0);
+
+  // Estados do Treino / Pós-Treino
+  const [readinessScore, setReadinessScore] = useState(70);
+  const [completedExercises, setCompletedExercises] = useState({});
+  const [postPse, setPostPse] = useState(6);
+  const [postDuration, setPostDuration] = useState(60);
+  const [workoutFinished, setWorkoutFinished] = useState(false);
+
   // Helper para ler parâmetros tanto de searchParams quanto da query string dentro do hash (#/checkin/...?pkg=...)
   const getParam = (key) => {
     const fromSearch = searchParams.get(key);
@@ -50,7 +84,45 @@ export default function QuickCheckinPage() {
   const queryAthleteName = getParam('athleteName');
   const queryPkg = getParam('pkg');
 
-  // Se vier com pacote assinado ou nome do atleta na URL, processar imediatamente
+  // Função para normalizar e aplicar treinos de forma robusta
+  const applyWorkoutsList = (workoutsArray, targetAthleteId, targetAthleteName) => {
+    if (!Array.isArray(workoutsArray)) return;
+
+    const filtered = workoutsArray.filter(w => {
+      if (!w) return false;
+      const sameId = targetAthleteId && (String(w.athlete_id) === String(targetAthleteId));
+      const sameName = targetAthleteName && String(w.athlete_name || '').trim().toLowerCase() === String(targetAthleteName).trim().toLowerCase();
+      // Correção proativa: treinos ativos são aqueles onde is_active !== 0 e !== false
+      const isActive = w.is_active === undefined || w.is_active === null || w.is_active === true || w.is_active === 1 || w.is_active === '1';
+      return (sameId || sameName || !targetAthleteId) && isActive;
+    }).map(w => ({
+      ...w,
+      exercises: (w.exercises || []).slice().sort((a, b) => 
+        (Number(a.order_index || a.order) || 0) - (Number(b.order_index || b.order) || 0)
+      )
+    }));
+
+    if (filtered.length > 0) {
+      setAthleteWorkouts(filtered);
+    }
+  };
+
+  // Função para carregar os treinos estritamente deste atleta
+  const loadWorkoutsForAthlete = async (athId, athName) => {
+    if (!athId && !athName) return;
+    setLoadingWorkouts(true);
+    try {
+      const res = await api.get(`/api/v1/workouts/?athlete_id=${encodeURIComponent(athId || '')}`);
+      const list = Array.isArray(res.data) ? res.data : (res.data?.workouts || []);
+      applyWorkoutsList(list, athId, athName);
+    } catch (e) {
+      console.warn('Erro ao buscar treinos do atleta:', e);
+    } finally {
+      setLoadingWorkouts(false);
+    }
+  };
+
+  // Processamento imediato ao abrir via link com parâmetros
   useEffect(() => {
     let payload = null;
     if (queryPkg) {
@@ -62,32 +134,51 @@ export default function QuickCheckinPage() {
       }
     }
 
-    if (payload && payload.n) {
+    if (payload && (payload.n || payload.name)) {
       // Pacote assinado do treinador recebido diretamente via WhatsApp!
+      const pName = payload.n || payload.name;
+      const pId = payload.i || payload.id || queryAthleteId || 'ath_individual';
       const athleteObj = {
-        id: payload.i || queryAthleteId || 'ath_individual',
-        codigoAtleta: payload.i || queryAthleteId,
-        name: payload.n,
-        group_name: payload.g || 'FORMCLUB',
-        group: payload.g || 'FORMCLUB',
-        birth_date: payload.b || '',
+        id: pId,
+        codigoAtleta: pId,
+        name: pName,
+        group_name: payload.g || payload.group || 'ALFA ACADEMY',
+        group: payload.g || payload.group || 'ALFA ACADEMY',
+        birth_date: payload.b || payload.birth_date || '',
       };
       setAthleteFound(athleteObj);
 
+      // Se payload contiver fichas de treino
       if (payload.w) {
-        setAthleteWorkouts([
-          {
-            id: 'pkg_workout',
-            athlete_id: athleteObj.id,
-            name: payload.w.title || 'Treino Individual',
-            workout_type: payload.w.type || 'A',
-            scheduled_date: payload.w.date || 'Hoje',
-            notes: payload.w.notes || '',
-            exercises: payload.w.exercises || [],
-            is_active: 1
-          }
-        ]);
+        const rawWorkouts = Array.isArray(payload.w) ? payload.w : [payload.w];
+        const formattedWorkouts = rawWorkouts.map((w, idx) => ({
+          id: w.id || `pkg_workout_${idx + 1}`,
+          athlete_id: athleteObj.id,
+          athlete_name: athleteObj.name,
+          name: w.title || w.name || 'Treino Individual Prescrito',
+          title: w.title || w.name || 'Treino Individual Prescrito',
+          workout_type: w.type || w.workout_type || 'A',
+          scheduled_date: w.date || w.scheduled_date || 'Hoje',
+          notes: w.notes || '',
+          exercises: (w.exercises || []).map((ex, eIdx) => ({
+            id: ex.id || eIdx + 1,
+            order_index: Number(ex.order_index || ex.order || (eIdx + 1)),
+            order: Number(ex.order_index || ex.order || (eIdx + 1)),
+            exercise_name: ex.name || ex.exercise_name || `Exercício ${eIdx + 1}`,
+            name: ex.name || ex.exercise_name || `Exercício ${eIdx + 1}`,
+            sets: ex.sets ?? '',
+            reps: ex.reps ?? '',
+            load_kg: ex.load_kg ?? ex.load ?? '',
+            rest_seconds: ex.rest_seconds ?? ex.rest ?? '',
+            notes: ex.notes || ''
+          })).sort((a, b) => a.order_index - b.order_index),
+          is_active: 1
+        }));
+        setAthleteWorkouts(formattedWorkouts);
+      } else {
+        loadWorkoutsForAthlete(athleteObj.id, athleteObj.name);
       }
+
       setStep('confirm');
       return;
     }
@@ -97,7 +188,7 @@ export default function QuickCheckinPage() {
       const loadDirectAthlete = async () => {
         setLoading(true);
         try {
-          const lookupTarget = queryAthleteName ? encodeURIComponent(queryAthleteName) : queryAthleteId;
+          const lookupTarget = queryAthleteName ? encodeURIComponent(queryAthleteName) : encodeURIComponent(queryAthleteId);
           const res = await api.get(`/api/v1/athletes/${lookupTarget}`);
           const ath = res.data?.data || res.data;
           if (ath && (ath.id || ath.name)) {
@@ -107,7 +198,7 @@ export default function QuickCheckinPage() {
             } else {
               setAthleteFound(ath);
               setStep('confirm');
-              loadWorkoutsForAthlete(ath.id || ath.codigoAtleta);
+              loadWorkoutsForAthlete(ath.id || ath.codigoAtleta, ath.name);
             }
           }
         } catch (e) {
@@ -119,25 +210,6 @@ export default function QuickCheckinPage() {
       loadDirectAthlete();
     }
   }, [queryAthleteId, queryAthleteName, queryPkg]);
-
-  // Função para carregar os treinos estritamente deste atleta
-  const loadWorkoutsForAthlete = async (athId) => {
-    if (!athId) return;
-    setLoadingWorkouts(true);
-    try {
-      const res = await api.get(`/api/v1/workouts/?athlete_id=${athId}`);
-      const list = Array.isArray(res.data) ? res.data : (res.data?.workouts || []);
-      // Filtrar com rigor absoluto garantindo que nenhum outro treino passe
-      const safeList = list.filter(w => String(w.athlete_id) === String(athId) && w.is_active !== 0);
-      if (safeList.length > 0) {
-        setAthleteWorkouts(safeList);
-      }
-    } catch (e) {
-      console.warn('Erro ao buscar treinos do atleta:', e);
-    } finally {
-      setLoadingWorkouts(false);
-    }
-  };
 
   // Máscara DD/MM/AAAA estilo eLoad
   const handleDateInput = (e) => {
@@ -169,6 +241,7 @@ export default function QuickCheckinPage() {
       if (res.data?.athlete) {
         setAthleteFound(res.data.athlete);
         setStep('confirm');
+        loadWorkoutsForAthlete(res.data.athlete.id || res.data.athlete.codigoAtleta, res.data.athlete.name);
       } else {
         setError('Nenhum atleta encontrado com esta data de nascimento.');
       }
@@ -192,7 +265,7 @@ export default function QuickCheckinPage() {
     }
     setStep('questionnaire');
     // Carregar em background a ficha de treino do atleta
-    loadWorkoutsForAthlete(athleteFound.id || athleteFound.codigoAtleta);
+    loadWorkoutsForAthlete(athleteFound.id || athleteFound.codigoAtleta, athleteFound.name);
   };
 
   const handleConfirmNo = () => {
@@ -236,7 +309,7 @@ export default function QuickCheckinPage() {
       setLoading(false);
       setStep('workout');
       // Garantir atualização da lista de treinos
-      loadWorkoutsForAthlete(athleteFound.id || athleteFound.codigoAtleta);
+      loadWorkoutsForAthlete(athleteFound.id || athleteFound.codigoAtleta, athleteFound.name);
     }
   };
 
@@ -323,7 +396,7 @@ export default function QuickCheckinPage() {
           <div className="space-y-6 text-center pt-2">
             <img
               src={athleteAvatar}
-              alt={athleteFound.name}
+              alt={athleteFound?.name || 'Atleta'}
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = defaultAvatar;
@@ -335,7 +408,7 @@ export default function QuickCheckinPage() {
               <p className="text-xs text-gray-400 font-medium">Você é:</p>
               <h2 className="text-2xl font-black text-white">{firstName}?</h2>
               <p className="text-xs text-gray-300 font-bold">
-                {athleteFound.name} &bull; {athleteFound.group_name || athleteFound.nomeGrupo || 'FORMCLUB'}
+                {athleteFound?.name} &bull; {athleteFound?.group_name || athleteFound?.nomeGrupo || 'FORMCLUB'}
               </p>
               <p className="text-[11px] text-[#E5A910]">
                 Treinador Responsável: MARCOS VINICIUS DE FREITAS FARIA
@@ -389,7 +462,7 @@ export default function QuickCheckinPage() {
           <form onSubmit={handleSubmitQuestionnaire} className="space-y-6">
             <div className="border-b border-white/[0.08] pb-4 text-center">
               <h2 className="text-lg font-black text-white tracking-wide">
-                OLÁ {athleteFound.name}, COMO VOCÊ ESTÁ HOJE?
+                OLÁ {athleteFound?.name}, COMO VOCÊ ESTÁ HOJE?
               </h2>
               <p className="text-xs text-gray-400 mt-1">
                 Responda com sinceridade para o cálculo correto da sua prontidão de treino.
@@ -522,7 +595,7 @@ export default function QuickCheckinPage() {
             </div>
 
             {/* Se Mulher: Ciclo Menstrual */}
-            {(athleteFound.gender === 'F' || athleteFound.descricaoGenero === 'Feminino') && (
+            {(athleteFound?.gender === 'F' || athleteFound?.descricaoGenero === 'Feminino') && (
               <div className="bg-[#0A0A0C] border border-white/[0.08] p-4 rounded-2xl space-y-3">
                 <h4 className="text-xs font-bold text-white flex items-center gap-2">
                   <Droplets className="h-4 w-4 text-pink-400" /> Registro do Ciclo Menstrual
@@ -608,7 +681,7 @@ export default function QuickCheckinPage() {
                         </p>
                       )}
                       <p className="text-xs text-gray-400">
-                        Prescrito exclusivamente para <strong className="text-white">{athleteFound.name}</strong> &bull; Marque as séries conforme executar no CT:
+                        Prescrito exclusivamente para <strong className="text-white">{athleteFound?.name}</strong> &bull; Marque as séries conforme executar no CT:
                       </p>
                     </div>
 
@@ -675,7 +748,7 @@ export default function QuickCheckinPage() {
                   Seu treinador já recebeu seus indicadores de hoje. Nenhum treino individual foi liberado no aplicativo para hoje — siga a orientação presencial do seu treinador no CT.
                 </p>
                 <div className="pt-2 text-[11px] text-gray-500 font-mono">
-                  Atleta: {athleteFound.name} &bull; Código #{cid}
+                  Atleta: {athleteFound?.name} &bull; Código #{cid}
                 </div>
               </div>
             )}

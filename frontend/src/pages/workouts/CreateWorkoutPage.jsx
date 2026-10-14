@@ -9,6 +9,7 @@ import useAthleteStore from '../../store/athleteStore';
 import useWorkoutStore from '../../store/workoutStore';
 import AthleteSearchSelect from '../../components/AthleteSearchSelect';
 import api from '../../services/api';
+import { buildAthleteWhatsappLink } from '../../utils/shareWorkoutLink';
 
 const CreateWorkoutPage = () => {
   const navigate = useNavigate();
@@ -71,38 +72,9 @@ const CreateWorkoutPage = () => {
     setExercises(newExercises);
   };
 
-  // Helper para gerar o link assinado com pkg Base64 UTF-8
+  // Helper para gerar o link assinado com pkg Base64 UTF-8 usando o utilitário unificado
   const buildShareUrl = (athlete, workoutData) => {
-    const payload = {
-      i: athlete.id,
-      n: athlete.name,
-      g: athlete.group_name || athlete.group || athlete.nomeGrupo || 'FORMCLUB',
-      b: athlete.birth_date || '',
-      w: {
-        title: workoutData.name,
-        type: workoutData.workout_type,
-        date: workoutData.scheduled_date,
-        notes: workoutData.notes || '',
-        exercises: (workoutData.exercises || []).map((ex, idx) => ({
-          order_index: idx + 1,
-          name: ex.exercise_name || ex.name,
-          sets: ex.sets,
-          reps: ex.reps,
-          load_kg: ex.load_kg,
-          rest_seconds: ex.rest_seconds,
-          notes: ex.notes || ''
-        }))
-      }
-    };
-
-    let pkg = '';
-    try {
-      pkg = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(payload)))));
-    } catch (e) {
-      console.warn('Erro ao codificar pkg:', e);
-    }
-
-    return `https://app.formclub.com.br/#/checkin/formclub-hub?athleteId=${encodeURIComponent(athlete.id)}&athleteName=${encodeURIComponent(athlete.name)}${pkg ? `&pkg=${pkg}` : ''}`;
+    return buildAthleteWhatsappLink(athlete, [workoutData]);
   };
 
   const handleSave = async () => {
