@@ -38,32 +38,28 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-          {/* Logo & Location Sub-badge */}
+          {/* Logo */}
           <Link
             href="/"
-            className="group flex items-center gap-3 shrink-0 focus:outline-none"
+            className="group flex items-center shrink-0 focus:outline-none"
             aria-label="FORMCLUB - Human Performance Center"
           >
-            <div className="relative h-9 w-40 sm:h-11 sm:w-52">
+            <div className="relative h-9 w-40 sm:h-10 sm:w-48 lg:h-11 lg:w-52">
               <img
                 src="/formclub.com.br/images/formclub-logo.png"
                 alt="FORMCLUB - Human Performance Center"
                 className="w-full h-full object-contain filter brightness-110 drop-shadow-md"
               />
             </div>
-            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono tracking-widest uppercase text-zinc-300">
-              <MapPin className="w-3 h-3 text-gold" />
-              <span>Vila Galvão</span>
-            </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-7 shrink-0">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-xs font-semibold uppercase tracking-wider text-zinc-300 hover:text-gold transition-colors py-1 relative group"
+                className="whitespace-nowrap text-xs font-semibold uppercase tracking-wider text-zinc-300 hover:text-gold transition-colors py-1 relative group"
               >
                 {link.label}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full" />

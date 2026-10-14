@@ -55,12 +55,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/sitemap.xml": {
-      "initialHeaders": {
-        "cache-control": "public, max-age=0, must-revalidate",
-        "content-type": "application/xml",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/sitemap.xml/layout,_N_T_/sitemap.xml/route,_N_T_/sitemap.xml/"
-      },
+    "/agendar": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -73,8 +68,32 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/sitemap.xml",
-      "dataRoute": null,
+      "srcRoute": "/agendar",
+      "dataRoute": "/agendar.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/",
+      "dataRoute": "/index.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -108,7 +127,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/modalidades": {
+    "/privacidade": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -121,8 +140,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/modalidades",
-      "dataRoute": "/modalidades.rsc",
+      "srcRoute": "/privacidade",
+      "dataRoute": "/privacidade.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -156,7 +175,12 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/agendar": {
+    "/sitemap.xml": {
+      "initialHeaders": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "application/xml",
+        "x-next-cache-tags": "_N_T_/layout,_N_T_/sitemap.xml/layout,_N_T_/sitemap.xml/route,_N_T_/sitemap.xml/"
+      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -169,8 +193,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/agendar",
-      "dataRoute": "/agendar.rsc",
+      "srcRoute": "/sitemap.xml",
+      "dataRoute": null,
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -180,7 +204,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/privacidade": {
+    "/modalidades": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -193,32 +217,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/privacidade",
-      "dataRoute": "/privacidade.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/",
-      "dataRoute": "/index.rsc",
+      "srcRoute": "/modalidades",
+      "dataRoute": "/modalidades.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -232,8 +232,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "e128f7494f69276277bca6516b20e323",
-    "previewModeSigningKey": "2062d2e29c56103d40f8b6effee04e7c06cfcdc2df7f12792946f1556f39aa61",
-    "previewModeEncryptionKey": "d1fd6643a8eb194b4aad788c87bd60f754724b94f75de518873f00505855ada8"
+    "previewModeId": "4cefa422eb11a3823abc7aaf0ae3bad4",
+    "previewModeSigningKey": "e627254ac14fb59adaea7a1dc9536bc3ab27eeca3e648eed4fc087a34c2d577e",
+    "previewModeEncryptionKey": "5aa709306ac7e846e41505e235708079bc8a397d0b9a1c48b5e3636583b62ccf"
   }
 }

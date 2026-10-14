@@ -1,12 +1,12 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/api/leads/route": "app/api/leads/route.js",
-  "/robots.txt/route": "app/robots.txt/route.js",
   "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
   "/agendar/page": "app/agendar/page.js",
   "/page": "app/page.js",
-  "/estrutura/page": "app/estrutura/page.js",
-  "/wellhub/page": "app/wellhub/page.js",
   "/modalidades/page": "app/modalidades/page.js",
-  "/privacidade/page": "app/privacidade/page.js"
+  "/privacidade/page": "app/privacidade/page.js",
+  "/wellhub/page": "app/wellhub/page.js",
+  "/estrutura/page": "app/estrutura/page.js"
 }
