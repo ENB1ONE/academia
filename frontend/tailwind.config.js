@@ -4,24 +4,50 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
+        // Paleta Oficial FormClub (site formclub: obsidian, charcoal, gold/amber)
         primary: {
-          DEFAULT: '#3B7DDD',
-          hover: '#2F64B1',
+          DEFAULT: '#E5A910', // Dourado / Amarelo Oficial FormClub
+          hover: '#C89008',
+          light: '#F5BE2C',
+          dark: '#C89008',
+          glow: 'rgba(229, 169, 16, 0.25)',
         },
         secondary: {
-          DEFAULT: '#17A2B8',
-          hover: '#138496',
+          DEFAULT: '#10B981',
+          hover: '#059669',
         },
-        accent: '#F59E0B',
-        background: '#F2F4F7',
-        surface: '#FFFFFF',
-        text: '#212529',
-        border: '#CED4DA',
-        danger: '#DC3545',
-        success: '#28A745',
+        obsidian: {
+          DEFAULT: '#0A0A0C',
+          950: '#050507',
+          900: '#0A0A0C',
+          800: '#121215',
+          700: '#18181D',
+          600: '#222229',
+        },
+        charcoal: {
+          DEFAULT: '#141418',
+          surface: '#1A1A20',
+          card: '#16161C',
+          border: 'rgba(255, 255, 255, 0.08)',
+          hover: '#1F1F27',
+        },
+        gold: {
+          DEFAULT: '#E5A910',
+          light: '#F5BE2C',
+          dark: '#C89008',
+          glow: 'rgba(229, 169, 16, 0.25)',
+        },
+        accent: '#E5A910',
+        background: '#0A0A0C', // Fundo Obsidian escuro premium do site
+        surface: '#141418',    // Cards e superfície Charcoal
+        text: '#FFFFFF',
+        muted: '#9CA3AF',
+        danger: '#EF4444',
+        success: '#10B981',
       }
     },
   },

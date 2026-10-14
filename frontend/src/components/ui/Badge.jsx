@@ -2,11 +2,11 @@ import React from 'react';
 
 const Badge = ({ children, variant = 'info', className = '' }) => {
   const variants = {
-    success: 'bg-[#D4EDDA] text-[#155724] border-[#C3E6CB]',
-    warning: 'bg-[#FFF3CD] text-[#856404] border-[#FFEEBA]',
-    danger: 'bg-[#F8D7DA] text-[#721C24] border-[#F5C6CB]',
-    info: 'bg-[#D1ECF1] text-[#0C5460] border-[#BEE5EB]',
-    neutral: 'bg-gray-100 text-gray-700 border-gray-200'
+    success: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    warning: 'bg-[#E5A910]/15 text-[#F5BE2C] border-[#E5A910]/30',
+    danger: 'bg-danger/15 text-danger border-danger/30',
+    info: 'bg-primary/15 text-primary border-primary/30',
+    neutral: 'bg-white/5 text-gray-300 border-white/10'
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Lock, Mail } from 'lucide-react';
+import { Lock, Mail, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../store/authStore';
 import Button from '../../components/ui/Button';
@@ -35,40 +35,43 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-background">
-      {/* Background Decorativo */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-background to-transparent"></div>
+    <div className="min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#0A0A0C]">
+      {/* Background Decorativo FormClub com Brilho Dourado */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#E5A910]/[0.07] rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#0A0A0C] via-transparent to-transparent"></div>
       </div>
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
         <img
-          className="mx-auto h-48 w-auto object-contain drop-shadow-xl"
+          className="mx-auto h-36 w-auto object-contain drop-shadow-[0_10px_25px_rgba(229,169,16,0.2)]"
           src={logo}
           alt="FormClub"
         />
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <Card className="shadow-2xl border-gray-800 backdrop-blur-sm bg-surface/80">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-extrabold text-text">
+        <Card className="shadow-2xl border-white/[0.08] backdrop-blur-md bg-[#141418]/90 p-8 sm:p-10 rounded-3xl">
+          <div className="text-center mb-8 space-y-1">
+            <span className="text-[11px] font-black uppercase tracking-widest text-[#E5A910]">
+              Human Performance Center
+            </span>
+            <h2 className="text-2xl font-black text-white tracking-tight">
               Acesse sua conta
             </h2>
-            <p className="mt-2 text-sm text-gray-400">
-              Painel de Monitoramento de Atletas
+            <p className="text-xs text-gray-400">
+              Painel Integrado de Monitoramento de Atletas
             </p>
           </div>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <Input
               label="Email"
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
+              placeholder="admin@formclub.com.br"
               icon={Mail}
             />
 
@@ -82,17 +85,16 @@ const LoginPage = () => {
                 placeholder="******"
                 icon={Lock}
               />
-              <div className="flex items-center justify-end mt-2">
-                <div className="text-sm">
-                  <Link to="/forgot-password" className="font-medium text-primary hover:text-primary/80 transition-colors">
-                    Esqueceu a senha?
-                  </Link>
-                </div>
+              <div className="flex items-center justify-end pt-1">
+                <Link to="/forgot-password" className="text-xs font-semibold text-[#E5A910] hover:underline transition-colors">
+                  Esqueceu a senha?
+                </Link>
               </div>
             </div>
 
-            <Button type="submit" className="w-full" isLoading={isLoading}>
-              Entrar
+            <Button type="submit" className="w-full py-3 text-sm font-black flex items-center justify-center gap-2 mt-2" isLoading={isLoading}>
+              <span>Entrar no Sistema</span>
+              <ArrowRight className="h-4 w-4" />
             </Button>
           </form>
         </Card>

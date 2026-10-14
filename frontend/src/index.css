@@ -3,24 +3,39 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --bg-obsidian: #0A0A0C;
+    --bg-charcoal: #141418;
+    --text-alabaster: #FFFFFF;
+    --accent-gold: #E5A910;
+  }
+
   body {
-    @apply bg-background text-text antialiased;
+    background-color: #0A0A0C;
+    color: #FFFFFF;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Custom scrollbar for eLoad clean theme */
+::selection {
+  background-color: #E5A910;
+  color: #0A0A0C;
+}
+
+/* Custom Scrollbar FormClub (Obsidian + Gold Hover) */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #F2F4F7; 
+  background: #0A0A0C; 
 }
 ::-webkit-scrollbar-thumb {
-  background: #CED4DA; 
+  background: #222229; 
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ADB5BD; 
+  background: #E5A910; 
 }
