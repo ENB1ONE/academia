@@ -15,7 +15,7 @@ export default defineConfig({
         theme_color: '#1B202B',
         background_color: '#1B202B',
         display: 'standalone',
-        start_url: '/academia/',
+        start_url: './',
         icons: [
           {
             src: 'pwa/icon-192x192.png',
@@ -40,5 +40,5 @@ export default defineConfig({
       }
     })
   ],
-  base: '/academia/',
+  base: './',
 })

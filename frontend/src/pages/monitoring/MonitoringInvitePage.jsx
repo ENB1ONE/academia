@@ -15,7 +15,9 @@ export default function MonitoringInvitePage() {
     setLoading(false);
   }, []);
 
-  const fullUrl = `${window.location.origin}/academia/#/checkin/${token}`;
+  const isCustomDomain = window.location.hostname.includes('formclub.com.br');
+  const basePath = isCustomDomain ? '' : (window.location.pathname.startsWith('/academia') ? '/academia' : '');
+  const fullUrl = `${window.location.origin}${basePath}/#/checkin/${token}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(fullUrl);
