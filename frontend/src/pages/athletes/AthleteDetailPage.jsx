@@ -13,10 +13,15 @@ import api from '../../services/api';
 import eloadSeedData from '../../data/eloadSeedData.json';
 import defaultAvatar from '../../assets/avatar-default.png';
 import { buildAthleteWhatsappLink } from '../../utils/shareWorkoutLink';
+import useAuthStore from '../../store/authStore';
 
 export default function AthleteDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const role = (user?.role || '').toLowerCase().trim();
+  const isAtleta = role === 'atleta' || role === 'athlete' || role === 'member';
+
   const [activeTab, setActiveTab] = useState('monitoring');
   const [athlete, setAthlete] = useState(null);
   const [allAthletes, setAllAthletes] = useState([]);
@@ -248,12 +253,14 @@ export default function AthleteDetailPage() {
         </div>
 
         <div className="flex items-center gap-2 self-start flex-wrap">
-          <button
-            onClick={() => setIsSwitchModalOpen(true)}
-            className="px-3.5 py-2 bg-[#141418] border border-white/10 hover:border-[#E5A910]/60 rounded-xl text-xs font-bold text-gray-200 hover:text-white flex items-center gap-1.5 transition shadow-sm"
-          >
-            <RefreshCw className="h-3.5 w-3.5 text-[#E5A910]" /> Trocar atleta
-          </button>
+          {!isAtleta && (
+            <button
+              onClick={() => setIsSwitchModalOpen(true)}
+              className="px-3.5 py-2 bg-[#141418] border border-white/10 hover:border-[#E5A910]/60 rounded-xl text-xs font-bold text-gray-200 hover:text-white flex items-center gap-1.5 transition shadow-sm"
+            >
+              <RefreshCw className="h-3.5 w-3.5 text-[#E5A910]" /> Trocar atleta
+            </button>
+          )}
           <button
             onClick={() => setIsPrintModalOpen(true)}
             className="px-3.5 py-2 bg-[#141418] border border-white/10 hover:border-[#E5A910]/60 rounded-xl text-xs font-bold text-gray-200 hover:text-white flex items-center gap-1.5 transition shadow-sm"

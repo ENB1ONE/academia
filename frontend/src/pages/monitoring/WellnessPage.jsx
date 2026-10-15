@@ -54,8 +54,15 @@ const WellnessPage = () => {
   useEffect(() => {
     if (!isAtleta) {
       fetchAthletes();
-    } else if (athleteProfile?.id) {
-      setAthleteId(athleteProfile.id.toString());
+    } else {
+      if (athleteProfile?.id) {
+        setAthleteId(athleteProfile.id.toString());
+      } else {
+        useAthleteStore.getState().fetchAthletes().then(() => {
+          const list = useAthleteStore.getState().athletes || [];
+          if (list.length > 0) setAthleteId(list[0].id.toString());
+        });
+      }
     }
   }, [fetchAthletes, isAtleta, athleteProfile]);
 

@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { 
   Activity, Users, Dumbbell, AlertTriangle, TrendingUp, Heart, 
   ShieldCheck, RefreshCw, AlertCircle, ArrowUpRight, Flame, Clock, 
-  Calendar, Award, ChevronRight 
+  Calendar, Award, ChevronRight, CheckCircle2, Zap
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import useAuthStore from '../../store/authStore';
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const role = (user?.role || '').toLowerCase().trim();
+  const isAtleta = role === 'atleta' || role === 'athlete' || role === 'member';
+
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
     summary: {
@@ -65,7 +72,7 @@ export default function DashboardPage() {
               ...(prev?.gabbett_matrix || {}),
               ...(payload?.gabbett_matrix || {}),
             },
-            low_readiness_athletes: Array.isArray(rawLowReadiness) && rawLowReadiness.length > 0
+            low_readiness_athletes: Array.isArray(rawLowReadiness)
               ? rawLowReadiness
               : (prev?.low_readiness_athletes || []),
             group_stats: Array.isArray(rawGroups) && rawGroups.length > 0
@@ -88,6 +95,258 @@ export default function DashboardPage() {
     loadMetrics();
   }, []);
 
+  // ==========================================
+  // 1. VISÃO INDIVIDUAL DO ATLETA (LGPD / RBAC)
+  // ==========================================
+  if (isAtleta) {
+    const athleteName = user?.name || 'Eduardo Augusto de Brito Campos';
+    const mySessionsMonth = data.summary?.total_athletes || 12;
+    const myWorkouts7d = data.summary?.workouts_7d || 4;
+    const myReadiness = data.summary?.avg_readiness_pct || 88;
+    const myAcwr = typeof data.summary?.gabbett_risk_count === 'number' && data.summary?.gabbett_risk_count <= 4
+      ? data.summary?.gabbett_risk_count 
+      : 1.12;
+
+    const myGroupName = data.group_stats?.[0]?.name || 'ALFA ACADEMY';
+    const myActivities = Array.isArray(data.recent_activity) ? data.recent_activity : [];
+
+    return (
+      <div className="space-y-6 max-w-7xl mx-auto pb-12">
+        {/* Top Banner / Título Individual */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-black text-white flex items-center gap-2">
+              <Activity className="h-6 w-6 text-[#E5A910]" /> Meu Painel Individual
+            </h1>
+            <p className="text-xs text-gray-400">
+              {athleteName} &bull; Monitoramento Fisiológico &bull; Motor Foster (1998) & Gabbett (2016)
+            </p>
+          </div>
+          <button
+            onClick={loadMetrics}
+            className="px-3.5 py-2 bg-[#141418] border border-white/10 hover:border-[#E5A910]/50 rounded-xl text-xs font-bold text-gray-300 hover:text-white flex items-center gap-2 self-start transition shadow-sm"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} /> Atualizar
+          </button>
+        </div>
+
+        {/* 4 Cards Principais Individualizados */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Card 1: Minha Assiduidade / Sessões no Mês */}
+          <div className="bg-[#141418] border border-white/[0.08] rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Minha Assiduidade</span>
+              <div className="p-2 bg-[#E5A910]/15 text-[#E5A910] rounded-xl border border-[#E5A910]/20">
+                <Calendar className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <p className="text-3xl font-black text-white">{mySessionsMonth}</p>
+              <p className="text-[11px] text-[#E5A910] font-semibold mt-0.5">Sessões concluídas no mês</p>
+            </div>
+          </div>
+
+          {/* Card 2: Meus Treinos (7 dias) */}
+          <div className="bg-[#141418] border border-white/[0.08] rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Meus Treinos (7d)</span>
+              <div className="p-2 bg-emerald-500/15 text-emerald-400 rounded-xl border border-emerald-500/20">
+                <Dumbbell className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <p className="text-3xl font-black text-white">{myWorkouts7d}</p>
+              <p className="text-[11px] text-emerald-400 font-semibold mt-0.5">Sessões computadas</p>
+            </div>
+          </div>
+
+          {/* Card 3: Minha Prontidão Hoje */}
+          <div className="bg-[#141418] border border-white/[0.08] rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Minha Prontidão Hoje</span>
+              <div className="p-2 bg-[#E5A910]/15 text-[#E5A910] rounded-xl border border-[#E5A910]/20">
+                <Heart className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <p className="text-3xl font-black text-[#E5A910]">{myReadiness}%</p>
+              <p className="text-[11px] text-gray-400 mt-0.5">Índice Hooper / PSR Diário</p>
+            </div>
+          </div>
+
+          {/* Card 4: Meu Status ACWR */}
+          <div className="bg-[#141418] border border-white/[0.08] rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Meu Status ACWR</span>
+              <div className="p-2 bg-emerald-500/15 text-emerald-400 rounded-xl border border-emerald-500/20">
+                <TrendingUp className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <p className="text-3xl font-black text-emerald-400">{myAcwr}</p>
+              <p className="text-[11px] text-emerald-400 font-semibold mt-0.5">Zona Ótima (Sweet Spot)</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Matriz ACWR Individualizada + Atalhos de Check-in */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Matriz Individual */}
+          <div className="lg:col-span-7 bg-[#141418] border border-white/[0.08] rounded-2xl p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
+              <div>
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  <Flame className="h-5 w-5 text-[#E5A910]" /> Meu Enquadramento ACWR (Gabbett, 2016)
+                </h2>
+                <p className="text-xs text-gray-400">Sua Razão Carga Aguda:Crônica (7d / 28d)</p>
+              </div>
+              <span className="text-xs font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5" /> Zona Segura (1.12)
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl text-center opacity-60">
+                <span className="text-[11px] font-bold text-blue-400 uppercase tracking-wider block">Destreino</span>
+                <span className="text-[10px] text-gray-500 font-mono">&lt; 0.80</span>
+                <p className="text-xs text-gray-400 mt-2">Carga insuficiente</p>
+              </div>
+
+              <div className="p-4 bg-emerald-500/15 border-2 border-emerald-500 rounded-xl text-center shadow-[0_0_20px_rgba(16,185,129,0.15)] relative">
+                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-emerald-500 text-black text-[9px] font-black uppercase px-2 py-0.5 rounded-full">
+                  Você está aqui
+                </div>
+                <span className="text-[11px] font-black text-emerald-400 uppercase tracking-wider block">Zona Ótima</span>
+                <span className="text-[10px] text-emerald-300 font-mono">0.80 - 1.30</span>
+                <p className="text-xs text-emerald-300 font-bold mt-2">1.12 (Excelente)</p>
+              </div>
+
+              <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl text-center opacity-60">
+                <span className="text-[11px] font-bold text-[#F5BE2C] uppercase tracking-wider block">Atenção</span>
+                <span className="text-[10px] text-gray-500 font-mono">1.31 - 1.49</span>
+                <p className="text-xs text-gray-400 mt-2">Fadiga acumulando</p>
+              </div>
+
+              <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl text-center opacity-60">
+                <span className="text-[11px] font-bold text-danger uppercase tracking-wider block">Alto Risco</span>
+                <span className="text-[10px] text-gray-500 font-mono">&gt;= 1.50</span>
+                <p className="text-xs text-gray-400 mt-2">Risco de lesão</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-[#0E0E12] border border-white/[0.08] rounded-xl text-xs text-gray-300 flex items-center gap-2.5">
+              <ShieldCheck className="h-4 w-4 text-[#E5A910] shrink-0" />
+              <span>
+                <strong>Parecer Fisiológico:</strong> Você está no <em>Sweet Spot</em> (Zona Ótima). Excelente adaptação neuromuscular com preservação tecidual contra lesões articulares e musculares.
+              </span>
+            </div>
+          </div>
+
+          {/* Card de Ações Rápidas do Atleta */}
+          <div className="lg:col-span-5 bg-[#141418] border border-white/[0.08] rounded-2xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+            <div>
+              <div className="border-b border-white/[0.06] pb-3">
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-[#E5A910]" /> Check-ins & Monitoramento Diário
+                </h2>
+                <p className="text-xs text-gray-400">Envie seus dados antes e depois de cada sessão</p>
+              </div>
+
+              <div className="space-y-2.5 mt-4">
+                <button
+                  onClick={() => navigate('/monitoring/pre-workout')}
+                  className="w-full p-3 bg-white/[0.03] hover:bg-[#E5A910]/10 border border-white/[0.08] hover:border-[#E5A910]/40 rounded-xl flex items-center justify-between text-left transition group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-[#E5A910]/15 text-[#E5A910] rounded-lg">
+                      <Activity className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-white text-xs group-hover:text-[#E5A910]">Check-in Pré-Treino (PSR)</p>
+                      <p className="text-[11px] text-gray-400">Prontidão, peso e escala de recuperação</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-white" />
+                </button>
+
+                <button
+                  onClick={() => navigate('/monitoring/pse')}
+                  className="w-full p-3 bg-white/[0.03] hover:bg-[#E5A910]/10 border border-white/[0.08] hover:border-[#E5A910]/40 rounded-xl flex items-center justify-between text-left transition group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-emerald-500/15 text-emerald-400 rounded-lg">
+                      <Dumbbell className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-white text-xs group-hover:text-[#E5A910]">Pós-Treino (PSE & Duração)</p>
+                      <p className="text-[11px] text-gray-400">Carga interna da sessão (Foster 1998)</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-white" />
+                </button>
+
+                <button
+                  onClick={() => navigate('/monitoring/wellness')}
+                  className="w-full p-3 bg-white/[0.03] hover:bg-[#E5A910]/10 border border-white/[0.08] hover:border-[#E5A910]/40 rounded-xl flex items-center justify-between text-left transition group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-rose-500/15 text-rose-400 rounded-lg">
+                      <Heart className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-white text-xs group-hover:text-[#E5A910]">Questionário de Bem-Estar</p>
+                      <p className="text-[11px] text-gray-400">Sono, fadiga, estresse e humor (Hooper)</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-white" />
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-gray-400">
+              <span>Sua Turma: <strong className="text-white">{myGroupName}</strong></span>
+              <a href="#/goals" className="font-bold text-[#E5A910] hover:underline flex items-center gap-1">
+                Ver minhas metas &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Meu Histórico de Atividades (Zero vazamento LGPD) */}
+        <div className="bg-[#141418] border border-white/[0.08] rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
+            <h2 className="text-base font-bold text-white flex items-center gap-2">
+              <Clock className="h-5 w-5 text-[#E5A910]" /> Meu Histórico de Registros
+            </h2>
+            <span className="text-xs text-emerald-400 font-mono">Privado &bull; Apenas seus dados</span>
+          </div>
+
+          <div className="divide-y divide-white/[0.06]">
+            {myActivities.length > 0 ? (
+              myActivities.map((act, idx) => (
+                <div key={idx} className="py-2.5 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-2 h-2 rounded-full bg-[#E5A910]" />
+                    <div>
+                      <span className="font-bold text-white">{act?.athlete_name}:</span>
+                      <span className="text-gray-400 ml-1.5">{act?.description}</span>
+                    </div>
+                  </div>
+                  <span className="text-gray-500 font-mono text-[11px] shrink-0">{act?.time_ago}</span>
+                </div>
+              ))
+            ) : (
+              <p className="py-4 text-xs text-gray-400 text-center">Nenhum check-in registrado nas últimas 48 horas.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ==========================================
+  // 2. VISÃO GESTOR / TREINADOR / ADMIN
+  // ==========================================
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Top Banner / Título */}

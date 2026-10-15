@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Target, Plus, CheckCircle, TrendingUp, AlertCircle, RefreshCw } from 'lucide-react';
-import api from '../../services/api';
+import { Target, Plus, CheckCircle, TrendingUp, AlertCircle, RefreshCw, UserCheck } from 'lucide-react';
+import api, { getScopedAthlete } from '../../services/api';
+import useAuthStore from '../../store/authStore';
 
 export default function GoalsPage() {
+  const { user, athleteProfile } = useAuthStore();
+  const role = (user?.role || '').toLowerCase().trim();
+  const isAtleta = role === 'atleta' || role === 'athlete' || role === 'member';
+
   const [athletes, setAthletes] = useState([]);
   const [selectedAthleteId, setSelectedAthleteId] = useState('');
+  const [selectedAthleteName, setSelectedAthleteName] = useState('');
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -25,8 +31,16 @@ export default function GoalsPage() {
       const res = await api.get('/api/v1/athletes/');
       const list = Array.isArray(res?.data) ? res.data : (res?.data?.athletes || []);
       setAthletes(list);
-      if (list.length > 0 && !selectedAthleteId) {
+      
+      if (isAtleta) {
+        const myAth = getScopedAthlete(list) || list[0];
+        if (myAth) {
+          setSelectedAthleteId(myAth.id);
+          setSelectedAthleteName(myAth.name || user?.name || 'Eduardo Augusto de Brito Campos');
+        }
+      } else if (list.length > 0 && !selectedAthleteId) {
         setSelectedAthleteId(list[0].id);
+        setSelectedAthleteName(list[0].name);
       }
     } catch (err) {
       console.error(err);
@@ -109,17 +123,28 @@ export default function GoalsPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <select
-            value={selectedAthleteId}
-            onChange={(e) => setSelectedAthleteId(e.target.value)}
-            className="px-3 py-2 bg-surface border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
-          >
-            {athletes.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.name || a.user?.name}
-              </option>
-            ))}
-          </select>
+          {isAtleta ? (
+            <div className="px-3.5 py-2 bg-primary/10 border border-primary/30 rounded-xl flex items-center gap-2 text-xs font-bold text-primary">
+              <UserCheck className="h-4 w-4" />
+              <span>{selectedAthleteName || user?.name || 'Eduardo Augusto de Brito Campos'}</span>
+            </div>
+          ) : (
+            <select
+              value={selectedAthleteId}
+              onChange={(e) => {
+                setSelectedAthleteId(e.target.value);
+                const found = athletes.find(a => String(a.id) === String(e.target.value));
+                if (found) setSelectedAthleteName(found.name);
+              }}
+              className="px-3 py-2 bg-surface border border-gray-700 rounded-lg text-white text-sm focus:border-primary focus:outline-none"
+            >
+              {athletes.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.name || a.user?.name}
+                </option>
+              ))}
+            </select>
+          )}
           <button
             onClick={fetchGoals}
             className="p-2 bg-surface border border-gray-700 text-gray-300 rounded-lg hover:border-gray-500"

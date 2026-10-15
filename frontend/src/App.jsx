@@ -40,11 +40,18 @@ import GroupMonitoringPage from './pages/monitoring/GroupMonitoringPage';
 import QuickCheckinPage from './pages/totem/QuickCheckinPage';
 import TotemPage from './pages/totem/TotemPage';
 
-const ProtectedRoute = ({ children, requiredRole }) => {
+const ProtectedRoute = ({ children, requiredRole, coachOnly }) => {
   const { isAuthenticated, user } = useAuthStore();
   
   if (!isAuthenticated) return <Navigate to="/" replace />;
   
+  const role = (user?.role || '').toLowerCase().trim();
+  const isAtleta = role === 'atleta' || role === 'athlete' || role === 'member';
+
+  if (coachOnly && isAtleta) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   if (requiredRole && user?.role !== requiredRole) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -77,12 +84,24 @@ function App() {
         }>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/athletes" element={<AthletesPage />} />
+          <Route path="/athletes" element={
+            <ProtectedRoute coachOnly>
+              <AthletesPage />
+            </ProtectedRoute>
+          } />
           <Route path="/athletes/:id" element={<AthleteDetailPage />} />
           
           {/* Workouts */}
-          <Route path="/workouts/new" element={<CreateWorkoutPage />} />
-          <Route path="/workouts/collective-log" element={<CollectiveLogPage />} />
+          <Route path="/workouts/new" element={
+            <ProtectedRoute coachOnly>
+              <CreateWorkoutPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/workouts/collective-log" element={
+            <ProtectedRoute coachOnly>
+              <CollectiveLogPage />
+            </ProtectedRoute>
+          } />
           
           {/* Monitoring Engine */}
           <Route path="/monitoring/pre-workout" element={<PreWorkoutPage />} />
@@ -90,24 +109,68 @@ function App() {
           <Route path="/monitoring/wellness" element={<WellnessPage />} />
           <Route path="/monitoring/pain" element={<PainMapPage />} />
           <Route path="/monitoring/menstrual" element={<MenstrualCyclePage />} />
-          <Route path="/monitoring/physical-tests" element={<PhysicalTestsPage />} />
-          <Route path="/monitoring/neuromuscular" element={<NeuromuscularPage />} />
-          <Route path="/monitoring/group" element={<GroupMonitoringPage />} />
-          <Route path="/monitoring/invite" element={<MonitoringInvitePage />} />
+          <Route path="/monitoring/physical-tests" element={
+            <ProtectedRoute coachOnly>
+              <PhysicalTestsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/monitoring/neuromuscular" element={
+            <ProtectedRoute coachOnly>
+              <NeuromuscularPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/monitoring/group" element={
+            <ProtectedRoute coachOnly>
+              <GroupMonitoringPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/monitoring/invite" element={
+            <ProtectedRoute coachOnly>
+              <MonitoringInvitePage />
+            </ProtectedRoute>
+          } />
           
           {/* Groups & Planning */}
-          <Route path="/groups" element={<GroupsPage />} />
-          <Route path="/planning" element={<PlanningPage />} />
-          <Route path="/planning/individual" element={<PlanningPage />} />
-          <Route path="/planning/collective" element={<PlanningPage />} />
+          <Route path="/groups" element={
+            <ProtectedRoute coachOnly>
+              <GroupsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/planning" element={
+            <ProtectedRoute coachOnly>
+              <PlanningPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/planning/individual" element={
+            <ProtectedRoute coachOnly>
+              <PlanningPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/planning/collective" element={
+            <ProtectedRoute coachOnly>
+              <PlanningPage />
+            </ProtectedRoute>
+          } />
           
           {/* Custom Assessments & Goals */}
-          <Route path="/assessments/types" element={<AssessmentTypesPage />} />
-          <Route path="/assessments/record" element={<RecordAssessmentPage />} />
+          <Route path="/assessments/types" element={
+            <ProtectedRoute coachOnly>
+              <AssessmentTypesPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/assessments/record" element={
+            <ProtectedRoute coachOnly>
+              <RecordAssessmentPage />
+            </ProtectedRoute>
+          } />
           <Route path="/goals" element={<GoalsPage />} />
           
           {/* Settings */}
-          <Route path="/settings/workout-types" element={<WorkoutTypesSettingsPage />} />
+          <Route path="/settings/workout-types" element={
+            <ProtectedRoute coachOnly>
+              <WorkoutTypesSettingsPage />
+            </ProtectedRoute>
+          } />
           
           {/* Admin only route */}
           <Route path="/admin/trainers" element={

@@ -41,8 +41,17 @@ const PreWorkoutPage = () => {
   useEffect(() => {
     if (!isAtleta) {
       fetchAthletes();
-    } else if (athleteProfile?.id) {
-      setAthleteId(athleteProfile.id.toString());
+    } else {
+      if (athleteProfile?.id) {
+        setAthleteId(athleteProfile.id.toString());
+      } else {
+        api.get('/api/v1/athletes/').then(res => {
+          const list = Array.isArray(res?.data) ? res.data : (res?.data?.athletes || []);
+          if (list.length > 0) {
+            setAthleteId(list[0].id.toString());
+          }
+        }).catch(console.error);
+      }
     }
 
     // Carregar tipos de treino

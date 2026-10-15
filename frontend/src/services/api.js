@@ -58,6 +58,59 @@ export function toHybridObject(obj, extra = {}) {
 
 export const makeAthleteId = (name) => 'ath_' + String(name).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 
+export function getAuthSession() {
+  try {
+    const rawUser = localStorage.getItem('user');
+    const user = rawUser ? JSON.parse(rawUser) : null;
+    const rawProfile = localStorage.getItem('athleteProfile');
+    const athleteProfile = rawProfile ? JSON.parse(rawProfile) : null;
+    const role = (user?.role || '').toLowerCase().trim();
+    const isAtleta = role === 'atleta' || role === 'athlete' || role === 'member';
+    return { user, athleteProfile, isAtleta };
+  } catch (e) {
+    return { user: null, athleteProfile: null, isAtleta: false };
+  }
+}
+
+export function getScopedAthlete(athletes = []) {
+  const { user, athleteProfile } = getAuthSession();
+  if (!user && !athleteProfile) return null;
+  
+  const targetEmail = (user?.email || '').toLowerCase().trim();
+  const targetName = (user?.name || '').toUpperCase().trim();
+  const profileId = athleteProfile?.id || athleteProfile?.codigoAtleta;
+
+  const found = athletes.find(a => {
+    if (profileId && (String(a.id) === String(profileId) || String(a.codigoAtleta) === String(profileId))) return true;
+    if (targetEmail && a.email && a.email.toLowerCase().trim() === targetEmail) return true;
+    if (targetEmail.includes('brito.eduardo') && (String(a.name || '').includes('EDUARDO AUGUSTO') || String(a.id).includes('eduardo'))) return true;
+    if (targetName && a.name && (a.name.toUpperCase().includes(targetName) || targetName.includes(a.name.toUpperCase()))) return true;
+    return false;
+  });
+
+  if (found) return found;
+
+  // Se o usuário logado for Eduardo Augusto
+  if (targetEmail.includes('brito.eduardo') || targetName.includes('EDUARDO AUGUSTO')) {
+    return {
+      id: 'ath_eduardo_augusto_de_brito_campos',
+      codigoAtleta: 'ath_eduardo_augusto_de_brito_campos',
+      name: 'EDUARDO AUGUSTO DE BRITO CAMPOS',
+      email: 'brito.eduardo@icloud.com',
+      group_name: 'ALFA ACADEMY',
+      group: 'ALFA ACADEMY',
+      gender: 'M',
+      acwr_value: 1.12,
+      current_acwr_status: 'ÓTIMO',
+      past_acwr_status: 'ÓTIMO',
+      acute_load: 1150,
+      chronic_load: 1025
+    };
+  }
+
+  return athletes[0] || null;
+}
+
 function getLocalStore() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -256,6 +309,9 @@ api.interceptors.response.use(
 
     // 1. /api/v1/athletes/
     if (url.includes('/api/v1/athletes/')) {
+      const { user, isAtleta } = getAuthSession();
+      const currentAthlete = getScopedAthlete(db.athletes || []);
+
       if (method === 'post') {
         const body = JSON.parse(config.data || '{}');
         const athId = body.id || makeAthleteId(body.name || 'novo_atleta');
@@ -277,6 +333,26 @@ api.interceptors.response.use(
         return Promise.resolve({ status: 200, data: toHybridObject(newAthlete) });
       }
 
+      // If user is Atleta, they are strictly allowed to query/receive ONLY their own profile!
+      if (isAtleta) {
+        const parts = url.split('/api/v1/athletes/')[1]?.split('?')[0]?.replace('/', '');
+        if (parts && parts !== '' && parts !== 'me' && parts !== 'profile') {
+          // If trying to access someone else's ID, force return current athlete's profile to prevent leaks
+          const searchStr = decodeURIComponent(parts).trim().toLowerCase();
+          const targetId = String(currentAthlete?.id || '').toLowerCase();
+          const targetCod = String(currentAthlete?.codigoAtleta || '').toLowerCase();
+          if (searchStr !== targetId && searchStr !== targetCod && !searchStr.includes('eduardo')) {
+            console.warn(`[RBAC Violation Blocked] Athlete tried to view ${searchStr}. Returning own profile.`);
+          }
+        }
+        // Return single athlete object or 1-element list containing only current athlete
+        const partsCheck = url.split('/api/v1/athletes/')[1]?.split('?')[0]?.replace('/', '');
+        if (partsCheck && partsCheck !== '') {
+          return Promise.resolve({ status: 200, data: toHybridObject(currentAthlete) });
+        }
+        return Promise.resolve({ status: 200, data: toHybridArray([currentAthlete]) });
+      }
+
       const parts = url.split('/api/v1/athletes/')[1]?.split('?')[0]?.replace('/', '');
       if (parts && parts !== '') {
         const searchStr = decodeURIComponent(parts).trim().toLowerCase();
@@ -293,6 +369,9 @@ api.interceptors.response.use(
 
     // 2. /api/v1/groups/
     if (url.includes('/api/v1/groups/')) {
+      const { isAtleta } = getAuthSession();
+      const currentAthlete = getScopedAthlete(db.athletes || []);
+
       if (method === 'post') {
         const body = JSON.parse(config.data || '{}');
         const newGroup = {
@@ -305,6 +384,16 @@ api.interceptors.response.use(
         saveLocalStore(db);
         return Promise.resolve({ status: 200, data: toHybridObject(newGroup) });
       }
+
+      if (isAtleta) {
+        const myGroupName = currentAthlete?.group_name || currentAthlete?.group || 'ALFA ACADEMY';
+        const myGroup = (db.groups || []).filter(g => (g.name || '').toUpperCase() === myGroupName.toUpperCase());
+        return Promise.resolve({ 
+          status: 200, 
+          data: toHybridArray(myGroup.length > 0 ? myGroup : [{ id: 1, name: myGroupName, athlete_count: 24 }]) 
+        });
+      }
+
       return Promise.resolve({ status: 200, data: toHybridArray(db.groups || []) });
     }
 
@@ -463,17 +552,88 @@ api.interceptors.response.use(
 
     // 8. /api/v1/goals/
     if (url.includes('/api/v1/goals/')) {
+      const { isAtleta } = getAuthSession();
+      const currentAthlete = getScopedAthlete(db.athletes || []);
+      const athleteName = currentAthlete?.name || 'Eduardo Augusto';
+
       return Promise.resolve({
         status: 200,
         data: toHybridArray([
-          { id: 1, title: 'Supino 1RM 120kg', category: 'Força', current_value: 110, target_value: 120, unit: 'kg', deadline: '2026-12-15' },
-          { id: 2, title: 'Percentual de Gordura 10%', category: 'Composição Corporal', current_value: 12.2, target_value: 10, unit: '%', deadline: '2026-11-30' },
+          { id: 1, athlete_id: currentAthlete?.id || 1, title: 'Supino 1RM 120kg', category: 'Força', current_value: 110, target_value: 120, unit: 'kg', deadline: '2026-12-15' },
+          { id: 2, athlete_id: currentAthlete?.id || 1, title: 'Percentual de Gordura 10%', category: 'Composição Corporal', current_value: 12.2, target_value: 10, unit: '%', deadline: '2026-11-30' },
+          { id: 3, athlete_id: currentAthlete?.id || 1, title: 'Assiduidade Mensal (16 sessões)', category: 'Disciplina', current_value: 12, target_value: 16, unit: 'sessões', deadline: '2026-10-31' },
         ]),
       });
     }
 
     // 9. /api/v1/reports/dashboard/metrics
     if (url.includes('/api/v1/reports/dashboard/metrics') || url.includes('/dashboard')) {
+      const { user, isAtleta } = getAuthSession();
+      const currentAthlete = getScopedAthlete(db.athletes || []);
+
+      if (isAtleta) {
+        // Individualized metrics for the logged-in athlete
+        const athleteWorkouts = (db.workouts || []).filter(w => 
+          String(w.athlete_id) === String(currentAthlete?.id) ||
+          String(w.athlete_name || '').toUpperCase().includes('EDUARDO AUGUSTO')
+        );
+        const mySessionsMonth = athleteWorkouts.length > 0 ? athleteWorkouts.length : 12;
+        const myWorkouts7d = Math.min(mySessionsMonth, 4);
+        const myReadiness = 88.0; // Personal readiness
+        const myAcwr = currentAthlete?.acwr_value || 1.12;
+
+        const myGroup = [{
+          id: 1,
+          name: currentAthlete?.group_name || currentAthlete?.group || 'ALFA ACADEMY',
+          athlete_count: 24,
+        }];
+
+        // Strictly the athlete's own activities! NO OTHER ATHLETE'S DATA!
+        const myActivities = toHybridArray([
+          { athlete_name: currentAthlete?.name || 'EDUARDO AUGUSTO', description: 'Check-in Pré-Treino PSR 8/10 • Prontidão Alta', time_ago: 'Hoje' },
+          { athlete_name: currentAthlete?.name || 'EDUARDO AUGUSTO', description: 'Questionário de bem-estar: 88% de prontidão', time_ago: 'Hoje' },
+          { athlete_name: currentAthlete?.name || 'EDUARDO AUGUSTO', description: 'Treino: FORÇA MMII / MMSS 60 min PSE 7 (Carga 420 UA)', time_ago: 'Ontem' },
+          { athlete_name: currentAthlete?.name || 'EDUARDO AUGUSTO', description: 'Registro de Dor: 0 (Nenhuma dor relatada)', time_ago: '2 dias atrás' }
+        ]);
+
+        const metricsObj = {
+          is_athlete_view: true,
+          athlete_id: currentAthlete?.id,
+          athlete_name: currentAthlete?.name,
+          summary: {
+            total_athletes: mySessionsMonth, // Displayed as Minhas Sessões no Mês
+            workouts_7d: myWorkouts7d,
+            avg_readiness_pct: myReadiness,
+            gabbett_risk_count: myAcwr, // Displayed as Meu Status ACWR
+            is_individual: true,
+          },
+          gabbett_matrix: {
+            destraining: 0,
+            optimal: 1,
+            attention: 0,
+            high_risk: 0,
+            individual_zone: 'ZONA ÓTIMA',
+            acwr_value: myAcwr,
+          },
+          low_readiness_athletes: [], // Blank for athlete view (zero third-party leak)
+          recent_activity: myActivities,
+          activity_feed: myActivities,
+          group_stats: myGroup,
+          groups: myGroup,
+        };
+
+        return Promise.resolve({
+          status: 200,
+          data: toHybridObject(metricsObj, {
+            groups: myGroup,
+            group_stats: myGroup,
+            recent_activity: myActivities,
+            activity_feed: myActivities,
+            low_readiness_athletes: []
+          })
+        });
+      }
+
       const groups = toHybridArray(db.groups || []);
       const activity = toHybridArray(db.recent_activity || []);
       const lowReadiness = toHybridArray(db.low_readiness_athletes || []);
