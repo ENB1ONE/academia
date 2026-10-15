@@ -23,8 +23,13 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then((regs) => {
       regs.forEach((r) => r.update());
     });
+    // Register sw.js for Web Push
+    navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
   } catch (err) {}
 }
+
+import { initWellnessDailyReminder } from './utils/pushNotifications';
+initWellnessDailyReminder();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Download, X, Share } from 'lucide-react';
 
 const PwaInstallPrompt = () => {
@@ -79,7 +79,7 @@ const PwaInstallPrompt = () => {
         </button>
 
         <div className="flex items-center gap-3">
-          <img src="/academia/pwa/icon-192x192.png" alt="Formclub" className="w-12 h-12 rounded-xl bg-background p-1" />
+          <img src="./pwa/icon-192x192.png" alt="Formclub" className="w-12 h-12 rounded-xl bg-background p-1 border border-primary/30" />
           <div className="flex-1">
             <h3 className="font-semibold text-white">Instalar o Aplicativo</h3>
             <p className="text-sm text-gray-400">Tenha uma experiência mais rápida e fácil diretamente no seu celular.</p>

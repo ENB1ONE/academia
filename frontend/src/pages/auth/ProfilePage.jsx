@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Lock, Save, Camera, Edit2 } from 'lucide-react';
+import { User, Lock, Save, Camera, Edit2, Bell } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../store/authStore';
 import api from '../../services/api';
 import Card from '../../components/ui/Card';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
+import { 
+  isPushSupported, 
+  requestNotificationPermission, 
+  triggerWellnessNotification,
+  getNotificationPermission 
+} from '../../utils/pushNotifications';
 
 const ProfilePage = () => {
   const { user, token } = useAuthStore();
@@ -15,12 +21,63 @@ const ProfilePage = () => {
   const [avatar, setAvatar] = useState(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [name, setName] = useState(user?.name || '');
+  const [pushEnabled, setPushEnabled] = useState(false);
 
   const [passwords, setPasswords] = useState({
     current_password: '',
     new_password: '',
     confirm_password: ''
   });
+
+  useEffect(() => {
+    // Check initial push status
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('formclub_push_enabled');
+      const perm = getNotificationPermission();
+      setPushEnabled(stored === 'true' && perm === 'granted');
+    }
+  }, []);
+
+  const handleTogglePush = async () => {
+    if (!isPushSupported()) {
+      toast.error('Notificações não são suportadas neste navegador.');
+      return;
+    }
+    if (pushEnabled) {
+      localStorage.setItem('formclub_push_enabled', 'false');
+      setPushEnabled(false);
+      toast.success('Lembretes push desativados.');
+    } else {
+      try {
+        const granted = await requestNotificationPermission();
+        if (granted) {
+          setPushEnabled(true);
+          toast.success('Lembretes push FORMCLUB ativados com sucesso!');
+        } else {
+          toast.error('Permissão de notificação foi recusada.');
+        }
+      } catch (err) {
+        toast.error(err.message || 'Erro ao ativar notificações');
+      }
+    }
+  };
+
+  const handleTestPush = async () => {
+    try {
+      const sent = await triggerWellnessNotification({
+        title: 'Bem-Estar',
+        body: 'Lembre-se de registrar seu bem-estar',
+        url: '#/monitoring/wellness'
+      });
+      if (sent) {
+        toast.success('Notificação de teste enviada!');
+      } else {
+        toast.error('Ative as notificações antes de testar.');
+      }
+    } catch (err) {
+      toast.error('Erro ao disparar notificação: ' + err.message);
+    }
+  };
 
   useEffect(() => {
     // Load mocked avatar and name from local storage if exists
@@ -186,6 +243,68 @@ const ProfilePage = () => {
         </div>
 
         <div className="md:col-span-2 space-y-6">
+          {/* Lembretes e Notificações Push PWA */}
+          <Card>
+            <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
+              <div className="flex items-center gap-2">
+                <Bell className="text-primary h-5 w-5" />
+                <h2 className="text-lg font-bold text-text">Notificações & Lembretes Push</h2>
+              </div>
+              <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                pushEnabled 
+                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' 
+                  : 'bg-gray-800 text-gray-400 border border-gray-700'
+              }`}>
+                {pushEnabled ? 'Ativado' : 'Desativado'}
+              </span>
+            </div>
+
+            <p className="text-sm text-gray-400 mb-5 leading-relaxed">
+              Receba lembretes diários pontuais na Central de Notificações do seu smartphone para nunca esquecer de registrar seu bem-estar matinal ou sua carga de treino.
+            </p>
+
+            <div className="bg-background/60 p-4 rounded-xl border border-gray-800/80 mb-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Lembrete Diário de Bem-Estar</h4>
+                  <p className="text-xs text-gray-400">Notificação: "Bem-Estar: Lembre-se de registrar seu bem-estar"</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleTogglePush}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                    pushEnabled ? 'bg-primary' : 'bg-gray-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      pushEnabled ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {pushEnabled && (
+                <div className="pt-3 border-t border-gray-800 flex items-center justify-between text-xs text-gray-300">
+                  <span>Horário sugerido:</span>
+                  <span className="font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-md border border-primary/20">08:00 (Matinal)</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleTestPush}
+                className="gap-2 border-primary/40 text-primary hover:bg-primary/10"
+              >
+                <Bell className="h-4 w-4" />
+                Testar Notificação Agora
+              </Button>
+            </div>
+          </Card>
+
           <Card>
             <div className="flex items-center gap-2 mb-6 border-b border-gray-800 pb-4">
               <Lock className="text-primary h-5 w-5" />

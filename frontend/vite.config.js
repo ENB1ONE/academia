@@ -6,14 +6,16 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['formclub-logo.png', 'pwa/icon-192x192.png', 'pwa/icon-512x512.png'],
+      strategies: 'injectManifest',
+      srcDir: 'public',
+      filename: 'sw.js',
+      includeAssets: ['formclub-logo-black.png', 'avatar-default.png', 'pwa/icon-192x192.png', 'pwa/icon-512x512.png'],
       manifest: {
-        name: 'FORMCLUB',
+        name: 'FORMCLUB Performance',
         short_name: 'FORMCLUB',
-        description: 'Human Performance Center',
-        theme_color: '#1B202B',
-        background_color: '#1B202B',
+        description: 'FORMCLUB - Human Performance Center',
+        theme_color: '#D4AF37',
+        background_color: '#0A0A0B',
         display: 'standalone',
         start_url: './',
         icons: [
@@ -35,7 +37,7 @@ export default defineConfig({
           }
         ]
       },
-      workbox: {
+      injectManifest: {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
       }
     })
